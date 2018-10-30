@@ -39,8 +39,12 @@ import com.varadhismartek.pathshalatransportsystem.Recyclervehiclefitness;
 import com.varadhismartek.pathshalatransportsystem.Team_Pojo;
 import com.varadhismartek.pathshalatransportsystem.TransBarrierModel;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -48,31 +52,41 @@ import java.util.List;
  */
 public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
-    RecyclerView recyclerView,otherdocuments,recyclerfinancial,recyclervehiclefitness;
+    RecyclerView recyclerView, otherdocuments, recyclerfinancial, recyclervehiclefitness;
     private List<Team_Pojo> teamList = new ArrayList<>();
 
     private RecyclerTeamAdapter adapter;
     private Recyclerfinancial recyclerfinancialadapter;
     private Recyclervehiclefitness recyclervehiclefitnessadapter;
-    private String[] vehicletype = {"BUS","AC BUS","MINI BUS","TRAVELLER"};
-    private String[] bodytype = {"NEW","SECOND HAND"};
-    Spinner vehicletypespin,bodytypespin;
-    String Tag = "Addvehicle";
-    String  str_vehicle_type,str_body_type,vehicleregno,vehiclename,vehiclegpsdetails,chasisnumber,enginenumber,manufacturename,modelnumber,
-            manufactureyear,seatingcapacity,registeringauthority,registeringstate;
-    EditText vehicle_regno,vehicle_name,vehicle_gpsdetails,chasis_number,engine_number,manufacture_name,
-            model_number,manufacture_year,seating_capacity,registering_authority,registering_state;
-    DatabaseReference lastIdref,lastIdref1;
+    private String[] vehicletype = {"BUS", "AC BUS", "MINI BUS", "TRAVELLER"};
+    private String[] bodytype = {"NEW", "SECOND HAND"};
+    private Spinner vehicletypespin, bodytypespin;
+    private String Tag = "Addvehicle";
+
+    private String str_vehicle_type, str_body_type, vehicleregno, vehiclename, vehiclegpsdetails, chasisnumber, enginenumber, manufacturename, modelnumber,
+            manufactureyear,seatingcapacity, registeringauthority, registeringstate, selectedYear, selectedMonth, selectedDate,
+            registereddate,purchasedate, preownerpurchasedate,previousownerremark, preownerpurchasecost, previousownername,
+            totalfreeservice,remanningservice, nextservicekms,nextservicedays, lastservicedate,insurancetype,insurancenum,
+            insurancedate,insurancerenewdate,insurancenextrenewdate,agentname,agentid,insurancecomname,agentcontnum,insurancecomnum;
+
+    private EditText vehicle_regno, vehicle_name, vehicle_gpsdetails, chasis_number, engine_number, manufacture_name,
+            model_number, manufacture_year, seating_capacity, registering_authority, registering_state, registered_date, purchase_date,
+            preownerpurchase_date, previousowner_remark, preownerpurchase_cost, previousowner_name,
+            mtotalfreeservice, mremanningservice, mnextservicekms, mnextservicedays, mlastservicedate,minsurancetype,minsurancenum,minsurancedate,
+            minsurancerenewdate,minsurancenextrenewdate,magentname,magentid,minsurancecomname,magentcontnum,minsurancecomnum;
+
+    DatabaseReference lastIdref, lastIdref1;
     DatabaseReference mref1 = FirebaseDatabase.getInstance().getReference("School/SchoolId/Vehicle_Registration");
-    ImageView calendarForDob;
-    TextView bt_save,vehicle_id;
+    ImageView iv_calendarregisterdate, iv_calendarpurchasedate, iv_previousownerpurchasedate;
+    TextView bt_save, vehicle_id;
+    TransBarrierModel transBarrierModel, transBarrierModelreg, transBarrierModelService,transBarrierModelInsurance;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View  v= inflater.inflate(R.layout.fragment_addvehicle, container, false);
+        View v = inflater.inflate(R.layout.fragment_addvehicle, container, false);
         initViews(v);
         initListner();
 
@@ -80,8 +94,9 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         lastIdref1 = FirebaseDatabase.getInstance().getReference("School/SchoolId/Barriers/Transport_Ids");
         //lastIdref1 = FirebaseDatabase.getInstance().getReference("School/SchoolId/Barriers/Transport_Ids/Current_Registration_Id");
         getStudentRegistrationIdFromBarriers();
+        //nextservicedayscheck();
 
-        CustomSpinnerAdapter customSpinnerAdaptervehicle=new CustomSpinnerAdapter(getActivity(),vehicletype,"#717071");
+        CustomSpinnerAdapter customSpinnerAdaptervehicle = new CustomSpinnerAdapter(getActivity(), vehicletype, "#717071");
         vehicletypespin.setAdapter(customSpinnerAdaptervehicle);
         vehicletypespin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -97,7 +112,7 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
             }
         });
 
-        CustomSpinnerAdapter customSpinnerAdapterbody=new CustomSpinnerAdapter(getActivity(),bodytype,"#717071");
+        CustomSpinnerAdapter customSpinnerAdapterbody = new CustomSpinnerAdapter(getActivity(), bodytype, "#717071");
         bodytypespin.setAdapter(customSpinnerAdapterbody);
         bodytypespin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -113,7 +128,7 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
             }
         });
 
-        adapter= new RecyclerTeamAdapter(getActivity(),teamList);
+        adapter = new RecyclerTeamAdapter(getActivity(), teamList);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -125,20 +140,18 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         otherdocuments.setItemAnimator(new DefaultItemAnimator());
         otherdocuments.setAdapter(recyclerotherdocuments);
 
-        recyclerfinancialadapter= new Recyclerfinancial(getActivity(),teamList);
+        recyclerfinancialadapter = new Recyclerfinancial(getActivity(), teamList);
         LinearLayoutManager mLayoutManager3 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerfinancial.setLayoutManager(mLayoutManager3);
         recyclerfinancial.setItemAnimator(new DefaultItemAnimator());
         recyclerfinancial.setAdapter(recyclerfinancialadapter);
 
-        recyclervehiclefitnessadapter = new Recyclervehiclefitness(getActivity(),teamList);
+        recyclervehiclefitnessadapter = new Recyclervehiclefitness(getActivity(), teamList);
         LinearLayoutManager mLayoutManager4 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclervehiclefitness.setLayoutManager(mLayoutManager4);
         recyclervehiclefitness.setItemAnimator(new DefaultItemAnimator());
         recyclervehiclefitness.setAdapter(recyclervehiclefitnessadapter);
         getData();
-
-
 
 
         return v;
@@ -147,36 +160,65 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
     }
 
 
-
-
     private void initViews(View v) {
-        vehicletypespin         = v.findViewById(R.id.vehicle_type);
-        bodytypespin            = v.findViewById(R.id.bodytype_id);
-        vehicle_id              = v.findViewById(R.id.vehicle_id);
-        vehicle_regno           = v.findViewById(R.id.registration_num);
-        vehicle_name            = v.findViewById(R.id.vehicle_name);
-        vehicle_gpsdetails      = v.findViewById(R.id.vehicle_gps_details);
-        recyclerView            = v.findViewById(R.id.recyclerteammembers);
-        otherdocuments          = v.findViewById(R.id.otherdocumentsrecyclerview);
-        recyclerfinancial       = v.findViewById(R.id.recyclerfinancialdetails);
-        recyclervehiclefitness  = v.findViewById(R.id.vehiclefitness);
-        chasis_number           = v.findViewById(R.id.chasis_number);
-        engine_number           = v.findViewById(R.id.engine_number);
-        manufacture_name        = v.findViewById(R.id.manufacture_name);
-        model_number            = v.findViewById(R.id.model_number);
-        manufacture_year        = v.findViewById(R.id.manufacture_year);
-        seating_capacity        = v.findViewById(R.id.seating_capacity);
-        registering_authority   = v.findViewById(R.id.registering_authority);
-        registering_state       = v.findViewById(R.id.registering_state);
-       // calendarForDob          = v.findViewById(R.id.calendar);
-        bt_save                 = v.findViewById(R.id.button_send);
+        vehicletypespin = v.findViewById(R.id.vehicle_type);
+        bodytypespin = v.findViewById(R.id.bodytype_id);
+        vehicle_id = v.findViewById(R.id.vehicle_id);
+        vehicle_regno = v.findViewById(R.id.registration_num);
+        vehicle_name = v.findViewById(R.id.vehicle_name);
+        vehicle_gpsdetails = v.findViewById(R.id.vehicle_gps_details);
+        recyclerView = v.findViewById(R.id.recyclerteammembers);
+        otherdocuments = v.findViewById(R.id.otherdocumentsrecyclerview);
+        recyclerfinancial = v.findViewById(R.id.recyclerfinancialdetails);
+        recyclervehiclefitness = v.findViewById(R.id.vehiclefitness);
+        chasis_number = v.findViewById(R.id.chasis_number);
+        engine_number = v.findViewById(R.id.engine_number);
+        manufacture_name = v.findViewById(R.id.manufacture_name);
+        model_number = v.findViewById(R.id.model_number);
+        manufacture_year = v.findViewById(R.id.manufacture_year);
+        seating_capacity = v.findViewById(R.id.seating_capacity);
+        registering_authority = v.findViewById(R.id.registering_authority);
+        registering_state = v.findViewById(R.id.registering_state);
+        iv_calendarregisterdate = v.findViewById(R.id.calendarregistereddate);
+        iv_calendarpurchasedate = v.findViewById(R.id.calendarpurchasedate);
+        iv_previousownerpurchasedate = v.findViewById(R.id.iv_previousownerpurchasedate);
+        bt_save = v.findViewById(R.id.button_send);
+        registered_date = v.findViewById(R.id.et_registereddate);
+        purchase_date = v.findViewById(R.id.et_purchasedate);
+        preownerpurchase_date = v.findViewById(R.id.previousownerpurchasedate);
+        previousowner_remark = v.findViewById(R.id.previousownerremark);
+        preownerpurchase_cost = v.findViewById(R.id.previousownerpurchasecost);
+        previousowner_name = v.findViewById(R.id.previousownername);
+        mtotalfreeservice = v.findViewById(R.id.et_totalfreeservice_transsport);
+        mremanningservice = v.findViewById(R.id.et_remanningservice_transport);
+        mnextservicedays = v.findViewById(R.id.et_nextservicedays_transport);
+        mnextservicekms = v.findViewById(R.id.et_nextservicekms_transport);
+        mlastservicedate = v.findViewById(R.id.et_lastservicedate_transport);
+        minsurancedate = v.findViewById(R.id.et_insurancedate_transport);
+        minsurancetype = v.findViewById(R.id.et_insurancetype_transport);
+        minsurancenum = v.findViewById(R.id.et_insurancenumber_transport);
+        minsurancerenewdate = v.findViewById(R.id.et_insurancerenewdate_transport);
+        minsurancenextrenewdate = v.findViewById(R.id.et_insurancenextrenewdate_transport);
+        magentname = v.findViewById(R.id.et_agentname_transport);
+        magentid = v.findViewById(R.id.et_agentid_transport);
+        minsurancecomname = v.findViewById(R.id.et_insurancecompanyname_transport);
+        magentcontnum = v.findViewById(R.id.et_agentcontnum_transport);
+        minsurancecomnum = v.findViewById(R.id.et_insurancecomnum_transport);
 
 
     }
+
     private void initListner() {
-      // calendarForDob.setOnClickListener(this);
-       bt_save.setOnClickListener(this);
+        iv_calendarregisterdate.setOnClickListener(this);
+        iv_calendarpurchasedate.setOnClickListener(this);
+        iv_previousownerpurchasedate.setOnClickListener(this);
+        mlastservicedate.setOnClickListener(this);
+        minsurancedate.setOnClickListener(this);
+        minsurancerenewdate.setOnClickListener(this);
+        minsurancenextrenewdate.setOnClickListener(this);
+        bt_save.setOnClickListener(this);
     }
+
     private void saveaddvehicledata() {
         final ProgressDialog progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("Storing data...please wait");
@@ -194,28 +236,58 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         seatingcapacity = seating_capacity.getText().toString();
         registeringauthority = registering_authority.getText().toString();
         registeringstate = registering_state.getText().toString();
+        registereddate = registered_date.getText().toString();
+        purchasedate = purchase_date.getText().toString();
+        preownerpurchasedate = preownerpurchase_date.getText().toString();
+        previousownerremark = previousowner_remark.getText().toString();
+        preownerpurchasecost = preownerpurchase_cost.getText().toString();
+        previousownername = previousowner_name.getText().toString();
+        totalfreeservice = mtotalfreeservice.getText().toString();
+        remanningservice = mremanningservice.getText().toString();
+        lastservicedate = mlastservicedate.getText().toString();
+        nextservicedays = mnextservicedays.getText().toString();
+        nextservicekms = mnextservicekms.getText().toString();
+
+        insurancetype = minsurancetype.getText().toString();
+        insurancenum = minsurancenum.getText().toString();
+        insurancedate = minsurancedate.getText().toString();
+        insurancerenewdate = minsurancerenewdate.getText().toString();
+        insurancenextrenewdate = minsurancenextrenewdate.getText().toString();
+        agentname = magentname.getText().toString();
+        agentid   = magentid.getText().toString();
+        insurancecomname   = minsurancecomname.getText().toString();
+        insurancecomnum   = magentcontnum.getText().toString();
+        agentcontnum   = magentcontnum.getText().toString();
+
+
         //create data model
+        transBarrierModel = new TransBarrierModel(str_vehicle_type, vehicleregno, vehiclename, vehiclegpsdetails);
+        transBarrierModelreg = new TransBarrierModel(str_body_type, chasisnumber,
+                enginenumber, manufacturename, modelnumber, manufactureyear, seatingcapacity, registeringauthority,
+                registeringstate, registereddate, purchasedate, preownerpurchasedate, previousownerremark, preownerpurchasecost, previousownername);
+
+        transBarrierModelService = new TransBarrierModel(totalfreeservice, remanningservice, lastservicedate, nextservicedays, nextservicekms);
+        transBarrierModelInsurance = new TransBarrierModel(insurancetype,insurancenum, insurancedate, insurancerenewdate,insurancenextrenewdate,
+                                     agentname,agentid,insurancecomname,agentcontnum,insurancecomnum);
 
         //send to firebase
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Log.d(Tag,"Run method call");
-                Log.d(Tag,"Test"+Constant.FINAL_REGISTRATION_ID);
-                TransBarrierModel transBarrierModel = new TransBarrierModel(str_vehicle_type,vehicleregno,vehiclename,vehiclegpsdetails);
-                TransBarrierModel transBarrierModelreg = new TransBarrierModel(str_body_type,chasisnumber,
-                        enginenumber,manufacturename,modelnumber,manufactureyear,seatingcapacity,registeringauthority,registeringstate);
+                Log.d(Tag, "Run method call");
+                Log.d(Tag, "Test" + Constant.FINAL_REGISTRATION_ID);
+
                 mref1.child(Constant.FINAL_REGISTRATION_ID).child("Basic_vehicle_Details").setValue(transBarrierModel);
                 mref1.child(Constant.FINAL_REGISTRATION_ID).child("vehicle_registration_Details").setValue(transBarrierModelreg);
-
-
-
+                mref1.child(Constant.FINAL_REGISTRATION_ID).child("Servicing_Details").setValue(transBarrierModelService);
+                mref1.child(Constant.FINAL_REGISTRATION_ID).child("Insurance_Details").setValue(transBarrierModelInsurance);
 
 
                 setdata();
             }
 
-        },1000);
+        }, 1000);
         progressDialog.dismiss();
 
 
@@ -270,46 +342,44 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(getContext(),vehicletype[position] , Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), vehicletype[position], Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
     private void getStudentRegistrationIdFromBarriers() {
-          final ProgressDialog progressDialog = new ProgressDialog(getActivity());
-          progressDialog.setMessage("Getting data please wait...");
-          progressDialog.show();
-          lastIdref.child("Transport_Ids").addValueEventListener(new ValueEventListener() {
+        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Getting data please wait...");
+        progressDialog.show();
+        lastIdref.child("Transport_Ids").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-               // Log.d("dataSnapShotA", ""+dataSnapshot.getKey());
-                for(DataSnapshot postSnapShotA : dataSnapshot.getChildren()){
-                  //  Log.d("postsnapShotA", ""+postSnapShotA.getKey());
-                    if(postSnapShotA.getKey().equals("Default_Registration_Id")){
-                        Log.d("empID_Default", ""+postSnapShotA.getValue());
+                // Log.d("dataSnapShotA", ""+dataSnapshot.getKey());
+                for (DataSnapshot postSnapShotA : dataSnapshot.getChildren()) {
+                    //  Log.d("postsnapShotA", ""+postSnapShotA.getKey());
+                    if (postSnapShotA.getKey().equals("Default_Registration_Id")) {
+                        Log.d("empID_Default", "" + postSnapShotA.getValue());
                         Constant.REGISTRATION_DEFAULT_ID = (String) postSnapShotA.getValue();
 
                     }
 
-                    if(postSnapShotA.getKey().equals("Start_Registration_Id")){
-                        Log.d("Start_Registration_Id", ""+postSnapShotA.getValue());
+                    if (postSnapShotA.getKey().equals("Start_Registration_Id")) {
+                        Log.d("Start_Registration_Id", "" + postSnapShotA.getValue());
                         Constant.REGISTRATION_START_ID = (String) postSnapShotA.getValue();
                         incrementRegistrationID();
                     }
 
-                    if(postSnapShotA.getKey().equals("Current_Registration_Id")){
-                        Log.d("Current_Registration_Id", ""+postSnapShotA.getValue());
+                    if (postSnapShotA.getKey().equals("Current_Registration_Id")) {
+                        Log.d("Current_Registration_Id", "" + postSnapShotA.getValue());
                         Constant.REGISTRATION_CURRENT_ID = (String) postSnapShotA.getValue();
 
                     }
                     progressDialog.dismiss();
 
                 }
-
-
-
 
 
             }
@@ -321,16 +391,15 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         });
 
     }
+
     private void incrementRegistrationID() {
 
-        if(Constant.REGISTRATION_START_ID.equalsIgnoreCase(Constant.REGISTRATION_DEFAULT_ID)){
+        if (Constant.REGISTRATION_START_ID.equalsIgnoreCase(Constant.REGISTRATION_DEFAULT_ID)) {
             increment();
-        }
-
-        else {
+        } else {
 
             Constant.REGISTRATION_CURRENT_ID = Constant.REGISTRATION_DEFAULT_ID;
-            Constant.REGISTRATION_START_ID= Constant.REGISTRATION_DEFAULT_ID;
+            Constant.REGISTRATION_START_ID = Constant.REGISTRATION_DEFAULT_ID;
             increment();
 
         }
@@ -338,22 +407,22 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
 
     private void increment() {
 
-        int val =lastAlphaNumeric(Constant.REGISTRATION_CURRENT_ID);
-        String half1 = Constant.REGISTRATION_CURRENT_ID.substring(0, val+1);
-        String half2 = Constant.REGISTRATION_CURRENT_ID.substring(val+1 , Constant.REGISTRATION_CURRENT_ID.length());
+        int val = lastAlphaNumeric(Constant.REGISTRATION_CURRENT_ID);
+        String half1 = Constant.REGISTRATION_CURRENT_ID.substring(0, val + 1);
+        String half2 = Constant.REGISTRATION_CURRENT_ID.substring(val + 1, Constant.REGISTRATION_CURRENT_ID.length());
 
-        String newHalf2 = "9"+half2;
+        String newHalf2 = "9" + half2;
 
-        int lastnumberincrease = Integer.parseInt((newHalf2))+1;
+        int lastnumberincrease = Integer.parseInt((newHalf2)) + 1;
 
         String newHalf2Icreae = String.valueOf(lastnumberincrease);
 
-        String finalNumber = newHalf2Icreae.substring(1,newHalf2Icreae.length() );
+        String finalNumber = newHalf2Icreae.substring(1, newHalf2Icreae.length());
 
-        Constant.FINAL_REGISTRATION_ID = half1+finalNumber;
+        Constant.FINAL_REGISTRATION_ID = half1 + finalNumber;
         Constant.REGISTRATION_CURRENT_TEMP_ID = Constant.FINAL_REGISTRATION_ID;
 
-        Log.d("Increment Id", ""+ Constant.FINAL_REGISTRATION_ID);
+        Log.d("Increment Id", "" + Constant.FINAL_REGISTRATION_ID);
         vehicle_id.setText(Constant.FINAL_REGISTRATION_ID);
 
     }
@@ -370,39 +439,259 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()){
-          //  case R.id.calendar:
-                // Get Current Date
-              //  final Dialog dialog = new Dialog(getActivity());
-             //   dialog.setContentView(R.layout.datepicker);
-              //  dialog.setTitle("");
-               // DatePicker datePicker = dialog.findViewById(R.id.datePickerDialog);
+        switch (v.getId()) {
+            //  case R.id.calendar:
+            // Get Current Date
+            //  final Dialog dialog = new Dialog(getActivity());
+            //   dialog.setContentView(R.layout.datepicker);
+            //  dialog.setTitle("");
+            // DatePicker datePicker = dialog.findViewById(R.id.datePickerDialog);
             case R.id.button_send:
                 saveaddvehicledata();
                 break;
+
+            case R.id.calendarregistereddate:
+                String registerdate = "Registereddate";
+                getDOB(registerdate);
+                break;
+            case R.id.calendarpurchasedate:
+                String purchasedate = "Purchasedate";
+                getDOB(purchasedate);
+                break;
+            case R.id.iv_previousownerpurchasedate:
+                String previousownerpurchasedate = "Previousownerpurchasedate";
+                getDOB(previousownerpurchasedate);
+                break;
+
+            case R.id.et_lastservicedate_transport:
+                String lastservicedate = "Lastservicedate";
+                getDOB(lastservicedate);
+                break;
+
         }
     }
 
-    private void setdata(){
+    private void getDOB(final String dob) {
+
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.setContentView(R.layout.datepicker);
+        dialog.setTitle("");
+        DatePicker datePicker = (DatePicker) dialog.findViewById(R.id.datePickerDialog);
+        final Calendar calendar = Calendar.getInstance();
+        selectedYear = String.valueOf(calendar.get(Calendar.YEAR));
+        selectedMonth = String.valueOf(calendar.get(Calendar.MONTH));
+        selectedDate = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
+        calendar.add(Calendar.YEAR, 0);
+
+        if (selectedDate.length() == 1) {
+            selectedDate = "0" + selectedDate;
+        }
+
+        if (selectedMonth.length() == 1) {
+            selectedMonth = "0" + selectedMonth;
+        }
+
+        Log.e("selected date", selectedDate + "");
+        Log.e("selected month", selectedMonth + "");
+        Log.e("selected year", selectedYear + "");
+
+
+        datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
+
+            @Override
+            public void onDateChanged(DatePicker datePicker, int year, int month, int dayOfMonth) {
+
+                String newMonth = "", stringNewDate = "", stringyear = String.valueOf(year);
+
+                if (String.valueOf(month + 1).length() == 1) {
+                    newMonth = "0" + (month + 1);
+                } else {
+                    newMonth = String.valueOf(month + 1);
+                }
+
+                if (String.valueOf(dayOfMonth).length() == 1) {
+                    stringNewDate = "0" + dayOfMonth;
+                } else {
+                    stringNewDate = String.valueOf(dayOfMonth);
+                }
+                Log.e("month", "" + newMonth);
+                Log.e("date", "" + stringNewDate);
+                Log.e("year", "" + stringyear);
+
+
+                switch (dob) {
+
+                    case "Registereddate":
+                        if (selectedDate.equals(stringNewDate) && selectedMonth.equals(newMonth) && selectedYear.equals(stringyear)) {
+                            String date = String.valueOf(stringNewDate) + "/" + String.valueOf(newMonth)
+                                    + "/" + String.valueOf(stringyear);
+
+                            registered_date.setText(date);
+
+                            dialog.dismiss();
+                        } else {
+
+                            if (!selectedDate.equals(stringNewDate)) {
+                                String date = String.valueOf(stringNewDate) + "/" + String.valueOf(newMonth)
+                                        + "/" + String.valueOf(stringyear);
+
+                                registered_date.setText(date);
+
+                                dialog.dismiss();
+                            } else {
+                                if (!selectedMonth.equals(newMonth)) {
+                                    String date = String.valueOf(stringNewDate) + "/" + String.valueOf(newMonth)
+                                            + "/" + String.valueOf(stringyear);
+
+                                    registered_date.setText(date);
+                                    dialog.dismiss();
+                                }
+                            }
+                        }
+                        break;
+
+
+                    case "Purchasedate":
+                        if (selectedDate.equals(stringNewDate) && selectedMonth.equals(newMonth) && selectedYear.equals(stringyear)) {
+                            String date = String.valueOf(stringNewDate) + "/" + String.valueOf(newMonth)
+                                    + "/" + String.valueOf(stringyear);
+
+                            purchase_date.setText(date);
+
+                            dialog.dismiss();
+                        } else {
+
+                            if (!selectedDate.equals(stringNewDate)) {
+                                String date = String.valueOf(stringNewDate) + "/" + String.valueOf(newMonth)
+                                        + "/" + String.valueOf(stringyear);
+
+                                purchase_date.setText(date);
+
+                                dialog.dismiss();
+                            } else {
+                                if (!selectedMonth.equals(newMonth)) {
+                                    String date = String.valueOf(stringNewDate) + "/" + String.valueOf(newMonth)
+                                            + "/" + String.valueOf(stringyear);
+
+                                    purchase_date.setText(date);
+                                    dialog.dismiss();
+                                }
+                            }
+                        }
+                        break;
+
+                    case "Previousownerpurchasedate":
+                        if (selectedDate.equals(stringNewDate) && selectedMonth.equals(newMonth) && selectedYear.equals(stringyear)) {
+                            String date = String.valueOf(stringNewDate) + "/" + String.valueOf(newMonth)
+                                    + "/" + String.valueOf(stringyear);
+
+                            preownerpurchase_date.setText(date);
+
+                            dialog.dismiss();
+                        } else {
+
+                            if (!selectedDate.equals(stringNewDate)) {
+                                String date = String.valueOf(stringNewDate) + "/" + String.valueOf(newMonth)
+                                        + "/" + String.valueOf(stringyear);
+
+                                preownerpurchase_date.setText(date);
+
+                                dialog.dismiss();
+                            } else {
+                                if (!selectedMonth.equals(newMonth)) {
+                                    String date = String.valueOf(stringNewDate) + "/" + String.valueOf(newMonth)
+                                            + "/" + String.valueOf(stringyear);
+
+                                    preownerpurchase_date.setText(date);
+                                    dialog.dismiss();
+                                }
+                            }
+                        }
+
+                        break;
+
+                    case "Lastservicedate":
+                        if (selectedDate.equals(stringNewDate) && selectedMonth.equals(newMonth) && selectedYear.equals(stringyear)) {
+                            String date = String.valueOf(stringNewDate) + "/" + String.valueOf(newMonth)
+                                    + "/" + String.valueOf(stringyear);
+
+                            mlastservicedate.setText(date);
+
+                            dialog.dismiss();
+                        } else {
+
+                            if (!selectedDate.equals(stringNewDate)) {
+                                String date = String.valueOf(stringNewDate) + "/" + String.valueOf(newMonth)
+                                        + "/" + String.valueOf(stringyear);
+
+                                mlastservicedate.setText(date);
+
+                                dialog.dismiss();
+                            } else {
+                                if (!selectedMonth.equals(newMonth)) {
+                                    String date = String.valueOf(stringNewDate) + "/" + String.valueOf(newMonth)
+                                            + "/" + String.valueOf(stringyear);
+
+                                    mlastservicedate.setText(date);
+                                    dialog.dismiss();
+                                }
+                            }
+                        }
+
+                        break;
+                }
+
+                selectedDate = String.valueOf(dayOfMonth);
+                selectedMonth = String.valueOf(month);
+                selectedYear = String.valueOf(year);
+            }
+        });
+        dialog.show();
+        datePicker.setMaxDate(calendar.getTimeInMillis());
+    }
+
+    private void setdata() {
         final ProgressDialog progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("Sending data...");
-        if(!Constant.REGISTRATION_CURRENT_TEMP_ID.equals(Constant.FINAL_REGISTRATION_ID)){
+        if (!Constant.REGISTRATION_CURRENT_TEMP_ID.equals(Constant.FINAL_REGISTRATION_ID)) {
             lastIdref.child("Current_Registration_Id").setValue(Constant.FINAL_REGISTRATION_ID);
             Toast.makeText(getActivity(), "Registration Finished1...", Toast.LENGTH_SHORT).show();
-            Intent in = new Intent(getActivity() , MainActivity.class);
+            Intent in = new Intent(getActivity(), MainActivity.class);
             startActivity(in);
             progressDialog.dismiss();
-        }
-        else {
+        } else {
 
             lastIdref1.child("Current_Registration_Id").setValue(Constant.FINAL_REGISTRATION_ID);
             Toast.makeText(getActivity(), "Registration Finished...", Toast.LENGTH_SHORT).show();
-             Intent in = new Intent(getActivity() , MainActivity.class);
-             startActivity(in);
+            Intent in = new Intent(getActivity(), MainActivity.class);
+            startActivity(in);
             progressDialog.dismiss();
         }
-        Log.d(Tag,"set data");
+
+        Log.d(Tag, "set data");
 
 
     }
+    private void nextservicedayscheck(){
+        String date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+        try {
+            SimpleDateFormat myFormat = new SimpleDateFormat("dd MM yyyy");
+            if(lastservicedate==null){
+                lastservicedate = date;
+            }
+            Date dateBefore = myFormat.parse(lastservicedate);
+            Date dateAfter = myFormat.parse(date);
+            long difference = dateAfter.getTime() - dateBefore.getTime();
+            float daysBetween = (difference / (1000*60*60*24));
+               /* You can also convert the milliseconds to days using this method
+                * float daysBetween =
+                *         TimeUnit.DAYS.convert(difference, TimeUnit.MILLISECONDS)
+                */
+               mnextservicedays.setText((int) daysBetween);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
+

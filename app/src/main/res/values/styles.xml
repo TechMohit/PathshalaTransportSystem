@@ -569,6 +569,12 @@
 
     </style>
 
+    <style name="ImageviewStyle">
+        <item name="android:layout_width">30dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_alignParentEnd">true</item>
+    </style>
+
 
     <style name="spinner_weight" parent="spinner_normal">
         <item name="android:layout_width">@dimen/dp0</item>
