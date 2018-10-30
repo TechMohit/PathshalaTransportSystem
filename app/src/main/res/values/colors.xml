@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--barrier colors-->
+
+    <color name="master_admin_dark">#325e15</color>
+    <color name="master_admin_light">#669cff57</color>
+    <color name="master_admin_medium">#FF64DD17</color>
+    <color name="master_admin_g">#64dd17</color>
+    <color name="white">#FFFFFF</color>
+    <color name="master_admin">#1faa00</color>
+
+
+    <!-- Management Colors-->
+    <color name="colorPrimary">#64dd17</color>
+    <color name="colorPrimaryDark">#1faa00</color>
+    <color name="colorAccent">#325e15</color>
+    <color name="backgroundColor">#efefef</color>
+    <color name="textcolor">#7D7D7D</color>
+
+    <!-- Teacher Color-->
+
+    <color name="teacherPrimary">#ff00bcd4</color>
+
+    <!-- Parent Color-->
+
+    <color name="parentPrimary">#00838f</color>
+    <color name="backgroundcolororange">#b7ff5400</color>
+    <color name="bgcolor">#94ffffff</color>
+    <color name="black">#000</color>
+    <color name="hintColor">#717071</color>
+</resources>

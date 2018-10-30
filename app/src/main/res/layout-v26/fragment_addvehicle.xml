@@ -1,0 +1,1750 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Ll_both_match_heading"
+    >
+
+    <LinearLayout
+       style="@style/Ll_normal_htl"
+        android:background="@drawable/card_shape">
+
+
+    <LinearLayout
+        style="@style/Ll_normal_htl"
+        android:background="@color/colorPrimaryDark">
+
+    
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@drawable/card_shape"
+
+           >
+
+           <TextView
+               style="@style/tv_normal_mrgn_pad"
+               android:text="@string/basic_details"
+               android:layout_gravity="center"/>
+
+            <LinearLayout
+                style="@style/Ll_normal_htl">
+
+                <TextView
+                    style="@style/tv_normal_mrgn_pad"
+                    android:text="@string/class_of_vehicle"
+                    android:layout_weight="5"/>
+
+                <Spinner
+                    style="@style/spinner_normal_mrgn_pad"
+                    android:layout_weight="1">
+
+                </Spinner>
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                style="@style/Ll_normal_htl"
+                android:baselineAligned="false">
+
+               <android.support.design.widget.TextInputLayout
+                  style="@style/textinputlaout_weight"
+                   android:layout_weight="1"
+                   android:layout_margin="@dimen/dp5"
+                   android:padding="@dimen/dp0">
+
+                   <EditText
+                       style="@style/edittext_normal"
+                       android:hint="@string/enter_vehicle_id"
+                       android:textSize="@dimen/sp10"
+                       android:importantForAutofill="no"
+                       android:inputType="text|number"/>
+
+
+               </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    style="@style/textinputlaout_weight"
+                    android:layout_margin="@dimen/dp5"
+                    android:padding="@dimen/dp0"
+                    android:layout_weight="1">
+
+                    <EditText
+                        style="@style/edittext_normal"
+                        android:hint="@string/vehicle_registration_number"
+                        android:textSize="@dimen/sp10"
+                        android:importantForAutofill="no"
+                        android:inputType="text|number" />
+
+
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/Ll_normal_htl"
+                android:baselineAligned="false">
+
+                <android.support.design.widget.TextInputLayout
+                    style="@style/textinputlaout_weight"
+                    android:layout_margin="@dimen/dp5"
+                    android:padding="@dimen/dp0"
+                    android:layout_weight="1">
+
+                    <EditText
+                        style="@style/edittext_normal"
+                        android:hint="@string/vehicle_name"
+                        android:textSize="@dimen/sp10"
+                        android:importantForAutofill="no"
+                        android:inputType="text|number"/>
+
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    style="@style/textinputlaout_weight"
+                    android:layout_margin="@dimen/dp5"
+                    android:padding="@dimen/dp0"
+                    android:layout_weight="1">
+
+                    <EditText
+                        style="@style/edittext_normal"
+                        android:hint="@string/vehicle_gps_details"
+                        android:textSize="@dimen/sp10"
+                        android:importantForAutofill="no"
+                        android:inputType="text|number"/>
+
+
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="@dimen/dp5"
+                app:cardCornerRadius="@dimen/dp5"
+                android:layout_margin="@dimen/dp5">
+
+                <LinearLayout
+                    style="@style/Ll_normal_vtl">
+
+
+                    <TextView
+                        style="@style/tv_normal_mrgn_pad"
+                        android:text="@string/registration_details"
+                        android:layout_gravity="center" />
+
+                    <LinearLayout
+                        style="@style/Ll_normal_htl">
+
+
+                        <TextView
+                            style="@style/tv_normal_mrgn_pad"
+                            android:text="@string/type_of_body"
+                            android:layout_weight="5"/>
+
+                        <Spinner
+                            style="@style/spinner_normal_mrgn_pad"
+                            android:layout_weight="1">
+                        </Spinner>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/Ll_normal_htl"
+                        android:baselineAligned="false">
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_weight"
+                            android:layout_weight="1"
+                            android:layout_margin="@dimen/dp5"
+                            android:padding="@dimen/dp0">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/enter_chasis_number"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_weight"
+                            android:layout_margin="@dimen/dp5"
+                            android:padding="@dimen/dp0"
+                            android:layout_weight="1">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/vehicle_engine_number"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/Ll_normal_htl"
+                        android:baselineAligned="false">
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_weight"
+                            android:layout_margin="@dimen/dp5"
+                            android:padding="@dimen/dp0"
+                            android:layout_weight="1">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/vehicle_maker_s_name"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_weight"
+                            android:layout_margin="@dimen/dp5"
+                            android:padding="@dimen/dp0"
+                            android:layout_weight="1">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/vehicle_model_number"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/Ll_normal_htl"
+                        android:baselineAligned="false">
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_weight"
+                            android:layout_weight="1"
+                            android:layout_margin="@dimen/dp5"
+                            android:padding="@dimen/dp0">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/vehicle_manufacturing_year"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_weight"
+                            android:layout_margin="@dimen/dp5"
+                            android:padding="@dimen/dp0"
+                            android:layout_weight="1">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/vehicle_seating_capacity_including_driver"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/Ll_normal_htl"
+                        android:baselineAligned="false">
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_weight"
+                            android:layout_margin="@dimen/dp5"
+                            android:padding="@dimen/dp0"
+                            android:layout_weight="1">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/vehicle_registering_authority"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_weight"
+                            android:layout_margin="@dimen/dp5"
+                            android:padding="@dimen/dp0"
+                            android:layout_weight="1">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/vehicle_registering_state"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/Ll_normal_htl"
+                        android:baselineAligned="false">
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_weight"
+                            android:layout_margin="@dimen/dp5"
+                            android:padding="@dimen/dp0"
+                            android:layout_weight="1">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/vehicle_registering_authority"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_weight"
+                            android:layout_margin="@dimen/dp5"
+                            android:padding="@dimen/dp0"
+                            android:layout_weight="1">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/vehicle_registering_state"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+                    </LinearLayout>
+
+                    <android.support.v7.widget.CardView
+                       style="@style/cardViewStyle"
+                        app:cardElevation="@dimen/dp5"
+                        app:cardCornerRadius="@dimen/dp5"
+                        android:layout_margin="@dimen/dp5">
+
+                        <LinearLayout
+                           style="@style/Ll_normal_vtl">
+
+                            <android.support.design.widget.TextInputLayout
+                                style="@style/textinputlaout_wmatch_hwrap"
+                                android:layout_margin="@dimen/dp5"
+                                android:padding="@dimen/dp0"
+                                android:layout_weight="1"
+                                android:layout_width="0dp">
+
+                                <EditText
+                                    style="@style/edittext_normal"
+                                    android:hint="@string/previous_owner_name"
+                                    android:textSize="@dimen/sp10"
+                                    android:importantForAutofill="no"
+                                    android:inputType="text|number"
+                                    tools:ignore="TooDeepLayout" />
+
+
+                            </android.support.design.widget.TextInputLayout>
+
+
+                            <LinearLayout
+                                style="@style/Ll_normal_htl"
+                                android:baselineAligned="false">
+
+                                <android.support.design.widget.TextInputLayout
+                                    style="@style/textinputlaout_weight"
+                                    android:layout_margin="@dimen/dp5"
+                                    android:padding="@dimen/dp0"
+                                    android:layout_weight="1">
+
+                                    <EditText
+                                        style="@style/edittext_normal"
+                                        android:hint="@string/previous_owner_purchased_date"
+                                        android:textSize="@dimen/sp10"
+                                        android:importantForAutofill="no"
+                                        android:inputType="text|number"/>
+
+
+                                </android.support.design.widget.TextInputLayout>
+
+                                <android.support.design.widget.TextInputLayout
+                                    style="@style/textinputlaout_weight"
+                                    android:layout_margin="@dimen/dp5"
+                                    android:padding="@dimen/dp0"
+                                    android:layout_weight="1">
+
+                                    <EditText
+                                        style="@style/edittext_normal"
+                                        android:hint="@string/previous_owner_puchased_cost"
+                                        android:textSize="@dimen/sp10"
+                                        android:importantForAutofill="no"
+                                        android:inputType="text|number"/>
+
+
+                                </android.support.design.widget.TextInputLayout>
+                            </LinearLayout>
+
+                            <android.support.v7.widget.CardView
+                                style="@style/cardViewStyle"
+                                app:cardElevation="@dimen/dp5"
+                                android:layout_height="@dimen/dp80"
+                                app:cardCornerRadius="@dimen/dp5"
+                                android:layout_margin="@dimen/dp5">
+
+
+                                <EditText
+                                   style="@style/edittext_normal"
+                                    android:background="#fff"
+                                    android:textSize="@dimen/sp10"
+                                    android:layout_margin="@dimen/sp10"
+                                    android:hint="@string/perticulars_of_previous_registration_and_register_number_if_any"
+                                    android:importantForAutofill="no"
+                                    android:inputType="text|number"/>
+
+
+
+
+
+                            </android.support.v7.widget.CardView>
+
+
+
+                        </LinearLayout>
+
+
+                    </android.support.v7.widget.CardView>
+
+
+                </LinearLayout>
+
+
+
+            </android.support.v7.widget.CardView>
+
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="@dimen/dp5"
+                app:cardCornerRadius="@dimen/dp5"
+                android:layout_margin="@dimen/dp5">
+
+                <LinearLayout
+                    style="@style/Ll_normal_vtl">
+
+
+
+                    <TextView
+                     style="@style/tv_normal_mrgn_pad"
+                        android:text="@string/servicing_details"
+                        android:layout_gravity="center"/>
+
+
+
+
+                    <LinearLayout
+                        style="@style/Ll_normal_htl"
+                        android:baselineAligned="false">
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_weight"
+                            android:layout_weight="1">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/total_free_service"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_weight"
+                            android:layout_weight="1">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/remaining_free_service"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        style="@style/Ll_normal_htl"
+                        android:baselineAligned="false">
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_weight"
+                            android:layout_weight="1">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/next_service_in_kms"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_weight"
+                            android:layout_weight="1">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/next_service_in_days"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/Ll_normal_htl"
+                        android:baselineAligned="false">
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_weight"
+                            android:layout_weight="1">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/last_serving_date"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+
+
+                        <LinearLayout
+                            style="@style/Ll_normal_htl_mrgn_pad"
+                            android:layout_width="@dimen/dp0"
+                            android:layout_weight="1"
+                            android:background="@drawable/card_shape">
+
+                            <TextView
+                                style="@style/tv_normal"
+                                android:layout_weight="1"
+                                android:textSize="@dimen/sp10"
+                                android:text="@string/send_service_alert"
+                                tools:ignore="NestedWeights" />
+
+                            <Switch
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1" />
+
+
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+
+
+
+
+
+
+                </LinearLayout>
+
+
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="@dimen/dp5"
+                app:cardCornerRadius="@dimen/dp5"
+                android:layout_margin="@dimen/dp5">
+
+                <LinearLayout
+                    style="@style/Ll_normal_vtl">
+
+
+
+                    <TextView
+                        style="@style/tv_normal_mrgn_pad"
+                        android:text="@string/insurance_details"
+                        android:layout_gravity="center"
+                        tools:ignore="TooManyViews" />
+
+
+
+                    <LinearLayout
+                        style="@style/Ll_normal_htl"
+                        android:baselineAligned="false">
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_weight"
+                            android:layout_weight="1">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/insurance_type"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_weight"
+                            android:layout_weight="1">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/insurance_number"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        style="@style/Ll_normal_htl"
+                        android:baselineAligned="false">
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_weight"
+                            android:layout_weight="1">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/insurance_date"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_weight"
+                            android:layout_weight="1">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/renewed_date"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/Ll_normal_htl"
+                        android:baselineAligned="false">
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_weight"
+                            android:layout_weight="1">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/next_renewal_date"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+
+
+                        <LinearLayout
+                            style="@style/Ll_normal_htl_mrgn_pad"
+                            android:layout_width="@dimen/dp0"
+                            android:layout_weight="1"
+                            android:background="@drawable/card_shape">
+
+                            <TextView
+                                style="@style/tv_normal"
+                                android:layout_weight="1"
+                                android:textSize="@dimen/sp10"
+                                android:text="@string/send_renewal_alert"
+                                tools:ignore="NestedWeights" />
+
+                            <Switch
+                                android:id="@+id/switch1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1" />
+
+
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        style="@style/Ll_normal_htl"
+                        android:baselineAligned="false">
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_weight"
+                            android:layout_weight="1">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/agent_id"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_weight"
+                            android:layout_weight="2">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/agent_name"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+
+
+
+                    </LinearLayout>
+
+
+                    <android.support.design.widget.TextInputLayout
+                        style="@style/textinputlaout_wmatch_hwrap">
+
+                        <EditText
+                            style="@style/edittext_normal"
+                            android:hint="@string/insurance_company_name"
+                            android:textSize="@dimen/sp10"
+                            android:importantForAutofill="no"
+                            android:inputType="text|number"/>
+
+                    </android.support.design.widget.TextInputLayout>
+
+
+                    <LinearLayout
+                        style="@style/Ll_normal_htl"
+                        android:baselineAligned="false">
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_weight"
+                            android:layout_weight="1">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/agent_contact_number"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_weight"
+                            android:layout_weight="1">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/insurance_company_number"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+
+
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                       style="@style/Ll_normal_htl_mrgn_pad">
+
+                        <TextView
+                          style="@style/tv_normal"
+                            android:text="@string/other_documents"/>
+
+                        <View
+                           style="@style/view_horizantal"
+                            android:layout_width="match_parent"
+                            android:layout_marginTop="@dimen/dp10"
+                            android:layout_marginStart="@dimen/dp10">
+
+                        </View>
+
+
+                    </LinearLayout>
+
+                    <android.support.v7.widget.RecyclerView
+                        style="@style/recyclerViewStyle"
+                        android:id="@+id/recyclerteammembers">
+
+
+                    </android.support.v7.widget.RecyclerView>
+
+
+                </LinearLayout>
+
+
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="@dimen/dp5"
+                app:cardCornerRadius="@dimen/dp5"
+                android:layout_margin="@dimen/dp5">
+
+                <LinearLayout
+                    style="@style/Ll_normal_vtl">
+
+
+
+                    <TextView
+                        style="@style/tv_normal_mrgn_pad"
+                        android:text="@string/other_documents"
+                        android:layout_gravity="center"/>
+                    <LinearLayout
+                        style="@style/Ll_normal_htl"
+                        android:baselineAligned="false">
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_weight"
+                            android:layout_weight="1">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/insurance_number"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_weight"
+                            android:layout_weight="1">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/rc_number"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+
+
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        style="@style/Ll_normal_htl">
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_wmatch_hwrap">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/noc_number"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+
+                    </LinearLayout>
+
+
+                    <android.support.v7.widget.CardView
+                       style="@style/cardViewStyle"
+                        app:cardElevation="@dimen/dp5"
+                        app:cardCornerRadius="@dimen/dp5"
+                        android:layout_margin="@dimen/dp5">
+                <LinearLayout
+                         style="@style/Ll_normal_vtl">
+
+
+                    <LinearLayout
+        style="@style/Ll_normal_htl_mrgn_pad">
+
+        <TextView
+            style="@style/tv_normal"
+            android:text="@string/pollution_certificate_details"/>
+
+        <View
+            style="@style/view_horizantal"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/dp10"
+            android:layout_marginStart="@dimen/dp10">
+
+        </View>
+
+
+    </LinearLayout>
+
+
+                    <LinearLayout
+                        style="@style/Ll_normal_htl"
+                        android:baselineAligned="false">
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_weight"
+                            android:layout_weight="1">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/pollution_certificate_number"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_weight"
+                            android:layout_weight="1">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/pollution_certificate_issue_date"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+        style="@style/Ll_normal_htl"
+                        android:baselineAligned="false">
+
+        <android.support.design.widget.TextInputLayout
+            style="@style/textinputlaout_weight"
+            android:layout_weight="1">
+
+            <EditText
+                style="@style/edittext_normal"
+                android:hint="@string/pollution_certificate_renewal_date"
+                android:textSize="@dimen/sp10"
+                android:importantForAutofill="no"
+                android:inputType="text|number"/>
+
+
+        </android.support.design.widget.TextInputLayout>
+
+                        <LinearLayout
+                            style="@style/Ll_normal_htl_mrgn_pad"
+                            android:layout_width="@dimen/dp0"
+                            android:layout_weight="1"
+                            android:background="@drawable/card_shape">
+
+                            <TextView
+                                style="@style/tv_normal"
+                                android:layout_weight="1"
+                                android:textSize="@dimen/sp10"
+                                android:text="@string/send_renewal_alert"
+                                tools:ignore="NestedWeights" />
+
+                            <Switch
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1" />
+
+
+
+                        </LinearLayout>
+
+
+    </LinearLayout>
+
+                </LinearLayout>
+
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        style="@style/cardViewStyle"
+                        app:cardElevation="@dimen/dp5"
+                        app:cardCornerRadius="@dimen/dp5"
+                        android:layout_margin="@dimen/dp5">
+                        <LinearLayout
+                            style="@style/Ll_normal_vtl">
+
+
+                            <LinearLayout
+                                style="@style/Ll_normal_htl_mrgn_pad">
+
+                                <TextView
+                                    style="@style/tv_normal"
+                                    android:text="@string/fitness_certificate_details"/>
+
+                                <View
+                                    style="@style/view_horizantal"
+                                    android:layout_width="match_parent"
+                                    android:layout_marginTop="@dimen/dp10"
+                                    android:layout_marginStart="@dimen/dp10">
+
+                                </View>
+
+
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                style="@style/Ll_normal_htl"
+                                android:baselineAligned="false">
+
+                                <android.support.design.widget.TextInputLayout
+                                    style="@style/textinputlaout_weight"
+                                    android:layout_weight="1">
+
+                                    <EditText
+                                        style="@style/edittext_normal"
+                                        android:hint="@string/vehicle_fitness_certificate_number"
+                                        android:textSize="@dimen/sp10"
+                                        android:importantForAutofill="no"
+                                        android:inputType="text|number"/>
+
+
+                                </android.support.design.widget.TextInputLayout>
+
+                                <android.support.design.widget.TextInputLayout
+                                    style="@style/textinputlaout_weight"
+                                    android:layout_weight="1">
+
+                                    <EditText
+                                        style="@style/edittext_normal"
+                                        android:hint="@string/vehicle_fitness_issue_date"
+                                        android:textSize="@dimen/sp10"
+                                        android:importantForAutofill="no"
+                                        android:inputType="text|number" />
+
+
+                                </android.support.design.widget.TextInputLayout>
+
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                style="@style/Ll_normal_htl"
+                                android:baselineAligned="false">
+
+                                <android.support.design.widget.TextInputLayout
+                                    style="@style/textinputlaout_weight"
+                                    android:layout_weight="1">
+
+                                    <EditText
+                                        style="@style/edittext_normal"
+                                        android:hint="@string/vehicle_fitness_renewal_date"
+                                        android:textSize="@dimen/sp10"
+                                        android:importantForAutofill="no"
+                                        android:inputType="text|number"/>
+
+
+                                </android.support.design.widget.TextInputLayout>
+
+                                <LinearLayout
+                                    style="@style/Ll_normal_htl_mrgn_pad"
+                                    android:layout_width="@dimen/dp0"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/card_shape">
+
+                                    <TextView
+                                        style="@style/tv_normal"
+                                        android:layout_weight="1"
+                                        android:textSize="@dimen/sp10"
+                                        android:text="@string/send_renewal_alert"
+                                        tools:ignore="NestedWeights" />
+
+                                    <Switch
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1" />
+
+
+
+                                </LinearLayout>
+
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        style="@style/cardViewStyle"
+                        app:cardElevation="@dimen/dp5"
+                        app:cardCornerRadius="@dimen/dp5"
+                        android:layout_margin="@dimen/dp5">
+                        <LinearLayout
+                            style="@style/Ll_normal_vtl">
+
+
+                            <LinearLayout
+                                style="@style/Ll_normal_htl_mrgn_pad">
+
+                                <TextView
+                                    style="@style/tv_normal"
+                                    android:text="@string/tax_permit_certificate_details"/>
+
+                                <View
+                                    style="@style/view_horizantal"
+                                    android:layout_width="match_parent"
+                                    android:layout_marginTop="@dimen/dp10"
+                                    android:layout_marginStart="@dimen/dp10">
+
+                                </View>
+
+
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                style="@style/Ll_normal_htl"
+                                android:baselineAligned="false">
+
+                                <android.support.design.widget.TextInputLayout
+                                    style="@style/textinputlaout_weight"
+                                    android:layout_weight="1">
+
+                                    <EditText
+                                        style="@style/edittext_normal"
+                                        android:hint="@string/tax_permit_number"
+                                        android:textSize="@dimen/sp10"
+                                        android:importantForAutofill="no"
+                                        android:inputType="text|number"/>
+
+
+                                </android.support.design.widget.TextInputLayout>
+
+                                <android.support.design.widget.TextInputLayout
+                                    style="@style/textinputlaout_weight"
+                                    android:layout_weight="1">
+
+                                    <EditText
+                                        style="@style/edittext_normal"
+                                        android:hint="@string/tax_payable_date"
+                                        android:textSize="@dimen/sp10"
+                                        android:importantForAutofill="no"
+                                        android:inputType="text|number"/>
+
+
+                                </android.support.design.widget.TextInputLayout>
+
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                style="@style/Ll_normal_htl"
+                                android:baselineAligned="false">
+
+                                <android.support.design.widget.TextInputLayout
+                                    style="@style/textinputlaout_weight"
+                                    android:layout_weight="1">
+
+                                    <EditText
+                                        style="@style/edittext_normal"
+                                        android:hint="@string/tax_permit_amount"
+                                        android:textSize="@dimen/sp10"
+                                        android:importantForAutofill="no"
+                                        android:inputType="text|number"/>
+
+
+                                </android.support.design.widget.TextInputLayout>
+
+                                <LinearLayout
+                                    style="@style/Ll_normal_htl_mrgn_pad"
+                                    android:layout_width="@dimen/dp0"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/card_shape">
+
+                                    <TextView
+                                        style="@style/tv_normal"
+                                        android:layout_weight="1"
+                                        android:textSize="@dimen/sp10"
+                                        android:text="@string/send_renewal_alert"
+                                        tools:ignore="NestedWeights" />
+
+                                    <Switch
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1" />
+
+
+
+                                </LinearLayout>
+
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </android.support.v7.widget.CardView>
+
+
+
+
+
+
+
+                    <LinearLayout
+                        style="@style/Ll_normal_htl_mrgn_pad">
+
+                        <TextView
+                            style="@style/tv_normal"
+                            android:text="@string/loan_document_images"/>
+
+                        <View
+                            style="@style/view_horizantal"
+                            android:layout_width="match_parent"
+                            android:layout_marginTop="@dimen/dp10"
+                            android:layout_marginStart="@dimen/dp10">
+
+                        </View>
+
+
+                    </LinearLayout>
+
+
+                    <android.support.v7.widget.RecyclerView
+                        style="@style/recyclerViewStyle"
+                        android:id="@+id/otherdocumentsrecyclerview">
+
+
+                    </android.support.v7.widget.RecyclerView>
+
+                </LinearLayout>
+
+
+
+            </android.support.v7.widget.CardView>
+
+
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="@dimen/dp5"
+                app:cardCornerRadius="@dimen/dp5"
+                android:layout_margin="@dimen/dp5">
+
+                <LinearLayout
+                    style="@style/Ll_normal_vtl">
+
+
+
+                    <TextView
+                        style="@style/tv_normal_mrgn_pad"
+                        android:text="@string/financial_details"
+                        android:layout_gravity="center"/>
+
+
+
+                    <LinearLayout
+                        style="@style/Ll_normal_htl">
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_wmatch_hwrap">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/vehicle_purchased_price"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+
+
+                    </LinearLayout>
+
+        <android.support.v7.widget.CardView
+            style="@style/cardViewStyle"
+            app:cardElevation="@dimen/dp5"
+            app:cardCornerRadius="@dimen/dp5"
+            android:layout_margin="@dimen/dp5">
+
+          <LinearLayout
+               style="@style/Ll_normal_vtl">
+
+              <LinearLayout
+                  style="@style/Ll_normal_htl"
+                  android:baselineAligned="false">
+
+
+                  <LinearLayout
+                      style="@style/Ll_normal_htl_mrgn_pad"
+                      android:layout_width="0dp"
+                      android:layout_weight="1"
+                      android:background="@drawable/card_shape">
+
+                      <TextView
+                          style="@style/tv_normal"
+                          android:layout_weight="1"
+                          android:textSize="@dimen/sp10"
+                          android:text="@string/loan_details_if_any"
+                          tools:ignore="NestedWeights" />
+
+                      <Switch
+
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_weight="1" />
+
+
+
+                  </LinearLayout>
+
+
+              </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/Ll_normal_htl">
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_wmatch_hwrap">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/bank_name"
+                                android:textSize="@dimen/sp10"
+                                android:importantForAutofill="no"
+                                android:inputType="text|number"/>
+
+
+                        </android.support.design.widget.TextInputLayout>
+
+
+
+                    </LinearLayout>
+
+
+                <LinearLayout
+            style="@style/Ll_normal_htl"
+                    android:baselineAligned="false">
+
+            <android.support.design.widget.TextInputLayout
+                style="@style/textinputlaout_weight"
+                android:layout_weight="1">
+
+                <EditText
+                    style="@style/edittext_normal"
+                    android:hint="@string/loan_account_number"
+                    android:textSize="@dimen/sp10"
+                    android:importantForAutofill="no"
+                    android:inputType="text|number"/>
+
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                style="@style/textinputlaout_weight"
+                android:layout_weight="1">
+
+                <EditText
+                    style="@style/edittext_normal"
+                    android:hint="@string/loan_amount"
+                    android:textSize="@dimen/sp10"
+                    android:importantForAutofill="no"
+                    android:inputType="text|number"/>
+
+
+            </android.support.design.widget.TextInputLayout>
+
+
+        </LinearLayout>
+
+              <LinearLayout
+                  style="@style/Ll_normal_htl"
+                  android:baselineAligned="false">
+
+                  <android.support.design.widget.TextInputLayout
+                      style="@style/textinputlaout_weight"
+                      android:layout_weight="1">
+
+                      <EditText
+                          style="@style/edittext_normal"
+                          android:hint="@string/loan_interest_rate"
+                          android:textSize="@dimen/sp10"
+                          android:importantForAutofill="no"
+                          android:inputType="text|number"/>
+
+
+                  </android.support.design.widget.TextInputLayout>
+
+                  <android.support.design.widget.TextInputLayout
+                      style="@style/textinputlaout_weight"
+                      android:layout_weight="1">
+
+                      <EditText
+                          style="@style/edittext_normal"
+                          android:hint="@string/down_payment"
+                          android:textSize="@dimen/sp10"
+                          android:importantForAutofill="no"
+                          android:inputType="text|number"/>
+
+
+                  </android.support.design.widget.TextInputLayout>
+
+
+              </LinearLayout>
+
+              <LinearLayout
+                  style="@style/Ll_normal_htl"
+                  android:baselineAligned="false">
+
+                  <android.support.design.widget.TextInputLayout
+                      style="@style/textinputlaout_weight"
+                      android:layout_weight="1">
+
+                      <EditText
+                          style="@style/edittext_normal"
+                          android:hint="@string/loan_approved_date"
+                          android:textSize="@dimen/sp10"
+                          android:importantForAutofill="no"
+                          android:inputType="text|number"/>
+
+
+                  </android.support.design.widget.TextInputLayout>
+
+                  <android.support.design.widget.TextInputLayout
+                      style="@style/textinputlaout_weight"
+                      android:layout_weight="1">
+
+                      <EditText
+                          style="@style/edittext_normal"
+                          android:hint="@string/loan_due_date"
+                          android:textSize="@dimen/sp10"
+                          android:importantForAutofill="no"
+                          android:inputType="text|number"/>
+
+                  </android.support.design.widget.TextInputLayout>
+
+
+              </LinearLayout>
+
+              <LinearLayout
+                  style="@style/Ll_normal_htl"
+                  android:baselineAligned="false">
+
+                  <android.support.design.widget.TextInputLayout
+                      style="@style/textinputlaout_weight"
+                      android:layout_weight="1">
+
+                      <EditText
+                          style="@style/edittext_normal"
+                          android:hint="@string/loan_end_date"
+                          android:textSize="@dimen/sp10"
+                          android:importantForAutofill="no"
+                          android:inputType="text|number"/>
+
+
+                  </android.support.design.widget.TextInputLayout>
+
+                  <android.support.design.widget.TextInputLayout
+                      style="@style/textinputlaout_weight"
+                      android:layout_weight="1">
+
+                      <EditText
+                          style="@style/edittext_normal"
+                          android:hint="@string/loan_emi_amount"
+                          android:textSize="@dimen/sp10"
+                          android:importantForAutofill="no"
+                          android:inputType="text|number"/>
+
+                  </android.support.design.widget.TextInputLayout>
+
+
+              </LinearLayout>
+
+
+
+          </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+
+                    <android.support.v7.widget.CardView
+                        style="@style/cardViewStyle"
+                        app:cardElevation="@dimen/dp5"
+                        app:cardCornerRadius="@dimen/dp5"
+                        android:layout_margin="@dimen/dp5">
+
+                        <LinearLayout
+                            style="@style/Ll_normal_vtl">
+
+                            <LinearLayout
+                                style="@style/Ll_normal_htl"
+                                android:baselineAligned="false">
+
+
+                                <LinearLayout
+                                    style="@style/Ll_normal_htl_mrgn_pad"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/card_shape">
+
+                                    <TextView
+                                        style="@style/tv_normal"
+                                        android:layout_weight="1"
+                                        android:textSize="@dimen/sp10"
+                                        android:text="@string/other_expenses_if_second_hand"
+                                        tools:ignore="NestedWeights" />
+
+                                    <Switch
+
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1" />
+
+
+
+                                </LinearLayout>
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                style="@style/Ll_normal_htl">
+
+                                <android.support.design.widget.TextInputLayout
+                                    style="@style/textinputlaout_wmatch_hwrap">
+
+                                    <EditText
+                                        style="@style/edittext_normal"
+                                        android:hint="@string/bank_name"
+                                        android:textSize="@dimen/sp10"
+                                        android:importantForAutofill="no"
+                                        android:inputType="text|number"/>
+
+
+                                </android.support.design.widget.TextInputLayout>
+
+
+
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                style="@style/Ll_normal_htl"
+                                android:baselineAligned="false">
+
+                                <android.support.design.widget.TextInputLayout
+                                    style="@style/textinputlaout_weight"
+                                    android:layout_weight="1">
+
+                                    <EditText
+                                        style="@style/edittext_normal"
+                                        android:hint="@string/maintenance_amount"
+                                        android:textSize="@dimen/sp10"
+                                        android:importantForAutofill="no"
+                                        android:inputType="text|number"/>
+
+
+                                </android.support.design.widget.TextInputLayout>
+
+                                <android.support.design.widget.TextInputLayout
+                                    style="@style/textinputlaout_weight"
+                                    android:layout_weight="1">
+
+                                    <EditText
+                                        style="@style/edittext_normal"
+                                        android:hint="@string/repairing_charges"
+                                        android:textSize="@dimen/sp10"
+                                        android:importantForAutofill="no"
+                                        android:inputType="text|number"/>
+
+
+                                </android.support.design.widget.TextInputLayout>
+
+
+                            </LinearLayout>
+
+
+<android.support.v7.widget.CardView
+   style="@style/cardViewStyle"
+    app:cardElevation="@dimen/dp5"
+    android:layout_height="@dimen/dp80"
+    app:cardCornerRadius="@dimen/dp5"
+    android:layout_margin="@dimen/dp5">
+
+
+
+    <EditText
+        style="@style/edittext_normal"
+        android:background="@color/white"
+        android:textSize="@dimen/sp10"
+        android:hint="@string/reamarks"
+        android:importantForAutofill="no"
+        android:inputType="text|number"/>
+
+
+
+</android.support.v7.widget.CardView>
+
+
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+
+
+
+                    <LinearLayout
+                        style="@style/Ll_normal_htl_mrgn_pad">
+
+                        <TextView
+                            style="@style/tv_normal"
+                            android:text="@string/loan_document_images"/>
+
+                        <View
+                            style="@style/view_horizantal"
+                            android:layout_width="match_parent"
+                            android:layout_marginTop="@dimen/dp10"
+                            android:layout_marginStart="@dimen/dp10">
+
+                        </View>
+
+
+                    </LinearLayout>
+
+                    <android.support.v7.widget.RecyclerView
+                        style="@style/recyclerViewStyle"
+                        android:id="@+id/recyclerfinancialdetails">
+
+
+                    </android.support.v7.widget.RecyclerView>
+
+
+                </LinearLayout>
+
+
+
+            </android.support.v7.widget.CardView>
+
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="@dimen/dp5"
+                app:cardCornerRadius="@dimen/dp5"
+                android:layout_margin="@dimen/dp5">
+
+                <LinearLayout
+                    style="@style/Ll_normal_vtl">
+
+
+
+                    <TextView
+                        style="@style/tv_normal_mrgn_pad"
+                        android:text="@string/vehicle_fitness"
+                        android:layout_gravity="center"/>
+
+
+
+
+
+
+
+                    <LinearLayout
+                        style="@style/Ll_normal_htl_mrgn_pad">
+
+                        <TextView
+                            style="@style/tv_normal"
+                            android:text="@string/vehicle_images"/>
+
+                        <View
+                            style="@style/view_horizantal"
+                            android:layout_width="match_parent"
+                            android:layout_marginTop="@dimen/dp10"
+                            android:layout_marginStart="@dimen/dp10">
+
+                        </View>
+
+
+                    </LinearLayout>
+
+                    <android.support.v7.widget.RecyclerView
+                        style="@style/recyclerViewStyle"
+                        android:id="@+id/vehiclefitness">
+
+
+                    </android.support.v7.widget.RecyclerView>
+
+
+                </LinearLayout>
+
+
+
+            </android.support.v7.widget.CardView>
+
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
