@@ -809,7 +809,7 @@
                                     android:layout_weight="1">
 
                                     <EditText
-                                           style="@style/edittext_normal"
+                                        style="@style/edittext_normal"
                                         android:id="@+id/et_agentid_transport"
                                         android:hint="@string/agent_id"
                                         android:importantForAutofill="no"
@@ -901,6 +901,8 @@
                                     android:layout_marginStart="@dimen/dp10"
                                     android:layout_marginTop="@dimen/dp10">
 
+
+
                                 </View>
 
 
@@ -936,13 +938,9 @@
                                 android:layout_gravity="center"
                                 android:text="@string/other_documents" />
 
-                            <in.varadhismartek.pathshalaerp.CircleImageView
-                                android:id="@+id/fatherImage"
-                                style="@style/CircleImageViewStyle"
-                                android:contentDescription="@string/studentimage"
-                                android:background="@drawable/attach2"
-                                android:layout_marginStart="@dimen/mar_padd_5dp"
-                                />
+
+
+
 
                             <LinearLayout
                                 style="@style/Ll_normal_htl"
@@ -1774,7 +1772,6 @@
                                     android:layout_marginTop="@dimen/dp10">
 
                                 </View>
-
 
                             </LinearLayout>
 

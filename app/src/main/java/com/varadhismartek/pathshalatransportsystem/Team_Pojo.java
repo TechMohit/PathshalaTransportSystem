@@ -7,11 +7,11 @@ package com.varadhismartek.pathshalatransportsystem;
 public class Team_Pojo {
 
     int image;
-    String text;
 
-    public Team_Pojo(int image, String text) {
+
+    public Team_Pojo(int image) {
         this.image = image;
-        this.text = text;
+
     }
 
     public int getImage() {
@@ -22,11 +22,7 @@ public class Team_Pojo {
         this.image = image;
     }
 
-    public String getText() {
-        return text;
-    }
 
-    public void setText(String text) {
-        this.text = text;
-    }
+
+
 }

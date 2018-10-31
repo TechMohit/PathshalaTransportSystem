@@ -1,13 +1,19 @@
 package com.varadhismartek.pathshalatransportsystem.Fragment;
 
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -55,13 +61,14 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
     RecyclerView recyclerView, otherdocuments, recyclerfinancial, recyclervehiclefitness;
     private List<Team_Pojo> teamList = new ArrayList<>();
 
-    private RecyclerTeamAdapter adapter;
+    public static RecyclerTeamAdapter adapter;
     private Recyclerfinancial recyclerfinancialadapter;
     private Recyclervehiclefitness recyclervehiclefitnessadapter;
     private String[] vehicletype = {"BUS", "AC BUS", "MINI BUS", "TRAVELLER"};
     private String[] bodytype = {"NEW", "SECOND HAND"};
     private Spinner vehicletypespin, bodytypespin;
     private String Tag = "Addvehicle";
+    Context context ;
 
     private String str_vehicle_type, str_body_type, vehicleregno, vehiclename, vehiclegpsdetails, chasisnumber, enginenumber, manufacturename, modelnumber,
             manufactureyear,seatingcapacity, registeringauthority, registeringstate, selectedYear, selectedMonth, selectedDate,
@@ -80,6 +87,7 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
     ImageView iv_calendarregisterdate, iv_calendarpurchasedate, iv_previousownerpurchasedate;
     TextView bt_save, vehicle_id;
     TransBarrierModel transBarrierModel, transBarrierModelreg, transBarrierModelService,transBarrierModelInsurance;
+    public static ArrayList<String> imgarraylist;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -95,6 +103,13 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         //lastIdref1 = FirebaseDatabase.getInstance().getReference("School/SchoolId/Barriers/Transport_Ids/Current_Registration_Id");
         getStudentRegistrationIdFromBarriers();
         //nextservicedayscheck();
+        imgarraylist = new ArrayList<>();
+
+        //setting the imageuri as constant for the image drawable
+        Uri imageuri = Uri.parse("android.resource://"+getContext().getPackageName()+"/drawable/folderad");
+
+        //adding the above image uri in the arraylist
+        imgarraylist.add(getPathFromUri(imageuri));
 
         CustomSpinnerAdapter customSpinnerAdaptervehicle = new CustomSpinnerAdapter(getActivity(), vehicletype, "#717071");
         vehicletypespin.setAdapter(customSpinnerAdaptervehicle);
@@ -128,11 +143,13 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
             }
         });
 
-        adapter = new RecyclerTeamAdapter(getActivity(), teamList);
+        adapter = new RecyclerTeamAdapter(getActivity(), imgarraylist);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new GridLayoutManager(context,4,GridLayoutManager.VERTICAL,false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
         Recyclerotherdocuments recyclerotherdocuments = new Recyclerotherdocuments(getActivity(), teamList);
         LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -151,12 +168,28 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         recyclervehiclefitness.setLayoutManager(mLayoutManager4);
         recyclervehiclefitness.setItemAnimator(new DefaultItemAnimator());
         recyclervehiclefitness.setAdapter(recyclervehiclefitnessadapter);
-        getData();
+        //getData();
 
 
         return v;
 
 
+    }
+
+
+
+    //creating the method to return the string from the uri
+    private String getPathFromUri(Uri filePathWorkExpTransport) {
+
+
+        Cursor cursor = getContext().getContentResolver().query(filePathWorkExpTransport, null, null, null, null);
+        if (cursor == null) {
+            return filePathWorkExpTransport.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            return cursor.getString(idx);
+        }
     }
 
 
@@ -204,6 +237,7 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         minsurancecomname = v.findViewById(R.id.et_insurancecompanyname_transport);
         magentcontnum = v.findViewById(R.id.et_agentcontnum_transport);
         minsurancecomnum = v.findViewById(R.id.et_insurancecomnum_transport);
+
 
 
     }
@@ -293,7 +327,7 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
 
     }
 
-    private void getData() {
+  /*  private void getData() {
 
         Team_Pojo team_pojo = new Team_Pojo(R.drawable.emp4, "Raghu");
         teamList.add(team_pojo);
@@ -338,7 +372,7 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         teamList.add(team_pojo);
 
         adapter.notifyDataSetChanged();
-    }
+    }*/
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -693,5 +727,6 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
             e.printStackTrace();
         }
     }
+
 }
 

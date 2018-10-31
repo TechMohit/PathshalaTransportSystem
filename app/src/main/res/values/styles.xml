@@ -181,7 +181,7 @@
 
     <!--Circleimageview -->
 
-    <style name="circleimagevw_normal">
+    <style name="CircleImageViewStyle">
         <item name="android:layout_width">@dimen/dp50</item>
         <item name="android:layout_height">@dimen/dp50</item>
 
