@@ -93,4 +93,11 @@
     <string name="loan_document_images">Loan Document Images</string>
     <string name="vehicle_fitness">Vehicle fitness</string>
     <string name="vehicle_images">Vehicle Images</string>
+    <string name="clickbutton">clickButton</string>
+    <string name="select_from_camera">Select From Camera</string>
+    <string name="select_from_gallery">Select from gallery</string>
+    <string name="add_sibling">Add Siblings</string>
+    <string name="student_name">Student Name</string>
+    <string name="cancel">Cancel</string>
+    <string name="submit">Submit</string>
 </resources>

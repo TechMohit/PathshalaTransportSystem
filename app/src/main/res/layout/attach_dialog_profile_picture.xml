@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/LinearLayoutStyle"
+    android:layout_gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/linearLayoutAttach"
+        style="@style/LinearLayoutStyle"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/dialog_ll_camera"
+            style="@style/LinearLayoutStyle"
+            android:padding="5dp"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/cameraClick"
+                android:background="@drawable/ic_camera_alt_black_24dp"
+                android:layout_width="@dimen/dp50"
+                android:layout_height="@dimen/dp50"
+                android:layout_gravity="center|fill_horizontal"
+                android:contentDescription="@string/clickbutton" />
+
+            <TextView
+                android:layout_marginStart="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/select_from_camera" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/dialog_ll_gallery"
+            style="@style/LinearLayoutStyle"
+            android:padding="5dp"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/galleryClick"
+                android:background="@drawable/ic_gallery"
+                android:layout_width="@dimen/dp50"
+                android:layout_height="@dimen/dp50"
+                android:layout_gravity="center|fill_horizontal"
+                android:contentDescription="@string/clickbutton" />
+
+            <TextView
+                android:layout_marginStart="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/select_from_gallery" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/spinnerLayout"
+        style="@style/cardViewStyle"
+        app:cardElevation="@dimen/dp5"
+        android:visibility="gone">
+
+        <LinearLayout
+            style="@style/LinearLayoutStyle"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp50"
+                android:background="@color/colorPrimary"
+                android:text="@string/add_sibling"
+                android:padding="5dp"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:drawableStart="@drawable/ic_siblings"
+                android:textColor="@color/white"/>
+
+
+            <LinearLayout
+                style="@style/LinearLayoutStyle"
+                android:layout_margin="@dimen/dp5"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:visibility="visible">
+
+                <Spinner
+                    style="@style/SpinnerStyleA"
+                    android:id="@+id/spinnerForClassSibling"
+                    android:layout_weight="1"
+                    android:background="@drawable/custom_spinner_background"
+                    />
+
+                <Spinner
+                    style="@style/SpinnerStyleA"
+                    android:id="@+id/spinnerForSectionSibling"
+                    android:layout_weight="1"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/custom_spinner_background"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/LinearLayoutStyle"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_margin="@dimen/dp10"
+                >
+
+                <MultiAutoCompleteTextView
+                    android:id="@+id/searchAutoComplete"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:background="@drawable/search_layout"
+                    android:ems="10"
+                    android:hint="@string/student_name"
+                    android:inputType="textPersonName"
+                    android:paddingBottom="@dimen/dp10"
+                    android:paddingLeft="@dimen/dp20"
+                    android:paddingRight="@dimen/dp20"
+                    android:paddingTop="@dimen/dp10"
+                    android:focusableInTouchMode="true"
+                    android:textColor="@color/hintColor"
+                    android:textSize="@dimen/sp17"
+                    android:layout_marginStart="@dimen/dp5"
+                    android:drawableRight="@drawable/ic_search_black_24dp"
+                    tools:ignore="RtlHardcoded" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="end">
+
+                <Button
+                    android:id="@+id/buttonSiblingCancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cancel"
+                    android:textColor="@color/hintColor"
+                    android:background="@android:color/transparent"
+                    tools:ignore="ButtonStyle" />
+
+
+                <Button
+                    android:id="@+id/buttonSiblingSubmit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/submit"
+                    android:textColor="@color/hintColor"
+                    android:background="@android:color/transparent"
+                    tools:ignore="ButtonStyle" />
+
+
+            </LinearLayout>
+
+
+
+
+
+        </LinearLayout>
+
+
+
+
+    </android.support.v7.widget.CardView>
+
+
+
+
+
+
+
+</LinearLayout>

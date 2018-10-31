@@ -271,6 +271,11 @@
 
     </style>
 
+    <style name="LinearLayoutStyle" >
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
 
     <style name="Ll_weight_htl" parent="Ll_normal_htl">
         <item name="android:layout_width">0dp</item>
