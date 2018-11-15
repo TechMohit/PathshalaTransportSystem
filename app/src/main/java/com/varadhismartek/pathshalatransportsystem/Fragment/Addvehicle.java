@@ -593,49 +593,14 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
                 getDOB(lastservicedate);
                 break;
 
-            case R.id.btnAdd:
-                btnAddOnClick();
-                break;
-
-            case R.id.dialog_ll_camera:
-                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, FROM_CAMERA);
-                settingsDialog.dismiss();
-                break;
 
 
-            case R.id.dialog_ll_gallery:
-                Intent in_gallery = new Intent(
-                        Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-                startActivityForResult(in_gallery,FROM_GALLERY);
-                settingsDialog.dismiss();
-                break;
 
 
         }
     }
 
-    private void btnAddOnClick() {
-        settingsDialog = new Dialog(getActivity());
-        settingsDialog.setContentView(R.layout.attach_dialog_profile_picture);
-        settingsDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
-
-        settingsDialog.setTitle("Choose your option..");
-
-
-
-        LinearLayout dialogcamera = settingsDialog.findViewById(R.id.dialog_ll_camera);
-        LinearLayout dialoggallery = settingsDialog.findViewById(R.id.dialog_ll_gallery);
-
-
-        dialogcamera.setOnClickListener(this);
-        dialoggallery.setOnClickListener(this);
-        settingsDialog.show();
-
-    }
 
     private void getDOB(final String dob) {
 
