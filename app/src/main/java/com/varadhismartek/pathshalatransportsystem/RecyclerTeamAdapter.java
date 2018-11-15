@@ -1,9 +1,11 @@
 package com.varadhismartek.pathshalatransportsystem;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +14,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 
 import com.varadhismartek.pathshalatransportsystem.Fragment.Addvehicle;
@@ -26,6 +30,7 @@ public class RecyclerTeamAdapter extends RecyclerView.Adapter<RecyclerTeamAdapte
     Context context;
     private int pos;
     private ImageView img;
+    Dialog settingsDialog;
 
     public RecyclerTeamAdapter(Context context, List<String> team_pojos)
     {
@@ -49,6 +54,15 @@ public class RecyclerTeamAdapter extends RecyclerView.Adapter<RecyclerTeamAdapte
             Addvehicle.imgarraylist.add(getPathFromUri(imageuri));
             notifyDataSetChanged();
 
+        }
+        if(requestCode == 200 && resultCode == Activity.RESULT_OK ) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), photo, "Title", null);
+            Uri filePath = Uri.parse(path);
+            Addvehicle.imgarraylist.set(pos,getPathFromUri(filePath));
+            Uri imageuri = Uri.parse("android.resource://"+context.getPackageName()+"/drawable/folderad");
+            Addvehicle.imgarraylist.add(getPathFromUri(imageuri));
+            notifyDataSetChanged();
         }
     }
 
@@ -102,7 +116,7 @@ public class RecyclerTeamAdapter extends RecyclerView.Adapter<RecyclerTeamAdapte
 
         }
 
-        Log.d("imaguri",imageuri.toString());
+        Log.d("imageloc",imageuri.toString());
 
         holder.img.setImageURI(imageuri);
 
@@ -110,11 +124,12 @@ public class RecyclerTeamAdapter extends RecyclerView.Adapter<RecyclerTeamAdapte
 
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_PICK,
+                btnAddOnClick();
+               /* Intent intent = new Intent(Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                intent.setType("image/*");
+                intent.setType("image*//*");
                 ((AppCompatActivity)context).startActivityForResult(
-                        Intent.createChooser(intent, "Select File"), 100);
+                        Intent.createChooser(intent, "Select File"), 100);*/
             }
 
         });
@@ -156,5 +171,46 @@ public class RecyclerTeamAdapter extends RecyclerView.Adapter<RecyclerTeamAdapte
         return Addvehicle.imgarraylist.size();
     }
 
+
+    private void btnAddOnClick() {
+        settingsDialog = new Dialog(context);
+        settingsDialog.setContentView(R.layout.attach_dialog_profile_picture);
+        settingsDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+
+        settingsDialog.setTitle("Choose your option..");
+
+
+
+        LinearLayout dialogcamera = settingsDialog.findViewById(R.id.dialog_ll_camera);
+        LinearLayout dialoggallery = settingsDialog.findViewById(R.id.dialog_ll_gallery);
+
+
+
+      dialoggallery.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              Intent intent = new Intent(Intent.ACTION_PICK,
+                      android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+              intent.setType("image/*");
+                ((AppCompatActivity)context).startActivityForResult(
+                        Intent.createChooser(intent, "Select File"), 100);
+              settingsDialog.dismiss();
+
+          }
+      });
+      dialogcamera.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+              ((AppCompatActivity)context).startActivityForResult(cameraIntent, 200);
+              settingsDialog.dismiss();
+
+          }
+      }
+      );
+        settingsDialog.show();
+
+    }
 
 }

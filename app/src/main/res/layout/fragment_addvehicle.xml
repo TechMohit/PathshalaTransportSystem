@@ -951,6 +951,7 @@
                                     android:layout_weight="1">
 
                                     <EditText
+                                        android:id="@+id/et_otherdocumentinsurancenum_transport"
                                         style="@style/edittext_normal"
                                         android:hint="@string/insurance_number"
                                         android:importantForAutofill="no"
@@ -965,6 +966,7 @@
                                     android:layout_weight="1">
 
                                     <EditText
+                                        android:id="@+id/et_rcnum_transport"
                                         style="@style/edittext_normal"
                                         android:hint="@string/rc_number"
                                         android:importantForAutofill="no"
@@ -984,6 +986,7 @@
 
                                     <EditText
                                         style="@style/edittext_normal"
+                                        android:id="@+id/et_nocnum_transport"
                                         android:hint="@string/noc_number"
                                         android:importantForAutofill="no"
                                         android:inputType="text|number"
@@ -1034,6 +1037,7 @@
 
                                             <EditText
                                                 style="@style/edittext_normal"
+                                                android:id="@+id/et_pollutioncertificatenum_transport"
                                                 android:hint="@string/pollution_certificate_number"
                                                 android:importantForAutofill="no"
                                                 android:inputType="text|number"
@@ -1049,6 +1053,7 @@
                                             <EditText
                                                 style="@style/edittext_normal"
                                                 android:hint="@string/pollution_certificate_issue_date"
+                                                android:id="@+id/et_pollutioncertificateissuedate_transport"
                                                 android:importantForAutofill="no"
                                                 android:inputType="text|number"
                                                 android:textSize="@dimen/sp10" />
@@ -1070,6 +1075,7 @@
                                             <EditText
                                                 style="@style/edittext_normal"
                                                 android:hint="@string/pollution_certificate_renewal_date"
+                                                android:id="@+id/et_pollutioncertificaterenewdate_transport"
                                                 android:importantForAutofill="no"
                                                 android:inputType="text|number"
                                                 android:textSize="@dimen/sp10" />
@@ -1145,6 +1151,7 @@
                                             <EditText
                                                 style="@style/edittext_normal"
                                                 android:hint="@string/vehicle_fitness_certificate_number"
+                                                android:id="@+id/et_fitnesscertificatenumber_transport"
                                                 android:importantForAutofill="no"
                                                 android:inputType="text|number"
                                                 android:textSize="@dimen/sp10" />
@@ -1159,6 +1166,7 @@
                                             <EditText
                                                 style="@style/edittext_normal"
                                                 android:hint="@string/vehicle_fitness_issue_date"
+                                                android:id="@+id/et_fitnesscertificateissuedate_transport"
                                                 android:importantForAutofill="no"
                                                 android:inputType="text|number"
                                                 android:textSize="@dimen/sp10" />
@@ -1180,6 +1188,7 @@
                                             <EditText
                                                 style="@style/edittext_normal"
                                                 android:hint="@string/vehicle_fitness_renewal_date"
+                                                android:id="@+id/et_fitnesscertificaterenewdate_transport"
                                                 android:importantForAutofill="no"
                                                 android:inputType="text|number"
                                                 android:textSize="@dimen/sp10" />
@@ -1255,6 +1264,7 @@
                                             <EditText
                                                 style="@style/edittext_normal"
                                                 android:hint="@string/tax_permit_number"
+                                                android:id="@+id/et_texpermitnumber_transport"
                                                 android:importantForAutofill="no"
                                                 android:inputType="text|number"
                                                 android:textSize="@dimen/sp10" />
@@ -1269,6 +1279,7 @@
                                             <EditText
                                                 style="@style/edittext_normal"
                                                 android:hint="@string/tax_payable_date"
+                                                android:id="@+id/et_texpayabledate_transport"
                                                 android:importantForAutofill="no"
                                                 android:inputType="text|number"
                                                 android:textSize="@dimen/sp10" />
@@ -1290,6 +1301,7 @@
                                             <EditText
                                                 style="@style/edittext_normal"
                                                 android:hint="@string/tax_permit_amount"
+                                                android:id="@+id/et_texpayableamount_transport"
                                                 android:importantForAutofill="no"
                                                 android:inputType="text|number"
                                                 android:textSize="@dimen/sp10" />
@@ -1342,8 +1354,6 @@
 
 
                             </LinearLayout>
-
-
                             <android.support.v7.widget.RecyclerView
                                 android:id="@+id/otherdocumentsrecyclerview"
                                 style="@style/recyclerViewStyle">
@@ -1384,6 +1394,7 @@
 
                                     <EditText
                                         style="@style/edittext_normal"
+                                        android:id="@+id/et_fdpurchaseprice_transport"
                                         android:hint="@string/vehicle_purchased_price"
                                         android:importantForAutofill="no"
                                         android:inputType="text|number"
@@ -1440,6 +1451,7 @@
                                             <EditText
                                                 style="@style/edittext_normal"
                                                 android:hint="@string/bank_name"
+                                                android:id="@+id/et_fdbankname_transport"
                                                 android:importantForAutofill="no"
                                                 android:inputType="text|number"
                                                 android:textSize="@dimen/sp10" />
@@ -1462,6 +1474,7 @@
                                             <EditText
                                                 style="@style/edittext_normal"
                                                 android:hint="@string/loan_account_number"
+                                                android:id="@+id/et_fdlaonaccountnum_transport"
                                                 android:importantForAutofill="no"
                                                 android:inputType="text|number"
                                                 android:textSize="@dimen/sp10" />
@@ -1476,6 +1489,7 @@
                                             <EditText
                                                 style="@style/edittext_normal"
                                                 android:hint="@string/loan_amount"
+                                                android:id="@+id/et_fdloanamount_transport"
                                                 android:importantForAutofill="no"
                                                 android:inputType="text|number"
                                                 android:textSize="@dimen/sp10" />
@@ -1497,6 +1511,7 @@
                                             <EditText
                                                 style="@style/edittext_normal"
                                                 android:hint="@string/loan_interest_rate"
+                                                android:id="@+id/et_fdloanintrestrate_transport"
                                                 android:importantForAutofill="no"
                                                 android:inputType="text|number"
                                                 android:textSize="@dimen/sp10" />
@@ -1511,6 +1526,7 @@
                                             <EditText
                                                 style="@style/edittext_normal"
                                                 android:hint="@string/down_payment"
+                                                android:id="@+id/et_fddownpayment_transport"
                                                 android:importantForAutofill="no"
                                                 android:inputType="text|number"
                                                 android:textSize="@dimen/sp10" />
@@ -1533,6 +1549,7 @@
                                             <EditText
                                                 style="@style/edittext_normal"
                                                 android:hint="@string/loan_approved_date"
+                                                android:id="@+id/et_fdloanapprovedate_transport"
                                                 android:importantForAutofill="no"
                                                 android:inputType="text|number"
                                                 android:textSize="@dimen/sp10" />
@@ -1547,6 +1564,7 @@
                                             <EditText
                                                 style="@style/edittext_normal"
                                                 android:hint="@string/loan_due_date"
+                                                android:id="@+id/et_fdloanduedate_transport"
                                                 android:importantForAutofill="no"
                                                 android:inputType="text|number"
                                                 android:textSize="@dimen/sp10" />
@@ -1568,6 +1586,7 @@
                                             <EditText
                                                 style="@style/edittext_normal"
                                                 android:hint="@string/loan_end_date"
+                                                android:id="@+id/et_fdloanenddate_transport"
                                                 android:importantForAutofill="no"
                                                 android:inputType="text|number"
                                                 android:textSize="@dimen/sp10" />
@@ -1582,6 +1601,7 @@
                                             <EditText
                                                 style="@style/edittext_normal"
                                                 android:hint="@string/loan_emi_amount"
+                                                android:id="@+id/et_fdloanemiamount_transport"
                                                 android:importantForAutofill="no"
                                                 android:inputType="text|number"
                                                 android:textSize="@dimen/sp10" />
@@ -1663,6 +1683,7 @@
                                             <EditText
                                                 style="@style/edittext_normal"
                                                 android:hint="@string/maintenance_amount"
+                                                android:id="@+id/et_fdmaintenanceamount_transport"
                                                 android:importantForAutofill="no"
                                                 android:inputType="text|number"
                                                 android:textSize="@dimen/sp10" />
@@ -1677,6 +1698,7 @@
                                             <EditText
                                                 style="@style/edittext_normal"
                                                 android:hint="@string/repairing_charges"
+                                                android:id="@+id/et_fdreparingcharges_transport"
                                                 android:importantForAutofill="no"
                                                 android:inputType="text|number"
                                                 android:textSize="@dimen/sp10" />
@@ -1700,6 +1722,7 @@
                                             style="@style/edittext_normal"
                                             android:background="@color/white"
                                             android:hint="@string/reamarks"
+                                            android:id="@+id/et_fdremarkes_transport"
                                             android:importantForAutofill="no"
                                             android:inputType="text|number"
                                             android:textSize="@dimen/sp10" />

@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="cardViewStyle">@style/CardView</item>
     </style>
 
 
@@ -877,6 +878,19 @@
         <item name="android:layout_weight">1</item>
         <item name="android:orientation">horizontal</item>
     </style>
+
+    <style name="clickbutton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">#d7b77c</item>
+        <item name="android:textColor">#fff</item>
+        <item name="android:drawableRight">@drawable/ic_attachment_black_24dp</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginRight">30dp</item>
+        <item name="android:drawableEnd">@drawable/ic_attachment_black_24dp</item>
+    </style>
+
 
 
 </resources>

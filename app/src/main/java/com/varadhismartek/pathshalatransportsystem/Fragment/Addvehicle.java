@@ -4,9 +4,11 @@ package com.varadhismartek.pathshalatransportsystem.Fragment;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,11 +23,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,32 +66,43 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
     RecyclerView recyclerView, otherdocuments, recyclerfinancial, recyclervehiclefitness;
     private List<Team_Pojo> teamList = new ArrayList<>();
 
-    public static RecyclerTeamAdapter adapter;
+    public static RecyclerTeamAdapter recyclerTeamAdapter;
+    public static Recyclerotherdocuments recyclerotherdocuments;
     private Recyclerfinancial recyclerfinancialadapter;
     private Recyclervehiclefitness recyclervehiclefitnessadapter;
     private String[] vehicletype = {"BUS", "AC BUS", "MINI BUS", "TRAVELLER"};
     private String[] bodytype = {"NEW", "SECOND HAND"};
     private Spinner vehicletypespin, bodytypespin;
     private String Tag = "Addvehicle";
-    Context context ;
+    Context context;
+    Dialog settingsDialog;
+    public static int FROM_GALLERY= 1;
+    public static int FROM_CAMERA= 2;
+
+
 
     private String str_vehicle_type, str_body_type, vehicleregno, vehiclename, vehiclegpsdetails, chasisnumber, enginenumber, manufacturename, modelnumber,
             manufactureyear,seatingcapacity, registeringauthority, registeringstate, selectedYear, selectedMonth, selectedDate,
             registereddate,purchasedate, preownerpurchasedate,previousownerremark, preownerpurchasecost, previousownername,
             totalfreeservice,remanningservice, nextservicekms,nextservicedays, lastservicedate,insurancetype,insurancenum,
-            insurancedate,insurancerenewdate,insurancenextrenewdate,agentname,agentid,insurancecomname,agentcontnum,insurancecomnum;
+            insurancedate,insurancerenewdate,insurancenextrenewdate,agentname,agentid,insurancecomname,agentcontnum,insurancecomnum,
+            otherdocinsurancenum,rcnumber,nocnumber,pollutioncertificatenum,pollutioncertificateissuedate,pollutioncertificaterenewdate,fitnesscertificatenum,fitnesscertificateissuedate,
+            fitnesscertificaterenewdate,taxpermitnum,taxpayabledate,taxpayableamount,fdvehiclepurchaseprice,fdbankname,fdloanaccountnum,fdloanamount,fdloaninterestrate,
+            fddownpayment,fdlaonapprovedate,fdloanduedate,fdloanenddate,fdloanemiamount,fdmaintaincecharges,fdreparingcharges,fdremarks;
 
     private EditText vehicle_regno, vehicle_name, vehicle_gpsdetails, chasis_number, engine_number, manufacture_name,
             model_number, manufacture_year, seating_capacity, registering_authority, registering_state, registered_date, purchase_date,
             preownerpurchase_date, previousowner_remark, preownerpurchase_cost, previousowner_name,
             mtotalfreeservice, mremanningservice, mnextservicekms, mnextservicedays, mlastservicedate,minsurancetype,minsurancenum,minsurancedate,
-            minsurancerenewdate,minsurancenextrenewdate,magentname,magentid,minsurancecomname,magentcontnum,minsurancecomnum;
+            minsurancerenewdate,minsurancenextrenewdate,magentname,magentid,minsurancecomname,magentcontnum,minsurancecomnum,motherdocinsurancenum,mrcnumber,mnocnumber,mpollutioncertificatenum,mpollutioncertificateissuedate,mpollutioncertificaterenewdate,
+            mfitnesscertificatenum,mfitnesscertificateissuedate,mfitnesscertificaterenewdate,mtaxpermitnum,mtaxpayabledate,mtaxpayableamount,mfdvehiclepurchaseprice,mfdbankname,mfdloanaccountnum,mfdloanamount,mfdloaninterestrate,mfddownpayment,
+            mfdlaonapprovedate,mfdloanduedate,mfdloanenddate,mfdloanemiamount,mfdmaintaincecharges,mfdreparingcharges,mfdremarks;;
 
     DatabaseReference lastIdref, lastIdref1;
     DatabaseReference mref1 = FirebaseDatabase.getInstance().getReference("School/SchoolId/Vehicle_Registration");
     ImageView iv_calendarregisterdate, iv_calendarpurchasedate, iv_previousownerpurchasedate;
     TextView bt_save, vehicle_id;
-    TransBarrierModel transBarrierModel, transBarrierModelreg, transBarrierModelService,transBarrierModelInsurance;
+    TransBarrierModel transBarrierModel, transBarrierModelreg, transBarrierModelService,transBarrierModelInsurance,transBarrierModelOtherDocument,transBarrierModelFinancialDetails;
     public static ArrayList<String> imgarraylist;
 
     @Override
@@ -143,19 +159,21 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
             }
         });
 
-        adapter = new RecyclerTeamAdapter(getActivity(), imgarraylist);
+        recyclerTeamAdapter = new RecyclerTeamAdapter(getActivity(), imgarraylist);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(context,4,GridLayoutManager.VERTICAL,false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        recyclerView.setAdapter(recyclerTeamAdapter);
+        recyclerTeamAdapter.notifyDataSetChanged();
 
-        Recyclerotherdocuments recyclerotherdocuments = new Recyclerotherdocuments(getActivity(), teamList);
+        recyclerotherdocuments = new Recyclerotherdocuments(getActivity(), teamList);
         LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        otherdocuments.setLayoutManager(mLayoutManager2);
+        otherdocuments.setHasFixedSize(true);
+        otherdocuments.setLayoutManager(new GridLayoutManager(context,4,GridLayoutManager.VERTICAL,false));
         otherdocuments.setItemAnimator(new DefaultItemAnimator());
         otherdocuments.setAdapter(recyclerotherdocuments);
+        recyclerotherdocuments.notifyDataSetChanged();
 
         recyclerfinancialadapter = new Recyclerfinancial(getActivity(), teamList);
         LinearLayoutManager mLayoutManager3 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -237,6 +255,34 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         minsurancecomname = v.findViewById(R.id.et_insurancecompanyname_transport);
         magentcontnum = v.findViewById(R.id.et_agentcontnum_transport);
         minsurancecomnum = v.findViewById(R.id.et_insurancecomnum_transport);
+        motherdocinsurancenum = v.findViewById(R.id.et_otherdocumentinsurancenum_transport);
+        mrcnumber = v.findViewById(R.id.et_rcnum_transport);
+        mnocnumber = v.findViewById(R.id.et_nocnum_transport);
+
+
+        mpollutioncertificatenum = v.findViewById(R.id.et_pollutioncertificatenum_transport);
+        mpollutioncertificateissuedate = v.findViewById(R.id.et_pollutioncertificateissuedate_transport);
+        mpollutioncertificaterenewdate = v.findViewById(R.id.et_pollutioncertificaterenewdate_transport);
+        mfitnesscertificatenum = v.findViewById(R.id.et_fitnesscertificatenumber_transport);
+        mfitnesscertificateissuedate = v.findViewById(R.id.et_fitnesscertificateissuedate_transport);
+        mtaxpermitnum = v.findViewById(R.id.et_texpermitnumber_transport);
+        mtaxpayabledate = v.findViewById(R.id.et_texpayabledate_transport);
+        mtaxpayableamount = v.findViewById(R.id.et_texpayableamount_transport);
+
+        mfdvehiclepurchaseprice = v.findViewById(R.id.et_fdpurchaseprice_transport);
+        mfdbankname = v.findViewById(R.id.et_fdbankname_transport);
+        mfdloanaccountnum = v.findViewById(R.id.et_fdlaonaccountnum_transport);
+        mfdloanamount = v.findViewById(R.id.et_fdloanamount_transport);
+        mfdloaninterestrate = v.findViewById(R.id.et_fdloanintrestrate_transport);
+        mfddownpayment = v.findViewById(R.id.et_fddownpayment_transport);
+        mfdlaonapprovedate = v.findViewById(R.id.et_fdloanapprovedate_transport);
+        mfdloanduedate = v.findViewById(R.id.et_fdloanduedate_transport);
+        mfdloanenddate = v.findViewById(R.id.et_fdloanenddate_transport);
+        mfdloanemiamount = v.findViewById(R.id.et_fdloanemiamount_transport);
+        mfdmaintaincecharges = v.findViewById(R.id.et_fdmaintenanceamount_transport);
+        mfdreparingcharges = v.findViewById(R.id.et_fdreparingcharges_transport);
+        mfdremarks = v.findViewById(R.id.et_fdremarkes_transport);
+
 
 
 
@@ -251,6 +297,8 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         minsurancerenewdate.setOnClickListener(this);
         minsurancenextrenewdate.setOnClickListener(this);
         bt_save.setOnClickListener(this);
+
+
     }
 
     private void saveaddvehicledata() {
@@ -293,6 +341,41 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         insurancecomnum   = magentcontnum.getText().toString();
         agentcontnum   = magentcontnum.getText().toString();
 
+        otherdocinsurancenum = motherdocinsurancenum.getText().toString();
+        rcnumber = mrcnumber.getText().toString();
+        nocnumber = mnocnumber.getText().toString();
+        pollutioncertificatenum = mpollutioncertificatenum.getText().toString();
+        pollutioncertificateissuedate = mpollutioncertificateissuedate.getText().toString();
+        pollutioncertificaterenewdate = mpollutioncertificaterenewdate.getText().toString();
+        fitnesscertificatenum = mfitnesscertificatenum.getText().toString();
+        fitnesscertificateissuedate = mfitnesscertificateissuedate.getText().toString();
+        fitnesscertificaterenewdate = mfitnesscertificaterenewdate.getText().toString();
+        taxpermitnum = mtaxpermitnum.getText().toString();
+        taxpayabledate = mtaxpayabledate.getText().toString();
+        taxpayableamount = mtaxpayableamount.getText().toString();
+
+        fdvehiclepurchaseprice = mfdvehiclepurchaseprice.getText().toString();
+        fdbankname = mfdbankname.getText().toString();
+        fdloanaccountnum = mfdloanaccountnum.getText().toString();
+        fdloanamount = mfdloanamount.getText().toString();
+        fdloaninterestrate = mfdloaninterestrate.getText().toString();
+        fddownpayment = mfddownpayment.getText().toString();
+        fdlaonapprovedate = mfdlaonapprovedate.getText().toString();
+        fdloanduedate = mfdloanduedate.getText().toString();
+        fdloanenddate = mfdloanenddate.getText().toString();
+        fdloanemiamount = mfdloanemiamount.getText().toString();
+        fdmaintaincecharges = mfdmaintaincecharges.getText().toString();
+        fdreparingcharges = mfdreparingcharges.getText().toString();
+        fdremarks = mfdremarks.getText().toString();
+
+
+
+
+
+
+
+
+
 
         //create data model
         transBarrierModel = new TransBarrierModel(str_vehicle_type, vehicleregno, vehiclename, vehiclegpsdetails);
@@ -303,6 +386,12 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         transBarrierModelService = new TransBarrierModel(totalfreeservice, remanningservice, lastservicedate, nextservicedays, nextservicekms);
         transBarrierModelInsurance = new TransBarrierModel(insurancetype,insurancenum, insurancedate, insurancerenewdate,insurancenextrenewdate,
                                      agentname,agentid,insurancecomname,agentcontnum,insurancecomnum);
+        transBarrierModelOtherDocument = new TransBarrierModel(otherdocinsurancenum,rcnumber,nocnumber,pollutioncertificatenum,pollutioncertificateissuedate,
+                pollutioncertificaterenewdate,fitnesscertificatenum,fitnesscertificateissuedate,fitnesscertificaterenewdate,taxpermitnum,taxpayabledate,taxpayableamount);
+
+        transBarrierModelFinancialDetails = new TransBarrierModel(fdvehiclepurchaseprice,fdbankname,fdloanaccountnum,fdloanamount,fdloaninterestrate,
+                fddownpayment,fdlaonapprovedate,fdloanduedate,fdloanenddate,fdloanemiamount,fdmaintaincecharges,fdreparingcharges,fdremarks);
+
 
         //send to firebase
 
@@ -316,6 +405,8 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
                 mref1.child(Constant.FINAL_REGISTRATION_ID).child("vehicle_registration_Details").setValue(transBarrierModelreg);
                 mref1.child(Constant.FINAL_REGISTRATION_ID).child("Servicing_Details").setValue(transBarrierModelService);
                 mref1.child(Constant.FINAL_REGISTRATION_ID).child("Insurance_Details").setValue(transBarrierModelInsurance);
+              //  mref1.child(Constant.FINAL_REGISTRATION_ID).child("Other_Document").setValue(transBarrierModelOtherdocument);
+              //  mref1.child(Constant.FINAL_REGISTRATION_ID).child("Financial_Details").setValue(transBarrierModelFinancialDetails);
 
 
                 setdata();
@@ -502,7 +593,48 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
                 getDOB(lastservicedate);
                 break;
 
+            case R.id.btnAdd:
+                btnAddOnClick();
+                break;
+
+            case R.id.dialog_ll_camera:
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, FROM_CAMERA);
+                settingsDialog.dismiss();
+                break;
+
+
+            case R.id.dialog_ll_gallery:
+                Intent in_gallery = new Intent(
+                        Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                startActivityForResult(in_gallery,FROM_GALLERY);
+                settingsDialog.dismiss();
+                break;
+
+
         }
+    }
+
+    private void btnAddOnClick() {
+        settingsDialog = new Dialog(getActivity());
+        settingsDialog.setContentView(R.layout.attach_dialog_profile_picture);
+        settingsDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+
+        settingsDialog.setTitle("Choose your option..");
+
+
+
+        LinearLayout dialogcamera = settingsDialog.findViewById(R.id.dialog_ll_camera);
+        LinearLayout dialoggallery = settingsDialog.findViewById(R.id.dialog_ll_gallery);
+
+
+        dialogcamera.setOnClickListener(this);
+        dialoggallery.setOnClickListener(this);
+        settingsDialog.show();
+
     }
 
     private void getDOB(final String dob) {

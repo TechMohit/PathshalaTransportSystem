@@ -38,6 +38,118 @@ public class TransBarrierModel {
     String agentname;
     String agentid;
     String insurancecomname;
+    String otherdocinsurancenum,rcnumber,nocnumber,pollutioncertificatenum,
+            pollutioncertificateissuedate,pollutioncertificaterenewdate,fitnesscertificatenum,
+            fitnesscertificateissuedate,fitnesscertificaterenewdate,taxpermitnum,taxpayabledate,taxpayableamount;
+    String fdvehiclepurchaseprice,fdbankname,fdloanaccountnum,fdloanamount,fdloaninterestrate,
+            fddownpayment,fdlaonapprovedate,fdloanduedate,fdloanenddate,fdloanemiamount,fdmaintaincecharges,fdreparingcharges,fdremarks;
+    String agentcontnum;
+    String insurancecomnum;
+    String insurancenextrenewdate;
+
+    public String getFdvehiclepurchaseprice() {
+        return fdvehiclepurchaseprice;
+    }
+
+    public String getFdbankname() {
+        return fdbankname;
+    }
+
+    public String getFdloanaccountnum() {
+        return fdloanaccountnum;
+    }
+
+    public String getFdloanamount() {
+        return fdloanamount;
+    }
+
+    public String getFdloaninterestrate() {
+        return fdloaninterestrate;
+    }
+
+    public String getFddownpayment() {
+        return fddownpayment;
+    }
+
+    public String getFdlaonapprovedate() {
+        return fdlaonapprovedate;
+    }
+
+    public String getFdloanduedate() {
+        return fdloanduedate;
+    }
+
+    public String getFdloanenddate() {
+        return fdloanenddate;
+    }
+
+    public String getFdloanemiamount() {
+        return fdloanemiamount;
+    }
+
+    public String getFdmaintaincecharges() {
+        return fdmaintaincecharges;
+    }
+
+    public String getFdreparingcharges() {
+        return fdreparingcharges;
+    }
+
+    public String getFdremarks() {
+        return fdremarks;
+    }
+
+
+
+    public String getOtherdocinsurancenum() {
+        return otherdocinsurancenum;
+    }
+
+    public String getRcnumber() {
+        return rcnumber;
+    }
+
+    public String getNocnumber() {
+        return nocnumber;
+    }
+
+    public String getPollutioncertificatenum() {
+        return pollutioncertificatenum;
+    }
+
+    public String getPollutioncertificateissuedate() {
+        return pollutioncertificateissuedate;
+    }
+
+    public String getPollutioncertificaterenewdate() {
+        return pollutioncertificaterenewdate;
+    }
+
+    public String getFitnesscertificatenum() {
+        return fitnesscertificatenum;
+    }
+
+    public String getFitnesscertificateissuedate() {
+        return fitnesscertificateissuedate;
+    }
+
+    public String getFitnesscertificaterenewdate() {
+        return fitnesscertificaterenewdate;
+    }
+
+    public String getTaxpermitnum() {
+        return taxpermitnum;
+    }
+
+    public String getTaxpayabledate() {
+        return taxpayabledate;
+    }
+
+    public String getTaxpayableamount() {
+        return taxpayableamount;
+    }
+
+
 
     public String getAgentname() {
         return agentname;
@@ -59,8 +171,7 @@ public class TransBarrierModel {
         return insurancecomnum;
     }
 
-    String agentcontnum;
-    String insurancecomnum;
+
 
     public String getInsurancetype() {
         return insurancetype;
@@ -82,7 +193,7 @@ public class TransBarrierModel {
         return insurancenextrenewdate;
     }
 
-    String insurancenextrenewdate;
+
 
 
     public String getTotalfreeservice() {
@@ -249,6 +360,44 @@ public class TransBarrierModel {
         this.agentcontnum = agentcontnum;
         this.insurancecomnum = insurancecomnum;
 
+
+    }
+    public TransBarrierModel(String otherdocinsurancenum,String rcnumber,String nocnumber,String pollutioncertificatenum,
+                             String pollutioncertificateissuedate,String pollutioncertificaterenewdate,String fitnesscertificatenum,
+                             String fitnesscertificateissuedate,String fitnesscertificaterenewdate,String taxpermitnum,String taxpayabledate,
+                             String taxpayableamount)
+    {
+        this.otherdocinsurancenum = otherdocinsurancenum;
+        this.rcnumber = rcnumber;
+        this.nocnumber = nocnumber;
+        this.pollutioncertificatenum = pollutioncertificatenum;
+        this.pollutioncertificateissuedate = pollutioncertificateissuedate;
+        this.pollutioncertificaterenewdate = pollutioncertificaterenewdate;
+        this.fitnesscertificatenum = fitnesscertificatenum;
+        this.fitnesscertificateissuedate = fitnesscertificateissuedate;
+        this.fitnesscertificaterenewdate = fitnesscertificaterenewdate;
+        this.taxpermitnum = taxpermitnum;
+        this.taxpayabledate = taxpayabledate;
+        this.taxpayableamount = taxpayableamount;
+
+    }
+
+    public TransBarrierModel(String fdvehiclepurchaseprice,String fdbankname,String fdloanaccountnum,String fdloanamount,String fdloaninterestrate,
+                             String fddownpayment,String fdlaonapprovedate,String fdloanduedate,String fdloanenddate,String fdloanemiamount,String fdmaintaincecharges,String fdreparingcharges,String fdremarks)
+    {
+       this.fdvehiclepurchaseprice = fdvehiclepurchaseprice;
+       this.fdbankname = fdbankname;
+       this.fdloanaccountnum = fdloanaccountnum;
+       this.fdloanamount = fdloanamount;
+       this.fdloaninterestrate = fdloaninterestrate;
+       this.fddownpayment = fddownpayment;
+       this.fdlaonapprovedate = fdlaonapprovedate;
+       this.fdloanduedate = fdloanduedate;
+       this.fdloanenddate = fdloanenddate;
+       this.fdloanemiamount = fdloanemiamount;
+       this.fdmaintaincecharges = fdmaintaincecharges;
+       this.fdreparingcharges = fdreparingcharges;
+       this.fdremarks = fdremarks;
 
     }
 
