@@ -104,7 +104,7 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
     TextView bt_save, vehicle_id;
     TransBarrierModel transBarrierModel, transBarrierModelreg, transBarrierModelService,transBarrierModelInsurance,transBarrierModelOtherDocument,transBarrierModelFinancialDetails;
     public static ArrayList<String> imgarraylist;
-
+    public static ArrayList<String> othrdocarraylist;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -120,12 +120,14 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         getStudentRegistrationIdFromBarriers();
         //nextservicedayscheck();
         imgarraylist = new ArrayList<>();
+        othrdocarraylist = new ArrayList<>();
 
         //setting the imageuri as constant for the image drawable
         Uri imageuri = Uri.parse("android.resource://"+getContext().getPackageName()+"/drawable/folderad");
 
         //adding the above image uri in the arraylist
         imgarraylist.add(getPathFromUri(imageuri));
+        othrdocarraylist.add(getPathFromUri(imageuri));
 
         CustomSpinnerAdapter customSpinnerAdaptervehicle = new CustomSpinnerAdapter(getActivity(), vehicletype, "#717071");
         vehicletypespin.setAdapter(customSpinnerAdaptervehicle);
@@ -167,7 +169,7 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         recyclerView.setAdapter(recyclerTeamAdapter);
         recyclerTeamAdapter.notifyDataSetChanged();
 
-        recyclerotherdocuments = new Recyclerotherdocuments(getActivity(), teamList);
+        recyclerotherdocuments = new Recyclerotherdocuments(getActivity(), othrdocarraylist);
         LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         otherdocuments.setHasFixedSize(true);
         otherdocuments.setLayoutManager(new GridLayoutManager(context,4,GridLayoutManager.VERTICAL,false));
@@ -592,10 +594,6 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
                 String lastservicedate = "Lastservicedate";
                 getDOB(lastservicedate);
                 break;
-
-
-
-
 
         }
     }
