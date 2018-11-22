@@ -32,6 +32,7 @@ public class Recyclerotherdocuments extends RecyclerView.Adapter<Recyclerotherdo
     private int pos;
     private ImageView img;
     Dialog settingsDialog;
+    String Tag  = "Recyclerotherdocuments" ;
 
     public Recyclerotherdocuments(Context context, List<String> team_pojos)
     {
@@ -41,7 +42,7 @@ public class Recyclerotherdocuments extends RecyclerView.Adapter<Recyclerotherdo
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == 100 && resultCode == Activity.RESULT_OK ) {
+        if(requestCode == 300 && resultCode == Activity.RESULT_OK ) {
 
             Uri uri = data.getData();
             // img.setImageURI(uri);
@@ -49,13 +50,13 @@ public class Recyclerotherdocuments extends RecyclerView.Adapter<Recyclerotherdo
             Addvehicle.othrdocarraylist.set(pos,getPathFromUri(uri));
             Uri imageuri = Uri.parse("android.resource://"+context.getPackageName()+"/drawable/folderad");
 
-            Log.d("njebtgh",imageuri+"");
+            Log.d("Tag",imageuri+"");
 
             Addvehicle.othrdocarraylist.add(getPathFromUri(imageuri));
             notifyDataSetChanged();
 
         }
-        if(requestCode == 200 && resultCode == Activity.RESULT_OK ) {
+        if(requestCode == 400 && resultCode == Activity.RESULT_OK ) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), photo, "Title", null);
             Uri filePath = Uri.parse(path);
@@ -131,7 +132,7 @@ public class Recyclerotherdocuments extends RecyclerView.Adapter<Recyclerotherdo
 
         }
 
-        Log.d("imageloc",imageuri.toString());
+        Log.d(Tag,imageuri.toString());
 
         holder.img.setImageURI(imageuri);
 
@@ -194,7 +195,7 @@ public class Recyclerotherdocuments extends RecyclerView.Adapter<Recyclerotherdo
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 intent.setType("image/*");
                 ((AppCompatActivity)context).startActivityForResult(
-                        Intent.createChooser(intent, "Select File"), 100);
+                        Intent.createChooser(intent, "Select File"), 300);
                 settingsDialog.dismiss();
 
             }
@@ -203,7 +204,7 @@ public class Recyclerotherdocuments extends RecyclerView.Adapter<Recyclerotherdo
                                             @Override
                                             public void onClick(View v) {
                                                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                                ((AppCompatActivity)context).startActivityForResult(cameraIntent, 200);
+                                                ((AppCompatActivity)context).startActivityForResult(cameraIntent, 400);
                                                 settingsDialog.dismiss();
 
                                             }

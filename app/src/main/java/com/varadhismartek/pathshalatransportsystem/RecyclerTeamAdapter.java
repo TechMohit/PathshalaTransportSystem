@@ -31,6 +31,7 @@ public class RecyclerTeamAdapter extends RecyclerView.Adapter<RecyclerTeamAdapte
     private int pos;
     private ImageView img;
     Dialog settingsDialog;
+    Uri fileIsuranceProfile;
 
     public RecyclerTeamAdapter(Context context, List<String> team_pojos)
     {
@@ -47,6 +48,7 @@ public class RecyclerTeamAdapter extends RecyclerView.Adapter<RecyclerTeamAdapte
             // img.setImageURI(uri);
             // arrayList.add(getPathFromUri(uri));
             Addvehicle.imgarraylist.set(pos,getPathFromUri(uri));
+            Addvehicle.imgarrayliststore.add(uri);
             Uri imageuri = Uri.parse("android.resource://"+context.getPackageName()+"/drawable/folderad");
 
             Log.d("njebtgh",imageuri+"");

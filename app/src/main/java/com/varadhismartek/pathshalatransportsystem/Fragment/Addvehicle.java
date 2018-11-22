@@ -35,11 +35,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.varadhismartek.pathshalatransportsystem.Constant;
 import com.varadhismartek.pathshalatransportsystem.MainActivity;
 import com.varadhismartek.pathshalatransportsystem.R;
@@ -50,6 +54,7 @@ import com.varadhismartek.pathshalatransportsystem.Recyclervehiclefitness;
 import com.varadhismartek.pathshalatransportsystem.Team_Pojo;
 import com.varadhismartek.pathshalatransportsystem.TransBarrierModel;
 
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -68,8 +73,8 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
 
     public static RecyclerTeamAdapter recyclerTeamAdapter;
     public static Recyclerotherdocuments recyclerotherdocuments;
-    private Recyclerfinancial recyclerfinancialadapter;
-    private Recyclervehiclefitness recyclervehiclefitnessadapter;
+    public static Recyclerfinancial recyclerfinancialadapter;
+    public static Recyclervehiclefitness recyclervehiclefitnessadapter;
     private String[] vehicletype = {"BUS", "AC BUS", "MINI BUS", "TRAVELLER"};
     private String[] bodytype = {"NEW", "SECOND HAND"};
     private Spinner vehicletypespin, bodytypespin;
@@ -100,11 +105,16 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
 
     DatabaseReference lastIdref, lastIdref1;
     DatabaseReference mref1 = FirebaseDatabase.getInstance().getReference("School/SchoolId/Vehicle_Registration");
+//    StorageReference mStorageRef = FirebaseStorage.getInstance().getReference("School/SchoolId/Vehicle_Registration");
+
     ImageView iv_calendarregisterdate, iv_calendarpurchasedate, iv_previousownerpurchasedate;
     TextView bt_save, vehicle_id;
     TransBarrierModel transBarrierModel, transBarrierModelreg, transBarrierModelService,transBarrierModelInsurance,transBarrierModelOtherDocument,transBarrierModelFinancialDetails;
     public static ArrayList<String> imgarraylist;
+    public static ArrayList<Uri> imgarrayliststore;
     public static ArrayList<String> othrdocarraylist;
+    public static ArrayList<String> finnancearraylist;
+    public static ArrayList<String> fittnesarraylist;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -120,7 +130,10 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         getStudentRegistrationIdFromBarriers();
         //nextservicedayscheck();
         imgarraylist = new ArrayList<>();
+        imgarrayliststore = new ArrayList<>();
         othrdocarraylist = new ArrayList<>();
+        finnancearraylist = new ArrayList<>();
+        fittnesarraylist = new ArrayList<>();
 
         //setting the imageuri as constant for the image drawable
         Uri imageuri = Uri.parse("android.resource://"+getContext().getPackageName()+"/drawable/folderad");
@@ -128,6 +141,8 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         //adding the above image uri in the arraylist
         imgarraylist.add(getPathFromUri(imageuri));
         othrdocarraylist.add(getPathFromUri(imageuri));
+        finnancearraylist.add(getPathFromUri(imageuri));
+        fittnesarraylist.add(getPathFromUri(imageuri));
 
         CustomSpinnerAdapter customSpinnerAdaptervehicle = new CustomSpinnerAdapter(getActivity(), vehicletype, "#717071");
         vehicletypespin.setAdapter(customSpinnerAdaptervehicle);
@@ -177,17 +192,21 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         otherdocuments.setAdapter(recyclerotherdocuments);
         recyclerotherdocuments.notifyDataSetChanged();
 
-        recyclerfinancialadapter = new Recyclerfinancial(getActivity(), teamList);
+        recyclerfinancialadapter = new Recyclerfinancial(getActivity(), finnancearraylist);
         LinearLayoutManager mLayoutManager3 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerfinancial.setLayoutManager(mLayoutManager3);
+        recyclerfinancial.setHasFixedSize(true);
+        recyclerfinancial.setLayoutManager(new GridLayoutManager(context,4,GridLayoutManager.VERTICAL,false));
         recyclerfinancial.setItemAnimator(new DefaultItemAnimator());
         recyclerfinancial.setAdapter(recyclerfinancialadapter);
+        recyclerfinancialadapter.notifyDataSetChanged();
 
-        recyclervehiclefitnessadapter = new Recyclervehiclefitness(getActivity(), teamList);
+        recyclervehiclefitnessadapter = new Recyclervehiclefitness(getActivity(), fittnesarraylist);
         LinearLayoutManager mLayoutManager4 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        recyclervehiclefitness.setLayoutManager(mLayoutManager4);
+        recyclervehiclefitness.setHasFixedSize(true);
+        recyclervehiclefitness.setLayoutManager(new GridLayoutManager(context,4,GridLayoutManager.VERTICAL,false));
         recyclervehiclefitness.setItemAnimator(new DefaultItemAnimator());
         recyclervehiclefitness.setAdapter(recyclervehiclefitnessadapter);
+        recyclerfinancialadapter.notifyDataSetChanged();
         //getData();
 
 
@@ -267,6 +286,7 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         mpollutioncertificaterenewdate = v.findViewById(R.id.et_pollutioncertificaterenewdate_transport);
         mfitnesscertificatenum = v.findViewById(R.id.et_fitnesscertificatenumber_transport);
         mfitnesscertificateissuedate = v.findViewById(R.id.et_fitnesscertificateissuedate_transport);
+        mfitnesscertificaterenewdate = v.findViewById(R.id.et_fitnesscertificaterenewdate_transport);
         mtaxpermitnum = v.findViewById(R.id.et_texpermitnumber_transport);
         mtaxpayabledate = v.findViewById(R.id.et_texpayabledate_transport);
         mtaxpayableamount = v.findViewById(R.id.et_texpayableamount_transport);
@@ -311,7 +331,7 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         //get data from each field
         vehicleregno = vehicle_regno.getText().toString();
         vehiclename = vehicle_name.getText().toString();
-        vehiclegpsdetails = vehicle_name.getText().toString();
+        vehiclegpsdetails = vehicle_gpsdetails.getText().toString();
         chasisnumber = chasis_number.getText().toString();
         enginenumber = engine_number.getText().toString();
         manufacturename = manufacture_name.getText().toString();
@@ -352,6 +372,7 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         fitnesscertificatenum = mfitnesscertificatenum.getText().toString();
         fitnesscertificateissuedate = mfitnesscertificateissuedate.getText().toString();
         fitnesscertificaterenewdate = mfitnesscertificaterenewdate.getText().toString();
+        Log.d("fitness","dated"+fitnesscertificaterenewdate);
         taxpermitnum = mtaxpermitnum.getText().toString();
         taxpayabledate = mtaxpayabledate.getText().toString();
         taxpayableamount = mtaxpayableamount.getText().toString();
@@ -370,15 +391,6 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         fdreparingcharges = mfdreparingcharges.getText().toString();
         fdremarks = mfdremarks.getText().toString();
 
-
-
-
-
-
-
-
-
-
         //create data model
         transBarrierModel = new TransBarrierModel(str_vehicle_type, vehicleregno, vehiclename, vehiclegpsdetails);
         transBarrierModelreg = new TransBarrierModel(str_body_type, chasisnumber,
@@ -396,19 +408,35 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
 
 
         //send to firebase
+        //final StorageReference storageReference = mStorageRef.child(Constant.FINAL_REGISTRATION_ID).child("Basic_vehicle_Details");
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 Log.d(Tag, "Run method call");
-                Log.d(Tag, "Test" + Constant.FINAL_REGISTRATION_ID);
+                Log.d(Tag, "Test" + Constant.FINAL_REGISTRATION_ID+imgarraylist.size());
+                /*for(int i=0;i<imgarraylist.size();i++) {
+                    storageReference.child("" + i).putFile(imgarrayliststore.get(i)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                            mref1.child(Constant.FINAL_REGISTRATION_ID).child("Basic_vehicle_Details").child("insurance_document_picture" + i).setValue(taskSnapshot.getDownloadUrl().toString());
+
+
+                        }
+                    });
+                }*/
+
+
+
+
 
                 mref1.child(Constant.FINAL_REGISTRATION_ID).child("Basic_vehicle_Details").setValue(transBarrierModel);
                 mref1.child(Constant.FINAL_REGISTRATION_ID).child("vehicle_registration_Details").setValue(transBarrierModelreg);
                 mref1.child(Constant.FINAL_REGISTRATION_ID).child("Servicing_Details").setValue(transBarrierModelService);
                 mref1.child(Constant.FINAL_REGISTRATION_ID).child("Insurance_Details").setValue(transBarrierModelInsurance);
-              //  mref1.child(Constant.FINAL_REGISTRATION_ID).child("Other_Document").setValue(transBarrierModelOtherdocument);
-              //  mref1.child(Constant.FINAL_REGISTRATION_ID).child("Financial_Details").setValue(transBarrierModelFinancialDetails);
+                mref1.child(Constant.FINAL_REGISTRATION_ID).child("Other_Document").setValue(transBarrierModelOtherDocument);
+                mref1.child(Constant.FINAL_REGISTRATION_ID).child("Financial_Details").setValue(transBarrierModelFinancialDetails);
 
 
                 setdata();

@@ -1,6 +1,7 @@
 package com.varadhismartek.pathshalatransportsystem;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,8 +27,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 300||requestCode == 400 && resultCode == Activity.RESULT_OK) {
+            Addvehicle.recyclerotherdocuments.onActivityResult(requestCode, resultCode, data);
+        }
+        if (requestCode == 100||requestCode == 200 && resultCode == Activity.RESULT_OK) {
+            Addvehicle.recyclerTeamAdapter.onActivityResult(requestCode,resultCode,data);
+        }
+        if (requestCode == 500||requestCode == 600 && resultCode == Activity.RESULT_OK) {
+            Addvehicle.recyclerfinancialadapter.onActivityResult(requestCode,resultCode,data);
+        }
+        if (requestCode == 700||requestCode == 800 && resultCode == Activity.RESULT_OK) {
+            Addvehicle.recyclervehiclefitnessadapter.onActivityResult(requestCode,resultCode,data);
+        }
 
-        Addvehicle.recyclerTeamAdapter.onActivityResult(requestCode,resultCode,data);
+
 
     }
+
+
 }
