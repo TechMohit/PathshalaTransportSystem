@@ -73,8 +73,10 @@
     <dimen name="dp140">140dp</dimen>
     <dimen name="dp150">150dp</dimen>
     <dimen name="dp200">200dp</dimen>
-
-
+    <dimen name="mar_padd_5dp">5dp</dimen>
+    <dimen name="dimen50dp">50dp</dimen>
+    <dimen name="dimen70dp">70dp</dimen>
+    <dimen name="mar_padd_10dp">10dp</dimen>
 
 
 </resources>

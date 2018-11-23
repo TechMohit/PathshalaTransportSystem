@@ -893,17 +893,26 @@
 
                                 <TextView
                                     style="@style/tv_normal"
-                                    android:text="@string/other_documents" />
+                                    android:text="@string/other_documents"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"/>
 
                                 <View
                                     style="@style/view_horizantal"
-                                    android:layout_width="match_parent"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
                                     android:layout_marginStart="@dimen/dp10"
                                     android:layout_marginTop="@dimen/dp10">
 
-
-
                                 </View>
+                                <ImageView
+                                    android:id="@+id/img_attachfile"
+                                    android:src="@drawable/ic_attachment_black_24dp"
+                                    android:layout_height="30dp"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="0.5"
+                                   android:layout_marginTop="5dp"/>
+
 
 
                             </LinearLayout>

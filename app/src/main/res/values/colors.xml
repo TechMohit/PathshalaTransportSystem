@@ -9,6 +9,8 @@
     <color name="master_admin_g">#64dd17</color>
     <color name="white">#FFFFFF</color>
     <color name="master_admin">#1faa00</color>
+    <color name="colorWhite">#f9f6f7</color>
+    <color name="whitecolor">#fff</color>
 
 
     <!-- Management Colors-->

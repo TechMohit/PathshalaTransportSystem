@@ -4,11 +4,12 @@ package com.varadhismartek.pathshalatransportsystem.Fragment;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,19 +19,15 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
+import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +42,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.varadhismartek.pathshalatransportsystem.Constant;
+import com.varadhismartek.pathshalatransportsystem.ImageAdapter;
+import com.varadhismartek.pathshalatransportsystem.ImageModel;
 import com.varadhismartek.pathshalatransportsystem.MainActivity;
 import com.varadhismartek.pathshalatransportsystem.R;
 import com.varadhismartek.pathshalatransportsystem.RecyclerTeamAdapter;
@@ -54,7 +53,6 @@ import com.varadhismartek.pathshalatransportsystem.Recyclervehiclefitness;
 import com.varadhismartek.pathshalatransportsystem.Team_Pojo;
 import com.varadhismartek.pathshalatransportsystem.TransBarrierModel;
 
-import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -80,9 +78,13 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
     private Spinner vehicletypespin, bodytypespin;
     private String Tag = "Addvehicle";
     Context context;
-    Dialog settingsDialog;
-    public static int FROM_GALLERY= 1;
+    Dialog imageChooserDialog;
+    public static int i =0;
     public static int FROM_CAMERA= 2;
+    public static int FROM_GALLERY= 1;
+    public int requestcode;
+    public Context mContext;
+
 
 
 
@@ -105,16 +107,21 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
 
     DatabaseReference lastIdref, lastIdref1;
     DatabaseReference mref1 = FirebaseDatabase.getInstance().getReference("School/SchoolId/Vehicle_Registration");
-//    StorageReference mStorageRef = FirebaseStorage.getInstance().getReference("School/SchoolId/Vehicle_Registration");
+    StorageReference mStorageRef = FirebaseStorage.getInstance().getReference("School/SchoolId/Vehicle_Registration");
 
-    ImageView iv_calendarregisterdate, iv_calendarpurchasedate, iv_previousownerpurchasedate;
+    ImageView iv_calendarregisterdate, iv_calendarpurchasedate, iv_previousownerpurchasedate,iv_attach;
     TextView bt_save, vehicle_id;
     TransBarrierModel transBarrierModel, transBarrierModelreg, transBarrierModelService,transBarrierModelInsurance,transBarrierModelOtherDocument,transBarrierModelFinancialDetails;
     public static ArrayList<String> imgarraylist;
-    public static ArrayList<Uri> imgarrayliststore;
+    public static ArrayList<ImageModel> imgarrayliststore;
     public static ArrayList<String> othrdocarraylist;
     public static ArrayList<String> finnancearraylist;
     public static ArrayList<String> fittnesarraylist;
+    public static ArrayList<ImageModel> arrayList;
+    private Uri filePath;
+    String pathProfile;
+    public static ImageAdapter imageAdapter;
+    ArrayList<RecyclerView> arrayListDocRecycelrview         = new ArrayList<>();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -134,6 +141,8 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         othrdocarraylist = new ArrayList<>();
         finnancearraylist = new ArrayList<>();
         fittnesarraylist = new ArrayList<>();
+        arrayList = new ArrayList<>();
+        ImageAdapter imageAdapter;
 
         //setting the imageuri as constant for the image drawable
         Uri imageuri = Uri.parse("android.resource://"+getContext().getPackageName()+"/drawable/folderad");
@@ -176,13 +185,13 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
             }
         });
 
-        recyclerTeamAdapter = new RecyclerTeamAdapter(getActivity(), imgarraylist);
+       /* recyclerTeamAdapter = new RecyclerTeamAdapter(getActivity(), imgarraylist);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(context,4,GridLayoutManager.VERTICAL,false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(recyclerTeamAdapter);
-        recyclerTeamAdapter.notifyDataSetChanged();
+        recyclerTeamAdapter.notifyDataSetChanged();*/
 
         recyclerotherdocuments = new Recyclerotherdocuments(getActivity(), othrdocarraylist);
         LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -232,6 +241,10 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
     }
 
 
+
+
+
+
     private void initViews(View v) {
         vehicletypespin = v.findViewById(R.id.vehicle_type);
         bodytypespin = v.findViewById(R.id.bodytype_id);
@@ -252,6 +265,7 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         registering_authority = v.findViewById(R.id.registering_authority);
         registering_state = v.findViewById(R.id.registering_state);
         iv_calendarregisterdate = v.findViewById(R.id.calendarregistereddate);
+        iv_attach = v.findViewById(R.id.img_attachfile);
         iv_calendarpurchasedate = v.findViewById(R.id.calendarpurchasedate);
         iv_previousownerpurchasedate = v.findViewById(R.id.iv_previousownerpurchasedate);
         bt_save = v.findViewById(R.id.button_send);
@@ -310,6 +324,46 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d("mohittest",""+data);
+
+
+            Log.d("mohittest1",""+data);
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), photo, "Title", null);
+            filePath= Uri.parse(path);
+
+           // setImageToRecyclerView();
+            // pathProfile = getPathFromUri(filePath);
+
+            arrayList.add(new ImageModel(filePath));
+            imageAdapter  = new ImageAdapter(imgarrayliststore,mContext,requestcode);
+            ImageModel imageModel = new ImageModel(filePath);
+            imgarrayliststore.add(imageModel);
+
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setLayoutManager(new GridLayoutManager(context,4,GridLayoutManager.VERTICAL,false));
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+            recyclerView.setAdapter(imageAdapter);
+            imageAdapter.notifyDataSetChanged();
+
+
+
+    }
+
+    private void setImageToRecyclerView() {
+        LinearLayoutManager guardianLayoutManager1 = new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
+        arrayListDocRecycelrview.get(0).setLayoutManager(guardianLayoutManager1);
+
+
+
+
+
+    }
+
     private void initListner() {
         iv_calendarregisterdate.setOnClickListener(this);
         iv_calendarpurchasedate.setOnClickListener(this);
@@ -319,6 +373,7 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         minsurancerenewdate.setOnClickListener(this);
         minsurancenextrenewdate.setOnClickListener(this);
         bt_save.setOnClickListener(this);
+        iv_attach.setOnClickListener(this);
 
 
     }
@@ -408,14 +463,16 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
 
 
         //send to firebase
-        //final StorageReference storageReference = mStorageRef.child(Constant.FINAL_REGISTRATION_ID).child("Basic_vehicle_Details");
+        final StorageReference storageReference = mStorageRef.child(Constant.FINAL_REGISTRATION_ID).child("Basic_vehicle_Details");
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+
+
                 Log.d(Tag, "Run method call");
-                Log.d(Tag, "Test" + Constant.FINAL_REGISTRATION_ID+imgarraylist.size());
-                /*for(int i=0;i<imgarraylist.size();i++) {
+                Log.d(Tag, "Test" + Constant.FINAL_REGISTRATION_ID+" "+imgarrayliststore.size()+""+imgarrayliststore.get(0));
+              /*  for(  i=0;i<imgarrayliststore.size();i++) {
                     storageReference.child("" + i).putFile(imgarrayliststore.get(i)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -623,9 +680,41 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
                 getDOB(lastservicedate);
                 break;
 
+            case R.id.img_attachfile:
+                openDialogForImageChoose();
+                break;
+
+
+            case R.id.camera:
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, Constant.FROM_CAMERA);
+                imageChooserDialog.dismiss();
+                break;
+
+            case R.id.gallery:
+                Intent i = new Intent(
+                        Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i,Constant.FROM_GALLERY);
+                imageChooserDialog.dismiss();
+                break;
+
+
         }
     }
 
+    private void openDialogForImageChoose() {
+
+        imageChooserDialog = new Dialog(getActivity());
+        imageChooserDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        imageChooserDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        imageChooserDialog.setContentView(R.layout.attach_image_dialog);
+        ImageView camera  = imageChooserDialog.findViewById(R.id.camera);
+        ImageView gallery  = imageChooserDialog.findViewById(R.id.gallery);
+
+        camera.setOnClickListener(this);
+        gallery.setOnClickListener(this);
+        imageChooserDialog.show();
+    }
 
 
     private void getDOB(final String dob) {

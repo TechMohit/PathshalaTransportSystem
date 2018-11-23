@@ -11,5 +11,7 @@ public class Constant {
     public static String REGISTRATION_CURRENT_ID ;
     public static String FINAL_REGISTRATION_ID  ;
     public static String REGISTRATION_CURRENT_TEMP_ID  ;
+    public static final int FROM_GALLERY= 1;
+    public static final int FROM_CAMERA= 2;
 
 }

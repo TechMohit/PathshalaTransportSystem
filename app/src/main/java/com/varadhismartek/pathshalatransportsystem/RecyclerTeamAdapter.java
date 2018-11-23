@@ -48,7 +48,7 @@ public class RecyclerTeamAdapter extends RecyclerView.Adapter<RecyclerTeamAdapte
             // img.setImageURI(uri);
             // arrayList.add(getPathFromUri(uri));
             Addvehicle.imgarraylist.set(pos,getPathFromUri(uri));
-            Addvehicle.imgarrayliststore.add(uri);
+         //   Addvehicle.imgarrayliststore.add(uri);
             Uri imageuri = Uri.parse("android.resource://"+context.getPackageName()+"/drawable/folderad");
 
             Log.d("njebtgh",imageuri+"");
