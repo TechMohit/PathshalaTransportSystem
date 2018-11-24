@@ -17,7 +17,6 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -50,14 +49,13 @@ import com.varadhismartek.pathshalatransportsystem.RecyclerTeamAdapter;
 import com.varadhismartek.pathshalatransportsystem.Recyclerfinancial;
 import com.varadhismartek.pathshalatransportsystem.Recyclerotherdocuments;
 import com.varadhismartek.pathshalatransportsystem.Recyclervehiclefitness;
-import com.varadhismartek.pathshalatransportsystem.Team_Pojo;
 import com.varadhismartek.pathshalatransportsystem.TransBarrierModel;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 
@@ -67,7 +65,7 @@ import java.util.Locale;
 public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     RecyclerView recyclerView, otherdocuments, recyclerfinancial, recyclervehiclefitness;
-    private List<Team_Pojo> teamList = new ArrayList<>();
+
 
     public static RecyclerTeamAdapter recyclerTeamAdapter;
     public static Recyclerotherdocuments recyclerotherdocuments;
@@ -80,12 +78,10 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
     Context context;
     Dialog imageChooserDialog;
     public static int i =0;
-    public static int FROM_CAMERA= 2;
-    public static int FROM_GALLERY= 1;
     public int requestcode;
-    public Context mContext;
+    String imageCase="A";
 
-
+    DatabaseReference databaseReference;
 
 
     private String str_vehicle_type, str_body_type, vehicleregno, vehiclename, vehiclegpsdetails, chasisnumber, enginenumber, manufacturename, modelnumber,
@@ -107,9 +103,9 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
 
     DatabaseReference lastIdref, lastIdref1;
     DatabaseReference mref1 = FirebaseDatabase.getInstance().getReference("School/SchoolId/Vehicle_Registration");
-    StorageReference mStorageRef = FirebaseStorage.getInstance().getReference("School/SchoolId/Vehicle_Registration");
+    StorageReference mStorageRef = FirebaseStorage.getInstance().getReference("School/SchoolId/");
 
-    ImageView iv_calendarregisterdate, iv_calendarpurchasedate, iv_previousownerpurchasedate,iv_attach;
+    ImageView iv_calendarregisterdate, iv_calendarpurchasedate, iv_previousownerpurchasedate,iv_otherdoc_attach,iv_loandoc_attach,iv_financedoc_attach,iv_vehicle_attach;
     TextView bt_save, vehicle_id;
     TransBarrierModel transBarrierModel, transBarrierModelreg, transBarrierModelService,transBarrierModelInsurance,transBarrierModelOtherDocument,transBarrierModelFinancialDetails;
     public static ArrayList<String> imgarraylist;
@@ -117,11 +113,11 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
     public static ArrayList<String> othrdocarraylist;
     public static ArrayList<String> finnancearraylist;
     public static ArrayList<String> fittnesarraylist;
-    public static ArrayList<ImageModel> arrayList;
+    ArrayList<Uri> arrayListOtherDocs = new ArrayList<>() ;
+    ArrayList<ImageModel> otherDocArrayListModel,loanDocArrayListModel, financeDocArrayListModel, vehicleImageArrayListModel;
+
     private Uri filePath;
-    String pathProfile;
-    public static ImageAdapter imageAdapter;
-    ArrayList<RecyclerView> arrayListDocRecycelrview         = new ArrayList<>();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -138,10 +134,12 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         //nextservicedayscheck();
         imgarraylist = new ArrayList<>();
         imgarrayliststore = new ArrayList<>();
-        othrdocarraylist = new ArrayList<>();
+        loanDocArrayListModel = new ArrayList<>();
+        financeDocArrayListModel = new ArrayList<>();
+        vehicleImageArrayListModel = new ArrayList<>();
         finnancearraylist = new ArrayList<>();
         fittnesarraylist = new ArrayList<>();
-        arrayList = new ArrayList<>();
+        otherDocArrayListModel  = new ArrayList<>();
         ImageAdapter imageAdapter;
 
         //setting the imageuri as constant for the image drawable
@@ -149,7 +147,7 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
 
         //adding the above image uri in the arraylist
         imgarraylist.add(getPathFromUri(imageuri));
-        othrdocarraylist.add(getPathFromUri(imageuri));
+        //othrdocarraylist.add(getPathFromUri(imageuri));
         finnancearraylist.add(getPathFromUri(imageuri));
         fittnesarraylist.add(getPathFromUri(imageuri));
 
@@ -191,7 +189,7 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         recyclerView.setLayoutManager(new GridLayoutManager(context,4,GridLayoutManager.VERTICAL,false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(recyclerTeamAdapter);
-        recyclerTeamAdapter.notifyDataSetChanged();*/
+        recyclerTeamAdapter.notifyDataSetChanged();
 
         recyclerotherdocuments = new Recyclerotherdocuments(getActivity(), othrdocarraylist);
         LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -216,7 +214,7 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         recyclervehiclefitness.setItemAnimator(new DefaultItemAnimator());
         recyclervehiclefitness.setAdapter(recyclervehiclefitnessadapter);
         recyclerfinancialadapter.notifyDataSetChanged();
-        //getData();
+        //getData();*/
 
 
         return v;
@@ -265,7 +263,12 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         registering_authority = v.findViewById(R.id.registering_authority);
         registering_state = v.findViewById(R.id.registering_state);
         iv_calendarregisterdate = v.findViewById(R.id.calendarregistereddate);
-        iv_attach = v.findViewById(R.id.img_attachfile);
+
+        iv_otherdoc_attach = v.findViewById(R.id.img_otherdoc_attachfile);
+        iv_loandoc_attach = v.findViewById(R.id.img_loandoc_attachfile);
+        iv_financedoc_attach = v.findViewById(R.id.img_financedoc_attachfile);
+        iv_vehicle_attach = v.findViewById(R.id.img_vehicle_attachfile);
+
         iv_calendarpurchasedate = v.findViewById(R.id.calendarpurchasedate);
         iv_previousownerpurchasedate = v.findViewById(R.id.iv_previousownerpurchasedate);
         bt_save = v.findViewById(R.id.button_send);
@@ -327,42 +330,147 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("mohittest",""+data);
+        Log.d("mohittest", "" + data);
+        if (requestCode == Constant.FROM_CAMERA && resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                Log.d("mohittest1", "" + data);
+                Bitmap photo = (Bitmap) data.getExtras().get("data");
+                String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), photo, "Title", null);
+                filePath = Uri.parse(path);
+
+                ImageAdapter imageAdapter;
+
+                switch (imageCase){
+
+                    case "A":
+                        arrayListOtherDocs.add(filePath);
+                        otherDocArrayListModel .add(new ImageModel(filePath));
+                        imageAdapter = new ImageAdapter(otherDocArrayListModel , getActivity(), requestcode);
+                        recyclerView.setHasFixedSize(true);
+                        recyclerView.setLayoutManager(new GridLayoutManager(context, 4, GridLayoutManager.VERTICAL, false));
+                        recyclerView.setItemAnimator(new DefaultItemAnimator());
+                        recyclerView.setAdapter(imageAdapter);
+                        imageAdapter.notifyDataSetChanged();
+                        break;
+
+                    case "B":
+                        loanDocArrayListModel.add(new ImageModel(filePath));
+                        imageAdapter = new ImageAdapter(loanDocArrayListModel, getActivity(), requestcode);
+                        otherdocuments.setHasFixedSize(true);
+                        otherdocuments.setLayoutManager(new GridLayoutManager(context, 4, GridLayoutManager.VERTICAL, false));
+                        otherdocuments.setItemAnimator(new DefaultItemAnimator());
+                        otherdocuments.setAdapter(imageAdapter);
+                        imageAdapter.notifyDataSetChanged();
+                        break;
 
 
-            Log.d("mohittest1",""+data);
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), photo, "Title", null);
-            filePath= Uri.parse(path);
+                    case "C":
+                        financeDocArrayListModel.add(new ImageModel(filePath));
+                        imageAdapter = new ImageAdapter(financeDocArrayListModel, getActivity(), requestcode);
+                        recyclerfinancial.setHasFixedSize(true);
+                        recyclerfinancial.setLayoutManager(new GridLayoutManager(context, 4, GridLayoutManager.VERTICAL, false));
+                        recyclerfinancial.setItemAnimator(new DefaultItemAnimator());
+                        recyclerfinancial.setAdapter(imageAdapter);
+                        imageAdapter.notifyDataSetChanged();
+                        break;
 
-           // setImageToRecyclerView();
-            // pathProfile = getPathFromUri(filePath);
+                    case "D":
+                        vehicleImageArrayListModel.add(new ImageModel(filePath));
+                        imageAdapter = new ImageAdapter(vehicleImageArrayListModel, getActivity(), requestcode);
+                        recyclervehiclefitness.setHasFixedSize(true);
+                        recyclervehiclefitness.setLayoutManager(new GridLayoutManager(context, 4, GridLayoutManager.VERTICAL, false));
+                        recyclervehiclefitness.setItemAnimator(new DefaultItemAnimator());
+                        recyclervehiclefitness.setAdapter(imageAdapter);
+                        imageAdapter.notifyDataSetChanged();
+                        break;
 
-            arrayList.add(new ImageModel(filePath));
-            imageAdapter  = new ImageAdapter(imgarrayliststore,mContext,requestcode);
-            ImageModel imageModel = new ImageModel(filePath);
-            imgarrayliststore.add(imageModel);
+                }
 
-            recyclerView.setHasFixedSize(true);
-            recyclerView.setLayoutManager(new GridLayoutManager(context,4,GridLayoutManager.VERTICAL,false));
-            recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-            recyclerView.setAdapter(imageAdapter);
-            imageAdapter.notifyDataSetChanged();
+            }
+        }
 
 
+        if (requestCode == Constant.FROM_GALLERY && resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                Uri contentURI = data.getData();
 
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), contentURI);
+
+                    int nh = (int) (bitmap.getHeight() * (256.0 / bitmap.getWidth()));
+                    Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 256, nh, true);
+                    String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), scaled, "Title", null);
+                    filePath = Uri.parse(path);
+                    ImageAdapter imageAdapter;
+
+                    switch (imageCase) {
+
+                        case "A":
+                            arrayListOtherDocs.add(filePath);
+                            otherDocArrayListModel .add(new ImageModel(filePath));
+                            imageAdapter = new ImageAdapter(otherDocArrayListModel , getActivity(), requestcode);
+                            recyclerView.setHasFixedSize(true);
+                            recyclerView.setLayoutManager(new GridLayoutManager(context, 4, GridLayoutManager.VERTICAL, false));
+                            recyclerView.setItemAnimator(new DefaultItemAnimator());
+                            recyclerView.setAdapter(imageAdapter);
+                            imageAdapter.notifyDataSetChanged();
+                            break;
+
+
+
+                        case "B":
+
+                            loanDocArrayListModel.add(new ImageModel(filePath));
+                            imageAdapter = new ImageAdapter(loanDocArrayListModel, getActivity(), requestcode);
+                            otherdocuments.setHasFixedSize(true);
+                            otherdocuments.setLayoutManager(new GridLayoutManager(context, 4, GridLayoutManager.VERTICAL, false));
+                            otherdocuments.setItemAnimator(new DefaultItemAnimator());
+                            otherdocuments.setAdapter(imageAdapter);
+                            imageAdapter.notifyDataSetChanged();
+                            break;
+
+                        case "C":
+
+                            financeDocArrayListModel.add(new ImageModel(filePath));
+                            imageAdapter = new ImageAdapter(financeDocArrayListModel, getActivity(), requestcode);
+                            recyclerfinancial.setHasFixedSize(true);
+                            recyclerfinancial.setLayoutManager(new GridLayoutManager(context, 4, GridLayoutManager.VERTICAL, false));
+                            recyclerfinancial.setItemAnimator(new DefaultItemAnimator());
+                            recyclerfinancial.setAdapter(imageAdapter);
+                            imageAdapter.notifyDataSetChanged();
+                            break;
+
+
+                        case "D":
+
+                            vehicleImageArrayListModel.add(new ImageModel(filePath));
+                            imageAdapter = new ImageAdapter(vehicleImageArrayListModel, getActivity(), requestcode);
+                            recyclervehiclefitness.setHasFixedSize(true);
+                            recyclervehiclefitness.setLayoutManager(new GridLayoutManager(context, 4, GridLayoutManager.VERTICAL, false));
+                            recyclervehiclefitness.setItemAnimator(new DefaultItemAnimator());
+                            recyclervehiclefitness.setAdapter(imageAdapter);
+                            imageAdapter.notifyDataSetChanged();
+                            break;
+
+                    }
+
+
+                }catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+        }
     }
 
-    private void setImageToRecyclerView() {
-        LinearLayoutManager guardianLayoutManager1 = new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
-        arrayListDocRecycelrview.get(0).setLayoutManager(guardianLayoutManager1);
+    private void setimage() {
 
-
-
-
-
+        ImageModel imageModel = new ImageModel(filePath);
+        otherDocArrayListModel .add(imageModel);
+       // imageAdapter.notifyDataSetChanged();
     }
+
 
     private void initListner() {
         iv_calendarregisterdate.setOnClickListener(this);
@@ -373,7 +481,10 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         minsurancerenewdate.setOnClickListener(this);
         minsurancenextrenewdate.setOnClickListener(this);
         bt_save.setOnClickListener(this);
-        iv_attach.setOnClickListener(this);
+        iv_otherdoc_attach.setOnClickListener(this);
+        iv_loandoc_attach.setOnClickListener(this);
+        iv_financedoc_attach.setOnClickListener(this);
+        iv_vehicle_attach.setOnClickListener(this);
 
 
     }
@@ -415,8 +526,8 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         agentname = magentname.getText().toString();
         agentid   = magentid.getText().toString();
         insurancecomname   = minsurancecomname.getText().toString();
-        insurancecomnum   = magentcontnum.getText().toString();
-        agentcontnum   = magentcontnum.getText().toString();
+        agentcontnum  = magentcontnum.getText().toString();
+        insurancecomnum   = minsurancecomnum.getText().toString();
 
         otherdocinsurancenum = motherdocinsurancenum.getText().toString();
         rcnumber = mrcnumber.getText().toString();
@@ -462,31 +573,39 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
                 fddownpayment,fdlaonapprovedate,fdloanduedate,fdloanenddate,fdloanemiamount,fdmaintaincecharges,fdreparingcharges,fdremarks);
 
 
-        //send to firebase
-        final StorageReference storageReference = mStorageRef.child(Constant.FINAL_REGISTRATION_ID).child("Basic_vehicle_Details");
+        Log.d("hftrhrtfhrt",Constant.FINAL_REGISTRATION_ID);
 
+        //send to firebase
+        final StorageReference storageReference = mStorageRef.child("Vehicle_Registration").child(Constant.FINAL_REGISTRATION_ID).child("Insurance_Details");
+        databaseReference =   mref1.child(Constant.FINAL_REGISTRATION_ID).child("Insurance_Details");
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
 
 
                 Log.d(Tag, "Run method call");
-                Log.d(Tag, "Test" + Constant.FINAL_REGISTRATION_ID+" "+imgarrayliststore.size()+""+imgarrayliststore.get(0));
-              /*  for(  i=0;i<imgarrayliststore.size();i++) {
-                    storageReference.child("" + i).putFile(imgarrayliststore.get(i)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                            mref1.child(Constant.FINAL_REGISTRATION_ID).child("Basic_vehicle_Details").child("insurance_document_picture" + i).setValue(taskSnapshot.getDownloadUrl().toString());
-
-
-                        }
-                    });
-                }*/
 
 
 
+                if(arrayListOtherDocs.size()>0) {
+                    Log.d(Tag, "arraysize"+arrayListOtherDocs.size());
+                    for (i = 0; i < arrayListOtherDocs.size(); i++) {
+                        Log.d(Tag, ""+arrayListOtherDocs.get(i));
 
+
+
+                        storageReference.child("" + i).putFile(arrayListOtherDocs.get(i)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                              databaseReference.child("insurance_document_picture").child(""+i).setValue(taskSnapshot.getDownloadUrl().toString());
+
+
+                            }
+                        });
+                    }
+                }
 
                 mref1.child(Constant.FINAL_REGISTRATION_ID).child("Basic_vehicle_Details").setValue(transBarrierModel);
                 mref1.child(Constant.FINAL_REGISTRATION_ID).child("vehicle_registration_Details").setValue(transBarrierModelreg);
@@ -495,62 +614,22 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
                 mref1.child(Constant.FINAL_REGISTRATION_ID).child("Other_Document").setValue(transBarrierModelOtherDocument);
                 mref1.child(Constant.FINAL_REGISTRATION_ID).child("Financial_Details").setValue(transBarrierModelFinancialDetails);
 
-
                 setdata();
+
+                Intent in = new Intent(getActivity(), MainActivity.class);
+                startActivity(in);
+
+                progressDialog.dismiss();
+
             }
 
-        }, 1000);
-        progressDialog.dismiss();
+        }, 6000);
+
 
 
     }
 
-  /*  private void getData() {
 
-        Team_Pojo team_pojo = new Team_Pojo(R.drawable.emp4, "Raghu");
-        teamList.add(team_pojo);
-
-        team_pojo = new Team_Pojo(R.drawable.emp4, "Abhi");
-        teamList.add(team_pojo);
-
-        team_pojo = new Team_Pojo(R.drawable.emp4, "nizar");
-        teamList.add(team_pojo);
-
-        team_pojo = new Team_Pojo(R.drawable.emp4, "sarup");
-        teamList.add(team_pojo);
-
-        team_pojo = new Team_Pojo(R.drawable.emp4, "sree");
-        teamList.add(team_pojo);
-
-        team_pojo = new Team_Pojo(R.drawable.emp4, "EM");
-        teamList.add(team_pojo);
-
-        team_pojo = new Team_Pojo(R.drawable.emp4, "EM");
-        teamList.add(team_pojo);
-
-        team_pojo = new Team_Pojo(R.drawable.emp4, "EM");
-        teamList.add(team_pojo);
-
-        team_pojo = new Team_Pojo(R.drawable.emp4, "EM");
-        teamList.add(team_pojo);
-
-        team_pojo = new Team_Pojo(R.drawable.emp4, "EM");
-        teamList.add(team_pojo);
-
-        team_pojo = new Team_Pojo(R.drawable.emp4, "EM");
-        teamList.add(team_pojo);
-
-        team_pojo = new Team_Pojo(R.drawable.emp4, "EM");
-        teamList.add(team_pojo);
-
-        team_pojo = new Team_Pojo(R.drawable.emp4, "EM");
-        teamList.add(team_pojo);
-
-        team_pojo = new Team_Pojo(R.drawable.emp4, "EM");
-        teamList.add(team_pojo);
-
-        adapter.notifyDataSetChanged();
-    }*/
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -680,7 +759,21 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
                 getDOB(lastservicedate);
                 break;
 
-            case R.id.img_attachfile:
+            case R.id.img_otherdoc_attachfile:
+                imageCase = "A";
+                openDialogForImageChoose();
+                break;
+
+            case R.id.img_loandoc_attachfile:
+                imageCase = "B";
+                openDialogForImageChoose();
+                break;
+            case R.id.img_financedoc_attachfile:
+                imageCase = "C";
+                openDialogForImageChoose();
+                break;
+            case R.id.img_vehicle_attachfile:
+                imageCase = "D";
                 openDialogForImageChoose();
                 break;
 
@@ -902,15 +995,11 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         if (!Constant.REGISTRATION_CURRENT_TEMP_ID.equals(Constant.FINAL_REGISTRATION_ID)) {
             lastIdref.child("Current_Registration_Id").setValue(Constant.FINAL_REGISTRATION_ID);
             Toast.makeText(getActivity(), "Registration Finished1...", Toast.LENGTH_SHORT).show();
-            Intent in = new Intent(getActivity(), MainActivity.class);
-            startActivity(in);
             progressDialog.dismiss();
         } else {
 
             lastIdref1.child("Current_Registration_Id").setValue(Constant.FINAL_REGISTRATION_ID);
             Toast.makeText(getActivity(), "Registration Finished...", Toast.LENGTH_SHORT).show();
-            Intent in = new Intent(getActivity(), MainActivity.class);
-            startActivity(in);
             progressDialog.dismiss();
         }
 

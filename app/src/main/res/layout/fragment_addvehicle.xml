@@ -906,7 +906,7 @@
 
                                 </View>
                                 <ImageView
-                                    android:id="@+id/img_attachfile"
+                                    android:id="@+id/img_otherdoc_attachfile"
                                     android:src="@drawable/ic_attachment_black_24dp"
                                     android:layout_height="30dp"
                                     android:layout_width="0dp"
@@ -1351,15 +1351,26 @@
 
                                 <TextView
                                     style="@style/tv_normal"
-                                    android:text="@string/loan_document_images" />
+                                    android:text="@string/loan_document_images"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"/>
 
                                 <View
                                     style="@style/view_horizantal"
-                                    android:layout_width="match_parent"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
                                     android:layout_marginStart="@dimen/dp10"
                                     android:layout_marginTop="@dimen/dp10">
 
                                 </View>
+
+                                <ImageView
+                                    android:id="@+id/img_loandoc_attachfile"
+                                    android:src="@drawable/ic_attachment_black_24dp"
+                                    android:layout_height="30dp"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="0.5"
+                                    android:layout_marginTop="5dp"/>
 
 
                             </LinearLayout>
@@ -1748,15 +1759,26 @@
 
                                 <TextView
                                     style="@style/tv_normal"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
                                     android:text="@string/loan_document_images" />
 
                                 <View
                                     style="@style/view_horizantal"
-                                    android:layout_width="match_parent"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
                                     android:layout_marginStart="@dimen/dp10"
                                     android:layout_marginTop="@dimen/dp10">
 
                                 </View>
+
+                                <ImageView
+                                    android:id="@+id/img_financedoc_attachfile"
+                                    android:src="@drawable/ic_attachment_black_24dp"
+                                    android:layout_height="30dp"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="0.5"
+                                    android:layout_marginTop="5dp"/>
 
 
                             </LinearLayout>
@@ -1795,15 +1817,27 @@
 
                                 <TextView
                                     style="@style/tv_normal"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="0.5"
                                     android:text="@string/vehicle_images" />
 
                                 <View
                                     style="@style/view_horizantal"
-                                    android:layout_width="match_parent"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="0.5"
                                     android:layout_marginStart="@dimen/dp10"
                                     android:layout_marginTop="@dimen/dp10">
 
                                 </View>
+
+                                <ImageView
+                                    android:id="@+id/img_vehicle_attachfile"
+                                    android:src="@drawable/ic_attachment_black_24dp"
+                                    android:layout_height="30dp"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="0.5"
+                                    android:layout_marginTop="5dp"/>
+
 
                             </LinearLayout>
 
