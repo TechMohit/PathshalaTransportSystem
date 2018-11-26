@@ -1,13 +1,18 @@
 package com.varadhismartek.pathshalatransportsystem.Fragment;
 
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -38,9 +43,11 @@ import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.varadhismartek.pathshalatransportsystem.Constant;
 import com.varadhismartek.pathshalatransportsystem.PlaceArrayAdapter;
 import com.varadhismartek.pathshalatransportsystem.R;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -48,6 +55,7 @@ import java.util.Calendar;
 public class Createroute extends Fragment implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks,View.OnClickListener {
     private String Tag = "Createroute";
     private String[] vehicletype = {"BUS", "AC BUS", "MINI BUS", "TRAVELLER"};
+    private Uri filePath;
 
     private EditText mroutenum;
     private String   routenum;
@@ -339,7 +347,43 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
     }
 
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constant.FROM_CAMERA && resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                Log.d("mohittest1", "" + data);
+                Bitmap photo = (Bitmap) data.getExtras().get("data");
+                String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), photo, "Title", null);
+                filePath = Uri.parse(path);
+                stopimage.setImageURI(filePath);
 
+            }
+        }
+
+
+        if (requestCode == Constant.FROM_GALLERY && resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                Uri contentURI = data.getData();
+
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), contentURI);
+
+                    int nh = (int) (bitmap.getHeight() * (256.0 / bitmap.getWidth()));
+                    Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 256, nh, true);
+                    String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), scaled, "Title", null);
+                    filePath = Uri.parse(path);
+                    stopimage.setImageURI(filePath);
+
+
+                }catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
+    }
 
     @Override
     public void onClick(View v) {
@@ -350,7 +394,20 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
 
             case R.id.image_picker_stop:
                 openDialogForImageChoose();
-                break;;
+                break;
+
+            case R.id.camera:
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, Constant.FROM_CAMERA);
+                imageChooserDialog.dismiss();
+                break;
+
+            case R.id.gallery:
+                Intent i = new Intent(
+                        Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i,Constant.FROM_GALLERY);
+                imageChooserDialog.dismiss();
+                break;
 
 
         }
