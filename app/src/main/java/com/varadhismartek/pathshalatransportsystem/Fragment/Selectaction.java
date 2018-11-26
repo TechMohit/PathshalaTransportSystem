@@ -32,6 +32,7 @@ public class Selectaction extends Fragment {
         View view = inflater.inflate(R.layout.fragment_selectaction, container, false);
         Button setBarrier = view.findViewById(R.id.btnsetBarrier);
         Button addvehicle = view.findViewById(R.id.btnaddvehicle);
+        Button createRoute = view.findViewById(R.id.btncreateroute);
         setBarrier.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -43,6 +44,12 @@ public class Selectaction extends Fragment {
             @Override
             public void onClick(View view) {
                 addvehicleinfo();
+            }
+        });
+        createRoute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createRoute();
             }
         });
         return view;
@@ -60,6 +67,14 @@ public class Selectaction extends Fragment {
         Addvehicle addvehicle= new Addvehicle();
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, addvehicle);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+    private void createRoute(){
+        Log.d("Selectaction","createRoute");
+        Createroute createroute = new Createroute();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, createroute);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

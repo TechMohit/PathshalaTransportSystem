@@ -1,0 +1,502 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.varadhismartek.pathshalatransportsystem.Fragment.Createroute">
+
+    <RelativeLayout
+        style="@style/Rl_normal"
+        android:background="@color/colorPrimaryDark">
+
+        <ImageView
+            android:id="@+id/img_backbtnaddress"
+            android:src="@drawable/ic_keyboard_arrow_left"
+            style="@style/imgvw_normal_mrgn_pad" />
+
+        <TextView
+            style="@style/tv_heading_mrgn_pad"
+            android:textColor="#ffffff"
+            android:textStyle="normal"
+            android:layout_centerHorizontal="true"
+            android:text="Create Route"/>
+
+        <TextView
+            android:id="@+id/button_send"
+            android:text="save"
+            tools:ignore="RelativeOverlap"
+            style="@style/tv_normal"
+            android:layout_centerVertical="true"
+            android:drawableLeft="@drawable/send"
+            android:paddingLeft="@dimen/dp10"
+            android:textSize="@dimen/sp18"
+            android:paddingRight="@dimen/dp10"
+            android:background="@drawable/sendshape"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/dp10"
+            android:textColor="@color/colorPrimaryDark"/>
+
+
+    </RelativeLayout>
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        style="@style/Ll_both_match_heading"
+        android:background="@drawable/card_shape">
+
+        <LinearLayout
+            style="@style/Ll_normal_vtl"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark">
+
+            <LinearLayout
+                android:background="@drawable/card_shape"
+                style="@style/Ll_both_match_heading">
+
+                <LinearLayout
+                    style="@style/Ll_normal_vtl"
+                    android:id="@+id/holidays_layout"
+                    android:orientation="horizontal"
+                    android:baselineAligned="false">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/event_name_TI"
+                        android:layout_weight="5"
+                        style="@style/textinputlaout_wmatch_hwrap"
+                        android:layout_width="0dp">
+
+                        <EditText
+                            android:id="@+id/editext_enterrouteno"
+                            android:hint="@string/enter_route_number"
+                            style="@style/edittext_normal"
+                            tools:ignore="Autofill,TextFields" />
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/Ll_normal_htl">
+
+
+                    <TextView
+                        style="@style/tv_normal_mrgn_pad"
+                        android:text="@string/class_of_vehicle"
+                        android:layout_weight="5"/>
+
+                    <Spinner
+                        android:id="@+id/spinner_vehicle_type"
+                        style="@style/spinner_normal_mrgn_pad"
+                        android:layout_weight="1"
+                        android:background="@drawable/custom_spinner_background">
+                    </Spinner>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    style="@style/Ll_normal_htl_mrgn_pad">
+
+                    <TextView
+                        style="@style/tv_normal"
+                        android:text="@string/vehicle_seating_capacity" />
+
+                    <TextView
+                        style="@style/tv_normal"
+                        android:textSize="@dimen/sp12"
+                        android:text="@string/including_driver">
+                    </TextView>
+
+
+                    <TextView
+                        style="@style/tv_normal"
+                        android:text="@string/_45"
+                        android:layout_weight="2"
+                        android:gravity="center"
+                        android:layout_width="0dp">
+                    </TextView>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/Ll_normal_htl_mrgn_pad">
+
+                    <TextView
+                        style="@style/tv_normal"
+                        android:layout_weight="1"
+                        android:text="@string/vehicle_name"
+                        />
+
+                    <TextView
+                        style="@style/tv_normal"
+                        android:text="@string/hosa02_40"
+                        android:layout_weight="1"
+                        android:gravity="center">
+                    </TextView>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/Ll_normal_htl_mrgn_pad">
+
+                    <TextView
+                        style="@style/tv_normal"
+                        android:layout_weight="1"
+                        android:text="@string/enter_vehicle_gps_number"
+                        />
+
+                    <TextView
+                        style="@style/tv_normal"
+                        android:text="@string/_5545wd4ad0"
+                        android:layout_weight="1"
+                        android:gravity="center">
+                    </TextView>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/Ll_normal_htl"
+                    android:baselineAligned="false">
+
+                    <android.support.design.widget.TextInputLayout
+                        style="@style/textinputlaout_weight"
+                        android:layout_weight="1"
+                        android:layout_margin="@dimen/dp5"
+                        android:padding="@dimen/dp0">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/et_startpointtoschool"
+                            style="@style/edittext_normal"
+                            android:hint="@string/vehicle_starting_point_towards_school"
+                            android:textSize="@dimen/sp12"
+                            tools:ignore="Autofill,TextFields" />
+
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/et_endpoint"
+                        style="@style/textinputlaout_weight"
+                        android:layout_margin="@dimen/dp5"
+                        android:padding="@dimen/dp0"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/tv_starttimetoschool"
+                            style="@style/edittext_normal"
+                            android:hint="Starting time(towards school)"
+                            android:textSize="@dimen/sp12"
+                            android:layout_marginTop="@dimen/dp25"
+
+                            tools:ignore="Autofill" />
+
+
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/Ll_normal_htl"
+                    android:baselineAligned="false">
+
+                    <android.support.design.widget.TextInputLayout
+                        style="@style/textinputlaout_weight"
+                        android:layout_margin="@dimen/dp5"
+                        android:padding="@dimen/dp0"
+                        android:layout_weight="1">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/et_startpointtohome"
+                            style="@style/edittext_normal"
+                            android:hint="@string/vehicle_starting_point_towards_home"
+                            android:textSize="@dimen/sp12"
+                            tools:ignore="Autofill,TextFields" />
+
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        style="@style/textinputlaout_weight"
+                        android:layout_margin="@dimen/dp5"
+                        android:padding="@dimen/dp0"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/et_starttimetohome"
+                            style="@style/edittext_normal"
+                            android:textSize="@dimen/sp12"
+                            android:layout_marginTop="@dimen/dp20"
+                            android:hint="Starting time(towards home)"
+                            tools:ignore="Autofill,TextFields" />
+
+
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/backgroundColor">
+
+
+                    <LinearLayout android:layout_marginTop="5dp"
+                        style="@style/Ll_normal_htl"
+                        android:background="#fff"
+                        android:layout_margin="@dimen/dp10"
+                        xmlns:android="http://schemas.android.com/apk/res/android">
+
+                        <TextView
+                            android:id="@+id/shifts"
+                            android:text="@string/max_no_of_stops_per_route"
+                            style="@style/tv_normal"
+                            android:layout_width="0dp"
+                            android:layout_weight="3"
+                            android:layout_margin="@dimen/dp5"/>
+
+
+                        <LinearLayout
+                            style="@style/Ll_weight_htl"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/shape_border"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:paddingBottom="@dimen/dp0">
+
+                            <TextView
+                                android:id="@+id/tv_nostopdesc"
+                                style="@style/textview_1"
+                                android:text="@string/minus" />
+
+                            <TextView
+                                android:id="@+id/tv_selectstop"
+                                style="@style/text_2"
+                                android:text="@string/one" />
+
+                            <TextView
+                                android:id="@+id/tv_nostopinsc"
+                                style="@style/textview12"
+                                android:layout_height="match_parent"
+                                android:text="@string/plus" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="@dimen/dp5"
+                    app:cardCornerRadius="@dimen/dp5"
+                    android:layout_margin="@dimen/dp2">
+
+                    <LinearLayout
+                        style="@style/Ll_normal_vtl">
+
+
+
+                        <LinearLayout
+                            style="@style/Ll_normal_htl_mrgn_pad"
+                            android:background="@drawable/card_shape">
+
+                            <TextView
+                                style="@style/tv_normal"
+                                android:layout_weight="1"
+                                android:text="@string/enter_location_manually" />
+
+                            <Switch
+                                android:id="@+id/switch1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1" />
+
+
+                        </LinearLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            style="@style/textinputlaout_wmatch_hwrap">
+
+                            <EditText
+                                style="@style/edittext_normal"
+                                android:hint="@string/enter_stop_name"
+                                tools:ignore="Autofill,TextFields" />
+
+
+                        </android.support.design.widget.TextInputLayout>
+
+
+                        <LinearLayout
+                            style="@style/Ll_normal_htl"
+                            android:baselineAligned="false">
+
+                            <android.support.design.widget.TextInputLayout
+                                style="@style/textinputlaout_weight"
+                                android:layout_weight="1">
+
+                                <EditText
+                                    style="@style/edittext_normal"
+                                    android:hint="@string/enter_latitude_point"
+                                    tools:ignore="Autofill,TextFields" />
+
+
+                            </android.support.design.widget.TextInputLayout>
+
+                            <android.support.design.widget.TextInputLayout
+                                style="@style/textinputlaout_weight"
+                                android:layout_weight="1">
+
+                                <EditText
+                                    style="@style/edittext_normal"
+                                    android:hint="@string/enter_longitude"
+                                    tools:ignore="Autofill,TextFields" />
+
+
+                            </android.support.design.widget.TextInputLayout>
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            style="@style/Ll_normal_htl"
+                            android:baselineAligned="false">
+
+                            <android.support.design.widget.TextInputLayout
+                                style="@style/textinputlaout_weight"
+                                android:layout_weight="1">
+
+                                <EditText
+                                    style="@style/edittext_normal"
+                                    android:hint="@string/enter_start_distance"
+                                    tools:ignore="Autofill,TextFields" />
+
+
+                            </android.support.design.widget.TextInputLayout>
+
+                            <android.support.design.widget.TextInputLayout
+                                style="@style/textinputlaout_weight"
+                                android:layout_weight="1">
+
+                                <EditText
+                                    style="@style/edittext_normal"
+                                    android:hint="@string/enter_approx_time"/>
+
+
+                            </android.support.design.widget.TextInputLayout>
+
+
+
+
+
+
+
+                        </LinearLayout>
+
+
+                        <android.support.v7.widget.CardView
+                            style="@style/cardViewStyle"
+                            app:cardBackgroundColor="@color/backgroundColor"
+                            android:layout_margin="@dimen/dp10"
+                            app:cardCornerRadius="@dimen/dp5"
+                            app:cardElevation="@dimen/dp5">
+
+                            <LinearLayout
+                                style="@style/Ll_normal_vtl">
+
+                                <ImageView
+                                    android:id="@+id/image_picker_calendar"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="80dp"
+                                    android:layout_margin="@dimen/dp10"
+                                    android:background="#fff"
+                                    android:src="@drawable/ic_attachment_black_24dp"
+                                    android:contentDescription="@string/todo" />
+
+                                <TextView
+                                    style="@style/tv_normal"
+                                    android:layout_width="match_parent"
+                                    android:text="@string/image_name_jpg"
+                                    android:layout_margin="@dimen/dp2"
+                                    android:gravity="center"
+                                    android:padding="@dimen/dp5"
+                                    android:background="@color/white"/>
+
+                            </LinearLayout>
+
+                        </android.support.v7.widget.CardView>
+
+                        <Button
+                            android:text="@string/plus"
+                            style="@style/button_normal_mrgn_pad"
+                            android:gravity="center"
+                            android:layout_gravity="center"/>
+
+                    </LinearLayout>
+
+
+
+                </android.support.v7.widget.CardView>
+
+
+                <android.support.v7.widget.CardView
+                    style="@style/cardViewStyle"
+                    android:layout_margin="@dimen/dp10"
+                    app:cardCornerRadius="@dimen/dp5"
+                    app:cardElevation="@dimen/dp5">
+
+
+                    <LinearLayout
+                        style="@style/Ll_normal_vtl"
+                        android:layout_margin="@dimen/dp10"
+                        android:background="@color/colorPrimary"
+                        android:layout_height="@dimen/dp150">
+
+
+
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+
+
+
+
+
+                <LinearLayout
+                    style="@style/Ll_normal_vtl"
+                    android:layout_margin="@dimen/dp5"
+                    android:background="@drawable/shape4">
+
+
+                    <TextView
+                        style="@style/tv_normal"
+                        android:text="Stops Lists"
+                        android:layout_gravity="center"
+                        android:gravity="center"/>
+
+
+
+                    <android.support.v7.widget.RecyclerView
+                        style="@style/recyclerView_bothmatchparent_mrgn_pad"
+                        android:background="@color/backgroundColor">
+
+
+                    </android.support.v7.widget.RecyclerView>
+
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

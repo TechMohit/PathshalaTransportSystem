@@ -66,7 +66,7 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
 
     RecyclerView recyclerView, otherdocuments, recyclerfinancial, recyclervehiclefitness;
 
-
+    private String Tag = "Addvehicle";
     public static RecyclerTeamAdapter recyclerTeamAdapter;
     public static Recyclerotherdocuments recyclerotherdocuments;
     public static Recyclerfinancial recyclerfinancialadapter;
@@ -74,14 +74,18 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
     private String[] vehicletype = {"BUS", "AC BUS", "MINI BUS", "TRAVELLER"};
     private String[] bodytype = {"NEW", "SECOND HAND"};
     private Spinner vehicletypespin, bodytypespin;
-    private String Tag = "Addvehicle";
+
     Context context;
     Dialog imageChooserDialog;
     public static int i =0;
     public int requestcode;
     String imageCase="A";
+    int count = 0;
+    int countother = 0;
+    int countfinance = 0;
+    int countvimage = 0;
 
-    DatabaseReference databaseReference;
+    DatabaseReference databaseReferenceInsurance,databaseReferenceOther,databaseReferenceLoan,databaseReferenceVehicle;
 
 
     private String str_vehicle_type, str_body_type, vehicleregno, vehiclename, vehiclegpsdetails, chasisnumber, enginenumber, manufacturename, modelnumber,
@@ -114,9 +118,13 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
     public static ArrayList<String> finnancearraylist;
     public static ArrayList<String> fittnesarraylist;
     ArrayList<Uri> arrayListOtherDocs = new ArrayList<>() ;
+    ArrayList<Uri> arrayListLoanDocs = new ArrayList<>() ;
+    ArrayList<Uri> arrayListFinanceDocs = new ArrayList<>() ;
+    ArrayList<Uri> arrayListvahicleimageDocs = new ArrayList<>() ;
     ArrayList<ImageModel> otherDocArrayListModel,loanDocArrayListModel, financeDocArrayListModel, vehicleImageArrayListModel;
 
     private Uri filePath;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -354,6 +362,7 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
                         break;
 
                     case "B":
+                        arrayListLoanDocs.add(filePath);
                         loanDocArrayListModel.add(new ImageModel(filePath));
                         imageAdapter = new ImageAdapter(loanDocArrayListModel, getActivity(), requestcode);
                         otherdocuments.setHasFixedSize(true);
@@ -365,6 +374,7 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
 
 
                     case "C":
+                        arrayListFinanceDocs.add(filePath);
                         financeDocArrayListModel.add(new ImageModel(filePath));
                         imageAdapter = new ImageAdapter(financeDocArrayListModel, getActivity(), requestcode);
                         recyclerfinancial.setHasFixedSize(true);
@@ -375,6 +385,7 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
                         break;
 
                     case "D":
+                        arrayListvahicleimageDocs.add(filePath);
                         vehicleImageArrayListModel.add(new ImageModel(filePath));
                         imageAdapter = new ImageAdapter(vehicleImageArrayListModel, getActivity(), requestcode);
                         recyclervehiclefitness.setHasFixedSize(true);
@@ -419,7 +430,7 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
 
 
                         case "B":
-
+                            arrayListLoanDocs.add(filePath);
                             loanDocArrayListModel.add(new ImageModel(filePath));
                             imageAdapter = new ImageAdapter(loanDocArrayListModel, getActivity(), requestcode);
                             otherdocuments.setHasFixedSize(true);
@@ -430,7 +441,7 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
                             break;
 
                         case "C":
-
+                            arrayListFinanceDocs.add(filePath);
                             financeDocArrayListModel.add(new ImageModel(filePath));
                             imageAdapter = new ImageAdapter(financeDocArrayListModel, getActivity(), requestcode);
                             recyclerfinancial.setHasFixedSize(true);
@@ -442,7 +453,7 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
 
 
                         case "D":
-
+                            arrayListvahicleimageDocs.add(filePath);
                             vehicleImageArrayListModel.add(new ImageModel(filePath));
                             imageAdapter = new ImageAdapter(vehicleImageArrayListModel, getActivity(), requestcode);
                             recyclervehiclefitness.setHasFixedSize(true);
@@ -464,12 +475,7 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         }
     }
 
-    private void setimage() {
 
-        ImageModel imageModel = new ImageModel(filePath);
-        otherDocArrayListModel .add(imageModel);
-       // imageAdapter.notifyDataSetChanged();
-    }
 
 
     private void initListner() {
@@ -573,12 +579,30 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
                 fddownpayment,fdlaonapprovedate,fdloanduedate,fdloanenddate,fdloanemiamount,fdmaintaincecharges,fdreparingcharges,fdremarks);
 
 
-        Log.d("hftrhrtfhrt",Constant.FINAL_REGISTRATION_ID);
+
+
+        mref1.child(Constant.FINAL_REGISTRATION_ID).child("Basic_vehicle_Details").setValue(transBarrierModel);
+        mref1.child(Constant.FINAL_REGISTRATION_ID).child("vehicle_registration_Details").setValue(transBarrierModelreg);
+        mref1.child(Constant.FINAL_REGISTRATION_ID).child("Servicing_Details").setValue(transBarrierModelService);
+        mref1.child(Constant.FINAL_REGISTRATION_ID).child("Insurance_Details").setValue(transBarrierModelInsurance);
+        mref1.child(Constant.FINAL_REGISTRATION_ID).child("Other_Document").setValue(transBarrierModelOtherDocument);
+        mref1.child(Constant.FINAL_REGISTRATION_ID).child("Financial_Details").setValue(transBarrierModelFinancialDetails);
+
 
         //send to firebase
-        final StorageReference storageReference = mStorageRef.child("Vehicle_Registration").child(Constant.FINAL_REGISTRATION_ID).child("Insurance_Details");
-        databaseReference =   mref1.child(Constant.FINAL_REGISTRATION_ID).child("Insurance_Details");
-        new Handler().postDelayed(new Runnable() {
+        final StorageReference storageReferenceInsurance = mStorageRef.child("Vehicle_Registration").child(Constant.FINAL_REGISTRATION_ID).child("Insurance_Details");
+        final StorageReference storageReferenceOther = mStorageRef.child("Vehicle_Registration").child(Constant.FINAL_REGISTRATION_ID).child("Other_Document");
+        final StorageReference storageReferenceLoan = mStorageRef.child("Vehicle_Registration").child(Constant.FINAL_REGISTRATION_ID).child("Financial_Details");
+        final StorageReference storageReferenceVehicle = mStorageRef.child("Vehicle_Registration").child(Constant.FINAL_REGISTRATION_ID).child("Vehicle_Details");
+
+        databaseReferenceInsurance =   mref1.child(Constant.FINAL_REGISTRATION_ID).child("Insurance_Details");
+        databaseReferenceOther     =   mref1.child(Constant.FINAL_REGISTRATION_ID).child("Other_Document");
+        databaseReferenceLoan      =   mref1.child(Constant.FINAL_REGISTRATION_ID).child("Financial_Details");
+        databaseReferenceVehicle   =   mref1.child(Constant.FINAL_REGISTRATION_ID).child("Vehicle_Picture");
+
+
+
+       new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
 
@@ -589,30 +613,98 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
 
                 if(arrayListOtherDocs.size()>0) {
                     Log.d(Tag, "arraysize"+arrayListOtherDocs.size());
+
                     for (i = 0; i < arrayListOtherDocs.size(); i++) {
+
+
                         Log.d(Tag, ""+arrayListOtherDocs.get(i));
-
-
-
-                        storageReference.child("" + i).putFile(arrayListOtherDocs.get(i)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        storageReferenceInsurance.child("" + i).putFile(arrayListOtherDocs.get(i)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
 
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                              databaseReference.child("insurance_document_picture").child(""+i).setValue(taskSnapshot.getDownloadUrl().toString());
-
+                                Log.d(Tag, ""+count);
+                                databaseReferenceInsurance.child("insurance_document_picture").child("Image"+count).setValue(taskSnapshot.getDownloadUrl().toString());
+                                Log.d(Tag, "2");
+                                count++;
 
                             }
                         });
                     }
                 }
 
-                mref1.child(Constant.FINAL_REGISTRATION_ID).child("Basic_vehicle_Details").setValue(transBarrierModel);
-                mref1.child(Constant.FINAL_REGISTRATION_ID).child("vehicle_registration_Details").setValue(transBarrierModelreg);
-                mref1.child(Constant.FINAL_REGISTRATION_ID).child("Servicing_Details").setValue(transBarrierModelService);
-                mref1.child(Constant.FINAL_REGISTRATION_ID).child("Insurance_Details").setValue(transBarrierModelInsurance);
-                mref1.child(Constant.FINAL_REGISTRATION_ID).child("Other_Document").setValue(transBarrierModelOtherDocument);
-                mref1.child(Constant.FINAL_REGISTRATION_ID).child("Financial_Details").setValue(transBarrierModelFinancialDetails);
+
+
+
+                if(arrayListLoanDocs.size()>0) {
+
+                    Log.d(Tag, "arrayListLoanDocs"+arrayListLoanDocs.size());
+
+                    for (i = 0; i < arrayListLoanDocs.size(); i++) {
+
+
+                        Log.d(Tag, ""+arrayListLoanDocs.get(i));
+                        storageReferenceOther.child("" + i).putFile(arrayListLoanDocs.get(i)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                Log.d(Tag, ""+countother);
+                                databaseReferenceOther.child("other_document_picture").child("Image"+countother).setValue(taskSnapshot.getDownloadUrl().toString());
+                                Log.d(Tag, "2");
+                                countother++;
+
+                            }
+                        });
+                    }
+                }
+
+
+                if(arrayListFinanceDocs.size()>0) {
+
+                    Log.d(Tag, "arrayListFinanceDocs"+arrayListFinanceDocs.size());
+
+                    for (i = 0; i < arrayListFinanceDocs.size(); i++) {
+
+
+                        Log.d(Tag, ""+arrayListFinanceDocs.get(i));
+                        storageReferenceLoan.child("" + i).putFile(arrayListFinanceDocs.get(i)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                Log.d(Tag, ""+countfinance);
+                                databaseReferenceLoan.child("loan_document_picture").child("Image"+countfinance).setValue(taskSnapshot.getDownloadUrl().toString());
+                                Log.d(Tag, "2");
+                                countfinance++;
+
+                            }
+                        });
+                    }
+                }
+
+                if(arrayListvahicleimageDocs.size()>0) {
+
+                    Log.d(Tag, "arrayListvahicleimageDocs"+arrayListvahicleimageDocs.size());
+
+                    for (i = 0; i < arrayListvahicleimageDocs.size(); i++) {
+
+
+                        Log.d(Tag, ""+arrayListvahicleimageDocs.get(i));
+                        storageReferenceVehicle.child("" + i).putFile(arrayListvahicleimageDocs.get(i)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                Log.d(Tag, ""+countvimage);
+                                databaseReferenceVehicle.child("Image"+countvimage).setValue(taskSnapshot.getDownloadUrl().toString());
+                                Log.d(Tag, "2");
+                                countvimage++;
+
+                            }
+                        });
+                    }
+                }
+
+
+
+
 
                 setdata();
 

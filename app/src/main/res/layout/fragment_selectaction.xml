@@ -30,6 +30,18 @@
             android:text="@string/add_vehicle"
             style="?android:attr/borderlessButtonStyle"/>
 
+        <Button
+            android:id="@+id/btncreateroute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/btn_shape_round"
+            android:padding="8dp"
+            android:text="@string/create_route"
+            style="?android:attr/borderlessButtonStyle"/>
+
 
 
 </LinearLayout>

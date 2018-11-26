@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">PathshalaTransportSystem</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -12,7 +12,24 @@
     <string name="one">1</string>
     <string name="plus">+</string>
     <string name="backarrowbutton">backclick</string>
-    <string name="create_route">Create Route</string>
+    <string name="create_route">Route</string>
+    <string name="enter_route_number">Enter Route Number</string>
+    <string name="select_bus_number">Select Bus Number</string>
+    <string name="enter_vehicle_gps_number">Vehicle GPS Number</string>
+    <string name="vehicle_starting_point_towards_school">Starting Point(Towards school)</string>
+    <string name="vehicle_starting_point_towards_home">Starting Point(Towards Home)</string>
+    <string name="vehicle_ending_point">Ending point</string>
+    <string name="enter_location_manually">Enter Location Manually</string>
+    <string name="enter_stop_name">Enter Stop Name</string>
+    <string name="enter_latitude_point">Enter Latitude point</string>
+    <string name="enter_longitude">Enter Longitude</string>
+    <string name="enter_start_distance">Enter start distance</string>
+    <string name="enter_approx_time">Enter approx time</string>
+    <string name="image_name_jpg">Image_name.jpg</string>
+    <string name="todo">TODO</string>
+    <string name="_45">45</string>
+    <string name="hosa02_40" tools:ignore="TypographyDashes">HOSA02-40</string>
+    <string name="_5545wd4ad0">5545wd4ad0</string>
     <string name="save">save</string>
     <string name="set_barrier">Set Barrier</string>
     <string name="add_vehicle">Add Vehicle</string>
