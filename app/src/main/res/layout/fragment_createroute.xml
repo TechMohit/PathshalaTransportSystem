@@ -187,8 +187,9 @@
                             android:id="@+id/tv_starttimetoschool"
                             style="@style/edittext_normal"
                             android:hint="Starting time(towards school)"
-                            android:textSize="@dimen/sp12"
-                            android:layout_marginTop="@dimen/dp25"
+                            android:textSize="@dimen/sp18"
+                            android:layout_marginTop="@dimen/dp22"
+                            android:layout_marginLeft="@dimen/dp20"
 
                             tools:ignore="Autofill" />
 
@@ -225,8 +226,9 @@
                         <TextView
                             android:id="@+id/et_starttimetohome"
                             style="@style/edittext_normal"
-                            android:textSize="@dimen/sp12"
-                            android:layout_marginTop="@dimen/dp20"
+                            android:textSize="@dimen/sp18"
+                            android:layout_marginTop="@dimen/dp22"
+                            android:layout_marginLeft="@dimen/dp20"
                             android:hint="Starting time(towards home)"
                             tools:ignore="Autofill,TextFields" />
 
@@ -407,7 +409,7 @@
                                 style="@style/Ll_normal_vtl">
 
                                 <ImageView
-                                    android:id="@+id/image_picker_calendar"
+                                    android:id="@+id/image_picker_stop"
                                     android:layout_width="match_parent"
                                     android:layout_height="80dp"
                                     android:layout_margin="@dimen/dp10"

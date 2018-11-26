@@ -1,7 +1,10 @@
 package com.varadhismartek.pathshalatransportsystem.Fragment;
 
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,10 +18,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -36,7 +41,8 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.varadhismartek.pathshalatransportsystem.PlaceArrayAdapter;
 import com.varadhismartek.pathshalatransportsystem.R;
 
-
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 
 public class Createroute extends Fragment implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks,View.OnClickListener {
@@ -45,14 +51,17 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
 
     private EditText mroutenum;
     private String   routenum;
-    private TextView bt_save,tv_decrease,tv_increase,tv_stop;
+    private TextView bt_save,tv_decrease,tv_increase,tv_stop,tv_starttimetoschool,tv_starttimetohome;
     AutoCompleteTextView actStartingpnt,actEndingpoint;
     Geocoder geocoder;
     static LatLng origin,destiny;
     public GoogleApiClient googleApiClient;
     public PlaceArrayAdapter mPlacearrayadpater;
+    private ImageView stopimage;
 
     public static LatLngBounds latLngBounds;
+
+    Dialog imageChooserDialog;
 
 
 
@@ -78,7 +87,7 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
          View view = inflater.inflate(R.layout.fragment_createroute, container, false);
         initViews(view);
         initListner();
-
+        getCurrentTime();
         geocoder=new Geocoder(getActivity());
 
         CustomSpinnerAdapter customSpinnerAdaptervehicle = new CustomSpinnerAdapter(getActivity(), vehicletype, "#717071");
@@ -205,8 +214,18 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
         return view;
     }
 
+    public void getCurrentTime() {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat mdformat = new SimpleDateFormat("hh:mm:ss a");
+        String strDate =  mdformat.format(calendar.getTime());
+        tv_starttimetoschool.setText(strDate);
+        tv_starttimetohome.setText(strDate);
+
+    }
+
     private void initListner() {
         bt_save.setOnClickListener(this);
+        stopimage.setOnClickListener(this);
     }
 
     private void initViews(View view) {
@@ -218,6 +237,9 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
         tv_stop = view.findViewById(R.id.tv_selectstop);
         actStartingpnt = view.findViewById(R.id.et_startpointtoschool);
         actEndingpoint = view.findViewById(R.id.et_startpointtohome);
+        tv_starttimetoschool = view.findViewById(R.id.tv_starttimetoschool);
+        tv_starttimetohome = view.findViewById(R.id.et_starttimetohome);
+        stopimage = view.findViewById(R.id.image_picker_stop);
 
 
 
@@ -326,8 +348,26 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
                 saveaddroutedata();
                 break;
 
+            case R.id.image_picker_stop:
+                openDialogForImageChoose();
+                break;;
+
 
         }
+    }
+
+    private void openDialogForImageChoose() {
+
+        imageChooserDialog = new Dialog(getActivity());
+        imageChooserDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        imageChooserDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        imageChooserDialog.setContentView(R.layout.attach_image_dialog);
+        ImageView camera  = imageChooserDialog.findViewById(R.id.camera);
+        ImageView gallery  = imageChooserDialog.findViewById(R.id.gallery);
+
+        camera.setOnClickListener(this);
+        gallery.setOnClickListener(this);
+        imageChooserDialog.show();
     }
 
     private void saveaddroutedata() {
