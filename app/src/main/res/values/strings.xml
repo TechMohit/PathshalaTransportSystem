@@ -23,7 +23,7 @@
     <string name="enter_stop_name">Enter Stop Name</string>
     <string name="enter_latitude_point">Enter Latitude point</string>
     <string name="enter_longitude">Enter Longitude</string>
-    <string name="enter_start_distance">Enter start distance</string>
+    <string name="enter_start_distance">Enter start distance(km)</string>
     <string name="enter_approx_time">Enter approx time</string>
     <string name="image_name_jpg">Image_name.jpg</string>
     <string name="todo">TODO</string>

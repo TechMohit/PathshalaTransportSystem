@@ -323,7 +323,8 @@
                         <android.support.design.widget.TextInputLayout
                             style="@style/textinputlaout_wmatch_hwrap">
 
-                            <EditText
+                            <AutoCompleteTextView
+                                android:id="@+id/tv_stop_name"
                                 style="@style/edittext_normal"
                                 android:hint="@string/enter_stop_name"
                                 tools:ignore="Autofill,TextFields" />
@@ -341,7 +342,10 @@
                                 android:layout_weight="1">
 
                                 <EditText
+                                    android:id="@+id/et_latitude"
                                     style="@style/edittext_normal"
+                                    android:maxLength="10"
+                                    android:focusable="false"
                                     android:hint="@string/enter_latitude_point"
                                     tools:ignore="Autofill,TextFields" />
 
@@ -353,8 +357,11 @@
                                 android:layout_weight="1">
 
                                 <EditText
+                                    android:id="@+id/et_longitude"
+                                    android:maxLength="10"
                                     style="@style/edittext_normal"
                                     android:hint="@string/enter_longitude"
+                                    android:focusable="false"
                                     tools:ignore="Autofill,TextFields" />
 
 
@@ -371,6 +378,9 @@
                                 android:layout_weight="1">
 
                                 <EditText
+                                    android:id="@+id/et_distance"
+                                    android:maxLength="5"
+                                    android:focusable="false"
                                     style="@style/edittext_normal"
                                     android:hint="@string/enter_start_distance"
                                     tools:ignore="Autofill,TextFields" />
@@ -450,22 +460,17 @@
                     app:cardElevation="@dimen/dp5">
 
 
-                    <LinearLayout
-                        style="@style/Ll_normal_vtl"
-                        android:layout_margin="@dimen/dp10"
-                        android:background="@color/colorPrimary"
-                        android:layout_height="@dimen/dp150">
-
-
-
-
-                    </LinearLayout>
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp">
+                        <fragment
+                            android:id="@+id/mapfragid"
+                            android:name="com.google.android.gms.maps.SupportMapFragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"/>
+                    </FrameLayout>
 
                 </android.support.v7.widget.CardView>
-
-
-
-
 
 
                 <LinearLayout
@@ -483,6 +488,7 @@
 
 
                     <android.support.v7.widget.RecyclerView
+                        android:id="@+id/add_route_recyclerview"
                         style="@style/recyclerView_bothmatchparent_mrgn_pad"
                         android:background="@color/backgroundColor">
 

@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Geocoder;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,7 +18,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,8 +45,19 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.maps.DirectionsApi;
+import com.google.maps.GeoApiContext;
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.DirectionsLeg;
+import com.google.maps.model.DirectionsResult;
+import com.google.maps.model.DirectionsRoute;
+import com.google.maps.model.Duration;
+import com.google.maps.model.TravelMode;
 import com.varadhismartek.pathshalatransportsystem.Constant;
 import com.varadhismartek.pathshalatransportsystem.PlaceArrayAdapter;
 import com.varadhismartek.pathshalatransportsystem.R;
@@ -52,20 +67,27 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 
-public class Createroute extends Fragment implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks,View.OnClickListener {
+public class Createroute extends Fragment implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks,View.OnClickListener,OnMapReadyCallback {
     private String Tag = "Createroute";
     private String[] vehicletype = {"BUS", "AC BUS", "MINI BUS", "TRAVELLER"};
     private Uri filePath;
 
-    private EditText mroutenum;
+    private EditText mroutenum,latpoint,longpoint,totaldistance;
     private String   routenum;
     private TextView bt_save,tv_decrease,tv_increase,tv_stop,tv_starttimetoschool,tv_starttimetohome;
-    AutoCompleteTextView actStartingpnt,actEndingpoint;
+    AutoCompleteTextView actStartingpnt,actEndingpoint,mAutoCompleteTextView;
     Geocoder geocoder;
-    static LatLng origin,destiny;
+    static LatLng origin,destiny,stop;
     public GoogleApiClient googleApiClient;
     public PlaceArrayAdapter mPlacearrayadpater;
     private ImageView stopimage;
+    static GoogleMap map;
+    SupportMapFragment supportMapFragment;
+    double selctlat,selectlong,orignselctlat,orignselectlong,destselctlat,destselectlong;
+    InputFilter[] filters ;
+    private static final String API_KEY = "AIzaSyCw3hM21S93-hSuAHWjW86jlVM_rGR4vWM";
+    String originselect,destinationselect;
+
 
     public static LatLngBounds latLngBounds;
 
@@ -78,7 +100,7 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
 
     private String str_vehicle_type,starting;
     int i = 1;
-
+    RecyclerView rv_stopview;
 
 
 
@@ -97,6 +119,9 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
         initListner();
         getCurrentTime();
         geocoder=new Geocoder(getActivity());
+        //set filter on edit text.
+        filters = new InputFilter[1];
+        filters[0] = new InputFilter.LengthFilter(2);
 
         CustomSpinnerAdapter customSpinnerAdaptervehicle = new CustomSpinnerAdapter(getActivity(), vehicletype, "#717071");
         vehicletypespin.setAdapter(customSpinnerAdaptervehicle);
@@ -113,7 +138,49 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
 
             }
         });
+        supportMapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.mapfragid);
+        supportMapFragment.getMapAsync(this);
 
+        rv_stopview.setHasFixedSize(true);
+        rv_stopview.setLayoutManager(new LinearLayoutManager(container.getContext(), LinearLayoutManager.VERTICAL, false));
+
+        //setting up for autocomplete textview
+
+
+        //setting an adapter for the autocompletextview
+
+        actStartingpnt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+
+                }
+                else {
+                    originselect = actStartingpnt.getText().toString();
+                    Log.d("Timetest", originselect);
+                }
+            }
+        });
+
+        mAutoCompleteTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+
+                }
+                else {
+                    destinationselect = mAutoCompleteTextView.getText().toString();
+                    Log.d("Timetest", destinationselect);
+                }
+            }
+        });
+
+
+
+
+
+
+       // destinationselect = mAutoCompleteTextView.getText().toString();
         tv_decrease.setOnClickListener(new View.OnClickListener() {
 
 
@@ -148,6 +215,7 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
 
         actStartingpnt.setText(starting);
         actEndingpoint.setText(starting);
+        mAutoCompleteTextView.setText(starting);
 
 
         if (googleApiClient==null||!googleApiClient.isConnected())
@@ -175,10 +243,12 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
         //setting the threshold for the autocomplete textview
         actStartingpnt.setThreshold(3);
         actEndingpoint.setThreshold(3);
+        mAutoCompleteTextView.setThreshold(3);
 
         //placing the adapter for the autocomplete textview
         actStartingpnt.setAdapter(mPlacearrayadpater);
         actEndingpoint.setAdapter(mPlacearrayadpater);
+        mAutoCompleteTextView.setAdapter(mPlacearrayadpater);
 
 
 
@@ -219,6 +289,24 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
             }
         });
 
+        mAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                stop=null;
+                mAutoCompleteTextView.setOnItemClickListener(mAutocompleteItemclick);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         return view;
     }
 
@@ -248,6 +336,11 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
         tv_starttimetoschool = view.findViewById(R.id.tv_starttimetoschool);
         tv_starttimetohome = view.findViewById(R.id.et_starttimetohome);
         stopimage = view.findViewById(R.id.image_picker_stop);
+        mAutoCompleteTextView = view.findViewById(R.id. tv_stop_name);
+        rv_stopview = view.findViewById(R.id.add_route_recyclerview);
+        latpoint = view.findViewById(R.id.et_latitude);
+        longpoint = view.findViewById(R.id.et_longitude);
+        totaldistance = view.findViewById(R.id.et_distance);
 
 
 
@@ -318,7 +411,14 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
             if (origin==null){
                 LatLng latLng=place.getLatLng();
                 origin=new LatLng(latLng.latitude,latLng.longitude);
+
+                orignselctlat = latLng.latitude;
+                orignselectlong = latLng.longitude;
+
                 Log.d("ORIGINVALUE", ""+origin);
+
+
+
             }
 
             //for getting the destiny value if the origin value is not null
@@ -327,6 +427,48 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
                 destiny = new LatLng(latLng1.latitude , latLng1.longitude);
                 Log.d("DESTINYVALUE", ""+destiny);
             }
+            //for getting the stop value if the stop value is not null
+            if(stop==null) {
+                LatLng latLng1 = place.getLatLng();
+                stop = new LatLng(latLng1.latitude, latLng1.longitude);
+                Log.d("stop", ""+stop);
+                selctlat = latLng1.latitude;
+                selectlong = latLng1.longitude;
+                latpoint.setText(""+selctlat);
+                longpoint.setText(""+selectlong);
+                Location startPoint=new Location("locationA");
+                startPoint.setLatitude(orignselctlat);
+                startPoint.setLongitude(orignselectlong);
+
+                Location endPoint=new Location("locationA");
+                endPoint.setLatitude(selctlat);
+                endPoint.setLongitude(selectlong);
+                double distance=startPoint.distanceTo(endPoint)/1000;
+                if(distance!=0&& distance>=1000){
+                  double dis = distance/1000;
+
+                  totaldistance.setText(""+dis+" "+"km");
+
+                }
+                else {
+                    totaldistance.setText("" + distance + " " + "km");
+                    }
+
+                Log.d("Timetest1","");
+
+
+
+
+                 //  String duration = getDurationForRoute("12.8983601,77.6179465", "28.660962100000003,77.2276794");
+                 String duration = getDurationForRoute("Bommanahalli, Bengaluru, Karnataka, India", "Electronic City, Bengaluru, Karnataka, India");
+                 Log.d("Timetest", duration);
+
+
+
+
+            }
+
+
 
             if (attributions != null) {
                 Toast.makeText(getContext(),"Some error while fetching",Toast.LENGTH_LONG).show();
@@ -357,6 +499,7 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
                 String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), photo, "Title", null);
                 filePath = Uri.parse(path);
                 stopimage.setImageURI(filePath);
+
 
             }
         }
@@ -445,4 +588,38 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
 
 
     }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
+    }
+
+    public String getDurationForRoute(String origin, String destination){
+    // - We need a context to access the API
+    GeoApiContext geoApiContext = new GeoApiContext.Builder()
+            .apiKey(API_KEY)
+            .build();
+
+    // - Perform the actual request
+        DirectionsResult directionsResult = null;
+        try {
+            directionsResult = DirectionsApi.newRequest(geoApiContext)
+                    .mode(TravelMode.DRIVING)
+                    .origin(origin)
+                    .destination(destination)
+                    .await();
+        } catch (ApiException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // - Parse the result
+    DirectionsRoute route = directionsResult.routes[0];
+    DirectionsLeg leg = route.legs[0];
+    Duration duration = leg.duration;
+    return duration.humanReadable;
+}
 }
