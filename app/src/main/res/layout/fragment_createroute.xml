@@ -393,6 +393,7 @@
                                 android:layout_weight="1">
 
                                 <EditText
+                                    android:id="@+id/et_traveltime"
                                     style="@style/edittext_normal"
                                     android:hint="@string/enter_approx_time"/>
 
@@ -441,6 +442,7 @@
                         </android.support.v7.widget.CardView>
 
                         <Button
+                            android:id="@+id/btn_addstop"
                             android:text="@string/plus"
                             style="@style/button_normal_mrgn_pad"
                             android:gravity="center"

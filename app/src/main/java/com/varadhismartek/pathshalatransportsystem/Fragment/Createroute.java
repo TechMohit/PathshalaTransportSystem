@@ -4,16 +4,19 @@ package com.varadhismartek.pathshalatransportsystem.Fragment;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.provider.SyncStateContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -45,11 +48,16 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.DirectionsApi;
 import com.google.maps.GeoApiContext;
 import com.google.maps.errors.ApiException;
@@ -58,13 +66,21 @@ import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.Duration;
 import com.google.maps.model.TravelMode;
+import com.varadhismartek.pathshalatransportsystem.AddStop;
 import com.varadhismartek.pathshalatransportsystem.Constant;
+import com.varadhismartek.pathshalatransportsystem.Constants;
+import com.varadhismartek.pathshalatransportsystem.Durationcalculate;
+import com.varadhismartek.pathshalatransportsystem.MarkerLists;
 import com.varadhismartek.pathshalatransportsystem.PlaceArrayAdapter;
 import com.varadhismartek.pathshalatransportsystem.R;
+import com.varadhismartek.pathshalatransportsystem.Stop_Address;
+import com.varadhismartek.pathshalatransportsystem.StopviewRecyclerAdapter;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 
 public class Createroute extends Fragment implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks,View.OnClickListener,OnMapReadyCallback {
@@ -72,7 +88,7 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
     private String[] vehicletype = {"BUS", "AC BUS", "MINI BUS", "TRAVELLER"};
     private Uri filePath;
 
-    private EditText mroutenum,latpoint,longpoint,totaldistance;
+    private EditText mroutenum,latpoint,longpoint,totaldistance,travelduration;
     private String   routenum;
     private TextView bt_save,tv_decrease,tv_increase,tv_stop,tv_starttimetoschool,tv_starttimetohome;
     AutoCompleteTextView actStartingpnt,actEndingpoint,mAutoCompleteTextView;
@@ -86,27 +102,48 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
     double selctlat,selectlong,orignselctlat,orignselectlong,destselctlat,destselectlong;
     InputFilter[] filters ;
     private static final String API_KEY = "AIzaSyCw3hM21S93-hSuAHWjW86jlVM_rGR4vWM";
-    String originselect,destinationselect;
+    Context context;
+    LocationManager locationManager;
+    Button btn_Add;
+    Marker marker;
+    ArrayList<Marker> markerArrayList;
+    StopviewRecyclerAdapter recyclerAdapter;
+
+    // flag for GPS status
+    boolean isGPSEnabled = false;
+
+    // flag for network status
+    boolean isNetworkEnabled = false;
 
 
     public static LatLngBounds latLngBounds;
 
     Dialog imageChooserDialog;
+    String originselect,destinationselect,stopselect;
 
 
 
 
     private Spinner vehicletypespin;
 
-    private String str_vehicle_type,starting;
+    private String str_vehicle_type,starting,Stop_Latlng,names,names1,names2;
+    Double latitude, longitutde;
     int i = 1;
     RecyclerView rv_stopview;
+    static int stop_num;
+    ArrayList<AddStop> arrayList;
+    ArrayList<MarkerLists> markerLists;
+    ArrayList<Stop_Address> stop_addressList;
+    HashMap<Integer, Marker> markerHashMap;
 
+    LatLng latLng;
 
 
     public Createroute() {
         // Required empty public constructor
     }
+
+
 
 
 
@@ -122,6 +159,21 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
         //set filter on edit text.
         filters = new InputFilter[1];
         filters[0] = new InputFilter.LengthFilter(2);
+        stop_num = Integer.parseInt(tv_stop.getText().toString());
+
+
+        //putting the marker on the map
+        markerHashMap = new HashMap<>();
+
+        //arraylist for map
+        markerArrayList = new ArrayList<>();
+
+        markerLists = new ArrayList<>();
+
+        stop_addressList = new ArrayList<>();
+
+        //this is for the recyclerview;
+        arrayList = new ArrayList<>();
 
         CustomSpinnerAdapter customSpinnerAdaptervehicle = new CustomSpinnerAdapter(getActivity(), vehicletype, "#717071");
         vehicletypespin.setAdapter(customSpinnerAdaptervehicle);
@@ -144,7 +196,33 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
         rv_stopview.setHasFixedSize(true);
         rv_stopview.setLayoutManager(new LinearLayoutManager(container.getContext(), LinearLayoutManager.VERTICAL, false));
 
+
+        locationManager = (LocationManager) getContext().getSystemService(getContext().LOCATION_SERVICE);
+
+        isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        //setting up the latlng for the latlngbounds for the places search
+        latLngBounds = new LatLngBounds(new LatLng(23.63936, 68.14712), new LatLng(28.20453, 97.34466));
+
+        //  Durationcalculate durationcalculate = new Durationcalculate(getActivity(),travelduration);
+      //  Log.d("Durationtest",""+travelduration.getText());
+      //  durationcalculate.execute("12.8983601,77.6179465", "28.660962100000003,77.2276794");
+
+        // getDurationForRoute("Bommanahalli, Bengaluru, Karnataka, India", "Electronic City, Bengaluru, Karnataka, India");
+
+        // String duration = getDurationForRoute("Bommanahalli, Bengaluru, Karnataka, India", "Electronic City, Bengaluru, Karnataka, India");
+        // Log.d("Timetest", duration);
         //setting up for autocomplete textview
+
+       /* new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                 getDurationForRoute("Bommanahalli, Bengaluru, Karnataka, India", "Electronic City, Bengaluru, Karnataka, India");
+                 Log.d("Timetest", duration);
+
+            }
+        },1000);*/
 
 
         //setting an adapter for the autocompletextview
@@ -260,7 +338,7 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                origin=null;
+                originselect = "select";
                 actStartingpnt.setOnItemClickListener(mAutocompleteItemclick);
             }
 
@@ -279,7 +357,7 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                destiny=null;
+                destinationselect="select";
                 actEndingpoint.setOnItemClickListener(mAutocompleteItemclick);
             }
 
@@ -297,7 +375,7 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                stop=null;
+                stopselect="select";
                 mAutoCompleteTextView.setOnItemClickListener(mAutocompleteItemclick);
             }
 
@@ -322,6 +400,7 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
     private void initListner() {
         bt_save.setOnClickListener(this);
         stopimage.setOnClickListener(this);
+        btn_Add.setOnClickListener(this);
     }
 
     private void initViews(View view) {
@@ -341,6 +420,8 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
         latpoint = view.findViewById(R.id.et_latitude);
         longpoint = view.findViewById(R.id.et_longitude);
         totaldistance = view.findViewById(R.id.et_distance);
+        travelduration = view.findViewById(R.id.et_traveltime);
+        btn_Add = view.findViewById(R.id.btn_addstop);
 
 
 
@@ -408,32 +489,42 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
             CharSequence attributions = places.getAttributions();
 
             //for getting the origin value
-            if (origin==null){
+            if (originselect=="select"){
                 LatLng latLng=place.getLatLng();
                 origin=new LatLng(latLng.latitude,latLng.longitude);
 
                 orignselctlat = latLng.latitude;
                 orignselectlong = latLng.longitude;
 
-                Log.d("ORIGINVALUE", ""+origin);
+                Log.d("ORIGINVALUE", "1"+origin);
+                //declaring marker and storing the current marker
+                map.addMarker(new MarkerOptions().position(origin).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN )).title(names1));
+                map.moveCamera(CameraUpdateFactory.newLatLng(origin));
+                map.animateCamera(CameraUpdateFactory.zoomTo(11));
 
+              //  callback.onMapReady(map);
 
 
             }
 
             //for getting the destiny value if the origin value is not null
-            else if (origin!=null){
+            if (destinationselect=="select"){
                 LatLng latLng1 = place.getLatLng();
                 destiny = new LatLng(latLng1.latitude , latLng1.longitude);
-                Log.d("DESTINYVALUE", ""+destiny);
+                Log.d("ORIGINVALUE", "2"+destiny);
+                map.addMarker(new MarkerOptions().position(destiny).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED )).title(names2));
+                map.moveCamera(CameraUpdateFactory.newLatLng(destiny));
+                map.animateCamera(CameraUpdateFactory.zoomTo(11));
             }
             //for getting the stop value if the stop value is not null
-            if(stop==null) {
-                LatLng latLng1 = place.getLatLng();
-                stop = new LatLng(latLng1.latitude, latLng1.longitude);
-                Log.d("stop", ""+stop);
-                selctlat = latLng1.latitude;
-                selectlong = latLng1.longitude;
+            if(stopselect=="select") {
+
+                latLng= place.getLatLng();
+                stop = new LatLng(latLng.latitude, latLng.longitude);
+                Log.d("ORIGINVALUE", "3"+latLng);
+                selctlat = latLng.latitude;
+                selectlong = latLng.longitude;
+                Stop_Latlng = selctlat+","+selectlong;
                 latpoint.setText(""+selctlat);
                 longpoint.setText(""+selectlong);
                 Location startPoint=new Location("locationA");
@@ -459,9 +550,9 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
 
 
 
-                 //  String duration = getDurationForRoute("12.8983601,77.6179465", "28.660962100000003,77.2276794");
-                 String duration = getDurationForRoute("Bommanahalli, Bengaluru, Karnataka, India", "Electronic City, Bengaluru, Karnataka, India");
-                 Log.d("Timetest", duration);
+               //    String duration = getDurationForRoute("12.8983601,77.6179465", "28.660962100000003,77.2276794");
+              //   String duration = getDurationForRoute("Bommanahalli, Bengaluru, Karnataka, India", "Electronic City, Bengaluru, Karnataka, India");
+                //   Log.d("Timetest", duration);
 
 
 
@@ -551,7 +642,60 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
                 startActivityForResult(i,Constant.FROM_GALLERY);
                 imageChooserDialog.dismiss();
                 break;
+            case R.id.btn_addstop:
+                String stop_name;
+                String stop_dist;
+                String stop_time;
 
+                if (Constants.number_of_counts < stop_num)
+                {
+                    stop_name = mAutoCompleteTextView.getText().toString();
+                    stop_dist = totaldistance.getText().toString();
+                    stop_time = travelduration.getText().toString();
+                    if (stop_name.isEmpty()) {
+                        mAutoCompleteTextView.setError("Enter the route name");
+                    }
+                    else if (stop_dist.isEmpty()) {
+                        totaldistance.setError("Enter the route distance");
+                    }
+                    else if (stop_time.isEmpty()) {
+                        travelduration.setError("Enter the time");
+                    }
+                    else {
+
+                        Constants.number_of_counts += 1;
+                        AddStop addStop = new AddStop(String.valueOf(Constants.number_of_counts), stop_name, stop_dist, stop_time,originselect,destinationselect,Stop_Latlng);
+                        arrayList.add(addStop);
+
+                        //this is for the waypoints
+                        Stop_Address stop_address = new Stop_Address(names, latitude, longitutde);
+                        stop_addressList.add(stop_address);
+
+                        markerLists.add(new MarkerLists(names, latitude, longitutde, latLng));
+                        Log.d("stop1", ""+latLng);
+                        //declaring marker and storing the current marker
+                        marker = map.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)).title(names));
+
+                        //markerHashMap.put(button_clik_count,marker);
+                        markerArrayList.add(marker);
+
+
+                        recyclerAdapter = new StopviewRecyclerAdapter(getContext(), arrayList, Constants.number_of_counts, stop_addressList, markerArrayList, map, markerLists,marker);
+
+                        recyclerAdapter.notifyData(arrayList, stop_addressList,markerArrayList,markerLists);
+                        mAutoCompleteTextView.setText("");
+                        totaldistance.setText("");
+                        travelduration.setText("");
+
+                        rv_stopview.setAdapter(recyclerAdapter);
+                    }
+
+                }
+                else
+                {
+                    Toast.makeText(getContext(), "you have already entered " + stop_num + " stops", Toast.LENGTH_SHORT).show();
+                }
+                break;
 
         }
     }
@@ -589,12 +733,13 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
 
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
 
-    }
 
-    public String getDurationForRoute(String origin, String destination){
+
+
+
+
+    public String  getDurationForRoute(String origin, String destination){
     // - We need a context to access the API
     GeoApiContext geoApiContext = new GeoApiContext.Builder()
             .apiKey(API_KEY)
@@ -622,4 +767,21 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
     Duration duration = leg.duration;
     return duration.humanReadable;
 }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        Toast.makeText(getContext(), "map loaded", Toast.LENGTH_LONG).show();
+        this.map = googleMap;
+        /*LatLng latLngtest = new LatLng(12.8399389, 77.6770031);
+
+
+
+        map.addMarker(new MarkerOptions().position(latLngtest).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).title("start address"));
+        map.addMarker(new MarkerOptions().position(latLngtest).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).title("End address"));
+        map.moveCamera(CameraUpdateFactory.newLatLng(latLngtest));
+
+        map.moveCamera(CameraUpdateFactory.newLatLng(latLngtest));
+        map.animateCamera(CameraUpdateFactory.zoomTo(11));*/
+
+    }
 }
