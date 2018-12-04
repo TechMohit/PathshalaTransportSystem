@@ -71,8 +71,8 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
     public static Recyclerotherdocuments recyclerotherdocuments;
     public static Recyclerfinancial recyclerfinancialadapter;
     public static Recyclervehiclefitness recyclervehiclefitnessadapter;
-    private String[] vehicletype = {"BUS", "AC BUS", "MINI BUS", "TRAVELLER"};
-    private String[] bodytype = {"NEW", "SECOND HAND"};
+    private ArrayList<String> vehicletype = new ArrayList<>();
+    private ArrayList<String> bodytype = new ArrayList<>();
     private Spinner vehicletypespin, bodytypespin;
 
     Context context;
@@ -149,7 +149,12 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         fittnesarraylist = new ArrayList<>();
         otherDocArrayListModel  = new ArrayList<>();
         ImageAdapter imageAdapter;
-
+        vehicletype.add("BUS");
+        vehicletype.add("AC BUS");
+        vehicletype.add("MINI BUS");
+        vehicletype.add("TRAVELLER");
+        bodytype.add("NEW");
+        bodytype.add("SECOND TYPE");
         //setting the imageuri as constant for the image drawable
         Uri imageuri = Uri.parse("android.resource://"+getContext().getPackageName()+"/drawable/folderad");
 
@@ -725,7 +730,7 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(getContext(), vehicletype[position], Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), vehicletype.get(position), Toast.LENGTH_LONG).show();
     }
 
     @Override

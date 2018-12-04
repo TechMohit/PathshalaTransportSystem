@@ -11,30 +11,32 @@ import android.widget.TextView;
 
 import com.varadhismartek.pathshalatransportsystem.R;
 
-
+import java.util.ArrayList;
 
 
 public class CustomSpinnerAdapter extends BaseAdapter implements SpinnerAdapter {
 
     Context mContext;
-    String[] leaves_types;
+    ArrayList<String>leaves_types;
     String colorcode;
 
-    public CustomSpinnerAdapter(Context mContext, String[] arrayList,String colorcode) {
+
+    public CustomSpinnerAdapter(Context mContext, ArrayList<String> arrayList, String colorcode) {
         this.mContext=mContext;
         this.leaves_types = arrayList;
         this.colorcode = colorcode;
 
     }
 
+
     @Override
     public int getCount() {
-        return leaves_types.length;
+        return leaves_types.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return leaves_types[position];
+        return leaves_types.get(position);
     }
 
     @Override
@@ -50,7 +52,7 @@ public class CustomSpinnerAdapter extends BaseAdapter implements SpinnerAdapter 
         txt.setTextSize(12);
 
         txt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down_circle_black_24dp, 0);
-        txt.setText(leaves_types[position]);
+        txt.setText(leaves_types.get(position));
         txt.setTextColor(Color.parseColor(colorcode));
         return  txt;
     }
@@ -61,7 +63,7 @@ public class CustomSpinnerAdapter extends BaseAdapter implements SpinnerAdapter 
         txt.setPadding(16, 16, 16, 16);
         txt.setTextSize(18);
         txt.setGravity(Gravity.CENTER_VERTICAL);
-        txt.setText(leaves_types[position]);
+        txt.setText(leaves_types.get(position));
         txt.setTextColor(Color.parseColor("#464646"));
         return  txt;
     }

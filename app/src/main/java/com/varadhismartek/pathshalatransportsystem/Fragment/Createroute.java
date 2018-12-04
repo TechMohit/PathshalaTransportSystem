@@ -125,7 +125,7 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
     boolean isNetworkEnabled = false;
     Dialog  imageChooserDialog;
     String  originselect, destinationselect,stopselect,route_distance, route_time,
-            routenum,str_vehicle_type, starting, Stop_Latlng, names, names1, names2,timepick;
+            routenum,str_vehicle_type1, starting, Stop_Latlng, names, names1, names2,timepick,vehiclename;
     Double latitude, longitutde, latitude1, longitutde1,selctlat,selectlong,orignselctlat,orignselectlong;
     ArrayList<Marker> markerArrayList;
     ArrayList<AddStop> arrayList;
@@ -134,6 +134,7 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
     ArrayList<JSONParsePojo> jsonParsePojo;
     HashMap<Integer, Marker> markerHashMap;
     ArrayList<String> vehicleReg;
+    ArrayList<String> vehicleReg1;
 
     LatLng latLng,mylocate;
     EditText latpoint, longpoint, totaldistance, travelduration,starttimetoschool,starttimetohome;
@@ -142,7 +143,7 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
     private Uri filePath;
     private TextView bt_save, tv_decrease, tv_increase,tv_stop,seatingcapacity, vehiclenameselct,vehiclegpsnumberselect;
     private ImageView currentlocation, imageclick;
-    private Spinner vehicletypespin;
+    Spinner vehicletypespin1;
 
     private int mHour, mMinute;
 
@@ -163,6 +164,7 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
         initListner();
         //getCurrentTime();
         getBusNumberfromfirebase();
+
 
         geocoder = new Geocoder(getActivity());
         //set filter on edit text.
@@ -185,16 +187,22 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
         //this is for the recyclerview;
         arrayList = new ArrayList<>();
         vehicleReg = new ArrayList<>();
+        vehicleReg1 = new ArrayList<>();
+        vehicleReg1.add("1");
+        vehicleReg1.add("2");
+        vehicleReg1.add("3");
 
-        CustomSpinnerAdapter customSpinnerAdaptervehicle = new CustomSpinnerAdapter(getActivity(), vehicletype, "#717071");
-        vehicletypespin.setAdapter(customSpinnerAdaptervehicle);
-        vehicletypespin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+
+        vehicletypespin1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                str_vehicle_type = parent.getItemAtPosition(position).toString();
-                  Log.d(Tag, str_vehicle_type);
-
+                str_vehicle_type1 = parent.getItemAtPosition(position).toString();
+                selectBusNameFromFirebase(str_vehicle_type1);
+                  Log.d(Tag, str_vehicle_type1);
             }
+
+
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -459,7 +467,7 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
     private void initViews(View view) {
 
         bt_save                 = view.findViewById(R.id.button_send);
-        vehicletypespin         = view.findViewById(R.id.spinner_vehicle_type);
+        vehicletypespin1        = view.findViewById(R.id.spinner_vehicle_type1);
         mroutenum               = view.findViewById(R.id.editext_enterrouteno);
         tv_decrease             = view.findViewById(R.id.tv_nostopdesc);
         tv_increase             = view.findViewById(R.id.tv_nostopinsc);
@@ -1216,24 +1224,42 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
     }
 
     private void getBusNumberfromfirebase(){
-        Log.d("firebasetest", ""+Constant.FINAL_REGISTRATION_ID);
+
         vehicleref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
 
                 if(vehicleReg.size()>=0){
                     vehicleReg.clear();
 
                 }
 
-                Log.d("firebasetest", ""+dataSnapshot.getKey());
+
 
                 for (DataSnapshot postSnapShotA : dataSnapshot.getChildren()){
-                    Log.d("firebasetest", ""+postSnapShotA.getKey());
-                    vehicleReg.add(postSnapShotA.getKey());
+
+
+                    for(DataSnapshot postSnapShotB:postSnapShotA.getChildren()){
+
+                        for(DataSnapshot postSnapShotC:postSnapShotB.getChildren()) {
+
+                            if(postSnapShotC.getKey().equals("vehicle_regno")) {
+                                vehicleReg.add(""+postSnapShotC.getValue());
+
+                            }
+                        }
+
+                    }
 
 
                 }
+
+                CustomSpinnerAdapter customSpinnerAdaptervehicle1 = new CustomSpinnerAdapter(getActivity(), vehicleReg, "#717071");
+                vehicletypespin1.setAdapter(customSpinnerAdaptervehicle1);
+
+
+
 
             }
 
@@ -1244,7 +1270,51 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
         });
     }
 
-}
+
+    private void selectBusNameFromFirebase(final String str_vehicle_type1) {
+
+       // Log.d("firebasetest", ""+Constant.FINAL_REGISTRATION_ID);
+        vehicleref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+               // Log.d("firebasetest", ""+dataSnapshot.getKey());
+
+                for (DataSnapshot postSnapShotA : dataSnapshot.getChildren()){
+                 //   Log.d("firebasetest", ""+postSnapShotA.getKey());
+
+                    for(DataSnapshot postSnapShotB:postSnapShotA.getChildren()){
+                      //  Log.d("firebasetest", ""+postSnapShotB.getKey());
+                        for(DataSnapshot postSnapShotC:postSnapShotB.getChildren()) {
+                         Log.d("firebasetest", "11:" + postSnapShotC.getKey());
+                            if(postSnapShotC.getValue().equals(str_vehicle_type1)) {
+
+
+
+                                Log.d("firebasetest", "12:"+postSnapShotC.getValue());
+                            }
+                        }
+
+                    }
+
+
+                }
+               // Log.d("fddczc", "size:"+vehicleReg.size());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+    }
+
+
+
 
 
 

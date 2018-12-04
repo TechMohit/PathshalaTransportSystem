@@ -86,7 +86,7 @@
                         android:layout_weight="5"/>
 
                     <Spinner
-                        android:id="@+id/spinner_vehicle_type"
+                        android:id="@+id/spinner_vehicle_type1"
                         style="@style/spinner_normal_mrgn_pad"
                         android:layout_weight="1"
                         android:background="@drawable/custom_spinner_background">
