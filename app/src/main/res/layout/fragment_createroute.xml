@@ -66,10 +66,11 @@
                         style="@style/textinputlaout_wmatch_hwrap"
                         android:layout_width="0dp">
 
-                        <EditText
+                        <AutoCompleteTextView
                             android:id="@+id/editext_enterrouteno"
                             android:hint="@string/enter_route_number"
                             style="@style/edittext_normal"
+                            android:inputType="text|number"
                             tools:ignore="Autofill,TextFields" />
                     </android.support.design.widget.TextInputLayout>
 
@@ -81,7 +82,7 @@
 
                     <TextView
                         style="@style/tv_normal_mrgn_pad"
-                        android:text="@string/class_of_vehicle"
+                        android:text="@string/select_bus_number"
                         android:layout_weight="5"/>
 
                     <Spinner
@@ -108,6 +109,7 @@
 
 
                     <TextView
+                        android:id="@+id/tv_seatingcapacity"
                         style="@style/tv_normal"
                         android:text="@string/_45"
                         android:layout_weight="2"
@@ -123,11 +125,12 @@
 
                     <TextView
                         style="@style/tv_normal"
-                        android:layout_weight="1"
+                        android:layout_weight="1.8"
                         android:text="@string/vehicle_name"
                         />
 
                     <TextView
+                        android:id="@+id/tv_vehicle_nameselct"
                         style="@style/tv_normal"
                         android:text="@string/hosa02_40"
                         android:layout_weight="1"
@@ -142,11 +145,12 @@
 
                     <TextView
                         style="@style/tv_normal"
-                        android:layout_weight="1"
+                        android:layout_weight="1.3"
                         android:text="@string/enter_vehicle_gps_number"
                         />
 
                     <TextView
+                        android:id="@+id/tv_vehicle_gpsnumberselect"
                         style="@style/tv_normal"
                         android:text="@string/_5545wd4ad0"
                         android:layout_weight="1"
@@ -162,7 +166,7 @@
 
                     <android.support.design.widget.TextInputLayout
                         style="@style/textinputlaout_weight"
-                        android:layout_weight="1"
+                        android:layout_weight="1.5"
                         android:layout_margin="@dimen/dp5"
                         android:padding="@dimen/dp0">
 
@@ -181,15 +185,14 @@
                         style="@style/textinputlaout_weight"
                         android:layout_margin="@dimen/dp5"
                         android:padding="@dimen/dp0"
-                        android:layout_weight="1">
+                        android:layout_weight="1.2">
 
-                        <TextView
-                            android:id="@+id/tv_starttimetoschool"
+                        <EditText
+                            android:id="@+id/et_starttimetoschool"
                             style="@style/edittext_normal"
                             android:hint="Starting time(towards school)"
-                            android:textSize="@dimen/sp18"
-                            android:layout_marginTop="@dimen/dp22"
-                            android:layout_marginLeft="@dimen/dp20"
+                            android:textSize="@dimen/sp12"
+                            android:layout_marginLeft="@dimen/dp40"
 
                             tools:ignore="Autofill" />
 
@@ -205,7 +208,7 @@
                         style="@style/textinputlaout_weight"
                         android:layout_margin="@dimen/dp5"
                         android:padding="@dimen/dp0"
-                        android:layout_weight="1">
+                        android:layout_weight="1.7">
 
                         <AutoCompleteTextView
                             android:id="@+id/et_startpointtohome"
@@ -223,10 +226,10 @@
                         android:padding="@dimen/dp0"
                         android:layout_weight="1">
 
-                        <TextView
+                        <EditText
                             android:id="@+id/et_starttimetohome"
                             style="@style/edittext_normal"
-                            android:textSize="@dimen/sp18"
+                            android:textSize="@dimen/sp12"
                             android:layout_marginTop="@dimen/dp22"
                             android:layout_marginLeft="@dimen/dp20"
                             android:hint="Starting time(towards home)"
@@ -310,15 +313,27 @@
                                 style="@style/tv_normal"
                                 android:layout_weight="1"
                                 android:text="@string/enter_location_manually" />
+                            <ImageView
+                                android:id="@+id/currentloc"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:layout_weight="1"
+                                android:visibility="gone"
+                                android:src="@drawable/current_location"/>
 
                             <Switch
-                                android:id="@+id/switch1"
+                                android:id="@+id/switchLoc"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1" />
 
 
+
+
+
                         </LinearLayout>
+
+
 
                         <android.support.design.widget.TextInputLayout
                             style="@style/textinputlaout_wmatch_hwrap">
@@ -380,7 +395,7 @@
                                 <EditText
                                     android:id="@+id/et_distance"
                                     android:maxLength="5"
-                                    android:focusable="false"
+
                                     style="@style/edittext_normal"
                                     android:hint="@string/enter_start_distance"
                                     tools:ignore="Autofill,TextFields" />
@@ -411,7 +426,6 @@
 
                         <android.support.v7.widget.CardView
                             style="@style/cardViewStyle"
-                            app:cardBackgroundColor="@color/backgroundColor"
                             android:layout_margin="@dimen/dp10"
                             app:cardCornerRadius="@dimen/dp5"
                             app:cardElevation="@dimen/dp5">
@@ -420,26 +434,27 @@
                                 style="@style/Ll_normal_vtl">
 
                                 <ImageView
-                                    android:id="@+id/image_picker_stop"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="80dp"
+                                    android:id="@+id/iv_stop"
+                                    android:layout_width="200dp"
+                                    android:layout_height="150dp"
                                     android:layout_margin="@dimen/dp10"
                                     android:background="#fff"
+                                    android:layout_gravity="center"
                                     android:src="@drawable/ic_attachment_black_24dp"
                                     android:contentDescription="@string/todo" />
 
-                                <TextView
-                                    style="@style/tv_normal"
-                                    android:layout_width="match_parent"
-                                    android:text="@string/image_name_jpg"
-                                    android:layout_margin="@dimen/dp2"
-                                    android:gravity="center"
-                                    android:padding="@dimen/dp5"
-                                    android:background="@color/white"/>
 
                             </LinearLayout>
 
+
+
+
+
                         </android.support.v7.widget.CardView>
+
+
+
+
 
                         <Button
                             android:id="@+id/btn_addstop"

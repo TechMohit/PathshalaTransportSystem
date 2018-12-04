@@ -564,6 +564,7 @@
         <item name="android:background">@drawable/spinnerbackgroundcolor</item>
         <item name="android:spinnerMode">dropdown</item>
 
+
     </style>
 
 
@@ -572,6 +573,7 @@
         <item name="android:layout_height">@dimen/dp30</item>
         <item name="android:background">@drawable/spinnerbackgroundcolor</item>
         <item name="android:spinnerMode">dropdown</item>
+
 
     </style>
 

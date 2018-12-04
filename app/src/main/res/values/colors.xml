@@ -15,9 +15,9 @@
 
 
     <!-- Management Colors-->
-    <color name="colorPrimary">#4fa4d2</color>
+    <color name="colorPrimary">#1faa00</color>
     <color name="colorPrimaryDark">#1faa00</color>
-    <color name="colorAccent">#325e15</color>
+    <color name="colorAccent">#1faa00</color>
     <color name="backgroundColor">#efefef</color>
     <color name="textcolor">#7D7D7D</color>
 
