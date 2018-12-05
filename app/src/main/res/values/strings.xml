@@ -54,7 +54,7 @@
     <string name="vehicle_registering_authority">Vehicle Registering Authority</string>
     <string name="vehicle_registering_state">Vehicle Registering State</string>
     <string name="previous_owner_name">Previous Owner Name</string>
-    <string name="previous_owner_puchased_cost">Previous Owner puchased Cost</string>
+    <string name="previous_owner_puchased_cost">Previous Puchased Cost</string>
     <string name="perticulars_of_previous_registration_and_register_number_if_any">Perticulars of previous Registration and register number(if any)</string>
     <string name="previous_owner_purchased_date">Previous Owner purchased Date</string>
     <string name="servicing_details">Servicing Details</string>
@@ -106,7 +106,7 @@
     <string name="bank_name">Bank Name</string>
     <string name="maintenance_amount">Maintenance Amount</string>
     <string name="repairing_charges">Repairing charges</string>
-    <string name="reamarks">Reamarks</string>
+    <string name="reamarks">Remarks</string>
     <string name="loan_document_images">Loan Images</string>
     <string name="vehicle_fitness">Vehicle fitness</string>
     <string name="vehicle_images">Vehicle Images</string>

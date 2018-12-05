@@ -79,11 +79,13 @@ import com.varadhismartek.pathshalatransportsystem.AsyncTask.FetchUrl;
 import com.varadhismartek.pathshalatransportsystem.Constant;
 import com.varadhismartek.pathshalatransportsystem.Constants;
 import com.varadhismartek.pathshalatransportsystem.JSONParsePojo;
+import com.varadhismartek.pathshalatransportsystem.MainActivity;
 import com.varadhismartek.pathshalatransportsystem.MarkerLists;
 import com.varadhismartek.pathshalatransportsystem.PlaceArrayAdapter;
 import com.varadhismartek.pathshalatransportsystem.R;
 import com.varadhismartek.pathshalatransportsystem.Stop_Address;
 import com.varadhismartek.pathshalatransportsystem.StopviewRecyclerAdapter;
+import com.varadhismartek.pathshalatransportsystem.Submit;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -125,7 +127,7 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
     boolean isNetworkEnabled = false;
     Dialog  imageChooserDialog;
     String  originselect, destinationselect,stopselect,route_distance, route_time,
-            routenum,str_vehicle_type1, starting, Stop_Latlng, names, names1, names2,timepick,vehiclename;
+            routeum,str_vehicle_type1, starting, Stop_Latlng, names, names1, names2,timepick,vehiclename,seatingnum,gpsnumber;
     Double latitude, longitutde, latitude1, longitutde1,selctlat,selectlong,orignselctlat,orignselectlong;
     ArrayList<Marker> markerArrayList;
     ArrayList<AddStop> arrayList;
@@ -134,21 +136,20 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
     ArrayList<JSONParsePojo> jsonParsePojo;
     HashMap<Integer, Marker> markerHashMap;
     ArrayList<String> vehicleReg;
-    ArrayList<String> vehicleReg1;
 
     LatLng latLng,mylocate;
-    EditText latpoint, longpoint, totaldistance, travelduration,starttimetoschool,starttimetohome;
+    EditText latpoint, longpoint, totaldistance, travelduration,starttimetoschool,starttimetohome,route_no;
     private String Tag = "Createroute";
-    private String[] vehicletype = {"BUS", "AC BUS", "MINI BUS", "TRAVELLER"};
     private Uri filePath;
     private TextView bt_save, tv_decrease, tv_increase,tv_stop,seatingcapacity, vehiclenameselct,vehiclegpsnumberselect;
-    private ImageView currentlocation, imageclick;
+    private ImageView currentlocation, imageclick,bckbtnclick;
     Spinner vehicletypespin1;
 
     private int mHour, mMinute;
 
     DatabaseReference vehicleref = FirebaseDatabase.getInstance().getReference("School/SchoolId/Vehicle_Registration");
-
+    DatabaseReference mDatabaseRef = FirebaseDatabase.getInstance().getReference("School/SchoolId/Vehicle_Transport/Routes");
+    DatabaseReference route_ref,stops_ref;
     public Createroute() {
 
         // Required empty public constructor
@@ -157,9 +158,15 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_createroute, container, false);
-
+        View view;
+        try {
+            // Inflate the layout for this fragment
+            view = inflater.inflate(R.layout.fragment_createroute, container, false);
+        }
+        catch (Exception e) {
+            Log.e(Tag, "onCreateView", e);
+            throw e;
+        }
         initViews(view);
         initListner();
         //getCurrentTime();
@@ -170,7 +177,6 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
         //set filter on edit text.
         filters = new InputFilter[1];
         filters[0] = new InputFilter.LengthFilter(2);
-        stop_num = Integer.parseInt(tv_stop.getText().toString());
         locationselect.setChecked(true);
 
 
@@ -187,10 +193,6 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
         //this is for the recyclerview;
         arrayList = new ArrayList<>();
         vehicleReg = new ArrayList<>();
-        vehicleReg1 = new ArrayList<>();
-        vehicleReg1.add("1");
-        vehicleReg1.add("2");
-        vehicleReg1.add("3");
 
 
 
@@ -238,7 +240,7 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
                     for (DataSnapshot suggestionSnapshot1 : suggestionSnapshot.getChildren()) {
                         autoComplete.add(suggestionSnapshot1.getKey());
                         Log.d("autocom", "2" + suggestionSnapshot1.getKey() + "" + suggestionSnapshot1.getValue());
-                        Log.d("autocom", "5" + mroutenum.getText().toString());
+                       // Log.d("autocom", "5" + mroutenum.getText().toString());
                     }
 
                 }
@@ -289,6 +291,7 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
 
                                     new loadAsync().execute(latitude1, longitutde1);
                                     latLng = new LatLng(latitude1, longitutde1);
+                                    Stop_Latlng = latitude1 + "," + longitutde1;
 
 
                                 }
@@ -461,6 +464,7 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
         currentlocation.setOnClickListener(this);
         starttimetoschool.setOnClickListener(this);
         starttimetohome.setOnClickListener(this);
+        bckbtnclick.setOnClickListener(this);
     }
 
 
@@ -468,7 +472,6 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
 
         bt_save                 = view.findViewById(R.id.button_send);
         vehicletypespin1        = view.findViewById(R.id.spinner_vehicle_type1);
-        mroutenum               = view.findViewById(R.id.editext_enterrouteno);
         tv_decrease             = view.findViewById(R.id.tv_nostopdesc);
         tv_increase             = view.findViewById(R.id.tv_nostopinsc);
         tv_stop                 = view.findViewById(R.id.tv_selectstop);
@@ -488,7 +491,9 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
         imageclick              = view.findViewById(R.id.iv_stop);
         seatingcapacity         = view.findViewById(R.id.tv_seatingcapacity);
         vehiclenameselct        = view.findViewById(R.id.tv_vehicle_nameselct);
-        vehiclegpsnumberselect  = view.findViewById(R.id.tv_vehicle_nameselct);
+        vehiclegpsnumberselect  = view.findViewById(R.id.tv_vehicle_gpsnumberselect);
+        bckbtnclick             = view.findViewById(R.id.img_backbtnaddress);
+        route_no                = view.findViewById(R.id.et_enterrouteno);
 
 
     }
@@ -498,7 +503,15 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_send:
-                saveaddroutedata();
+                String routenum;
+                routenum = route_no.getText().toString();
+                if (routenum.isEmpty()) {
+                    route_no.setError("Enter the route number");
+                }
+                else{
+                    saveaddroutedata();
+                }
+
                 break;
 
             case R.id.iv_stop:
@@ -521,7 +534,7 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
                 String stop_name;
                 String stop_dist;
                 String stop_time;
-
+                stop_num = Integer.parseInt(tv_stop.getText().toString());
                 if (Constants.number_of_counts < stop_num) {
                     stop_name = mAutoCompleteTextView.getText().toString();
                     stop_dist = totaldistance.getText().toString();
@@ -538,6 +551,7 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
                     else {*/
 
                     Constants.number_of_counts += 1;
+                    destinationselect = actEndingpoint.getText().toString();
                     AddStop addStop = new AddStop(String.valueOf(Constants.number_of_counts), stop_name, stop_dist, stop_time, originselect, destinationselect, Stop_Latlng);
                     arrayList.add(addStop);
 
@@ -602,11 +616,19 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
                 selecttime();
                 break;
 
+            case R.id.img_backbtnaddress:
+                backpress();
+
+                break;
+
 
         }
     }
 
-
+    private void backpress() {
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        startActivity(intent);
+    }
 
 
     ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback = new ResultCallback<PlaceBuffer>() {
@@ -638,10 +660,10 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
             if (destinationselect == "select") {
                 LatLng latLng1 = place.getLatLng();
                 destiny = new LatLng(latLng1.latitude, latLng1.longitude);
-                setmarker(destiny);
-                //   map.addMarker(new MarkerOptions().position(destiny).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED )).title(names2));
-                //  map.moveCamera(CameraUpdateFactory.newLatLng(destiny));
-                //  map.animateCamera(CameraUpdateFactory.zoomTo(11));
+               // setmarker(destiny);
+                 map.addMarker(new MarkerOptions().position(destiny).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED )).title(names2));
+                 map.moveCamera(CameraUpdateFactory.newLatLng(destiny));
+                 map.animateCamera(CameraUpdateFactory.zoomTo(11));
             }
             //for getting the stop value if the stop value is not null
             if (stopselect == "select") {
@@ -688,16 +710,6 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
 
         }
     };
-
-    public void getCurrentTime() {
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat mdformat = new SimpleDateFormat("hh:mm:ss a");
-        String strDate = mdformat.format(calendar.getTime());
-        starttimetoschool.setText(strDate);
-        starttimetohome.setText(strDate);
-
-    }
-
 
 
     @Override
@@ -903,15 +915,27 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
         progressDialog.show();
         Toast.makeText(getActivity(), "save click", Toast.LENGTH_LONG).show();
 
+        routeum         = route_no.getText().toString();
+        vehiclename     = vehiclenameselct.getText().toString();
+        seatingnum      = seatingcapacity.getText().toString();
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+
+                route_ref=mDatabaseRef.child(routeum);
+                Submit submit=new Submit(routeum,str_vehicle_type1,vehiclename,seatingnum,actStartingpnt.getText().toString(),actEndingpoint.getText().toString(),starttimetoschool.getText().toString(),starttimetohome.getText().toString(),vehiclegpsnumberselect.getText().toString(),stop_num);
+                route_ref.setValue(submit);
 
                 progressDialog.dismiss();
 
 
             }
         }, 6000);
+
+        backpress();
+
+
 
 
     }
@@ -1055,10 +1079,10 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
             Waypoints_Url = url;
             Log.d("Waypoints_Url", Waypoints_Url);
 
-            //  stops_ref = databaseReference.child("Routestops");
-            //  stops_ref.child("url").setValue(Waypoints_Url);
+              stops_ref = mDatabaseRef.child("Routestops");
+              stops_ref.child("url").setValue(Waypoints_Url);
 
-            // stops_ref.child("stoplist").setValue(arrayList);
+              stops_ref.child("stoplist").setValue(arrayList);
 
 
             //fetching the detailste of that url
@@ -1287,8 +1311,16 @@ public class Createroute extends Fragment implements GoogleApiClient.OnConnectio
                     for(DataSnapshot postSnapShotB:postSnapShotA.getChildren()){
                       //  Log.d("firebasetest", ""+postSnapShotB.getKey());
                         for(DataSnapshot postSnapShotC:postSnapShotB.getChildren()) {
-                         Log.d("firebasetest", "11:" + postSnapShotC.getKey());
+
                             if(postSnapShotC.getValue().equals(str_vehicle_type1)) {
+                                if(postSnapShotC.getKey().equals("vehicle_name")){
+                                    vehiclenameselct.setText(""+postSnapShotC.getValue());
+
+                                }
+                                if(postSnapShotC.getKey().equals("vehicle_gpsdetails")){
+                                    vehiclegpsnumberselect.setText(""+postSnapShotC.getValue());
+
+                                }
 
 
 
