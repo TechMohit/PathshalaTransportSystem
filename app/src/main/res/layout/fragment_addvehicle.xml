@@ -165,7 +165,8 @@
                         app:cardCornerRadius="@dimen/dp5"
                         app:cardElevation="@dimen/dp5">
 
-                        <LinearLayout style="@style/Ll_normal_vtl">
+                        <LinearLayout
+                            style="@style/Ll_normal_vtl">
 
 
                             <TextView
@@ -362,17 +363,12 @@
                                         android:hint="Registered date "
                                         android:importantForAutofill="no"
                                         android:inputType="text|number"
+                                        android:drawableRight="@drawable/ic_calendar"
                                         android:textSize="@dimen/sp10" />
 
 
                                 </android.support.design.widget.TextInputLayout>
-                                <ImageView
-                                    style="@style/ImageviewStyle"
-                                    android:id="@+id/calendarregistereddate"
-                                    android:src="@drawable/ic_calendar"
-                                    android:visibility="visible"
-                                    android:layout_gravity="center"
-                                    android:contentDescription="calendarforRegistereddate" />
+
                             </LinearLayout>
 
                             <LinearLayout
@@ -393,17 +389,11 @@
                                         android:hint="Purchase date"
                                         android:importantForAutofill="no"
                                         android:inputType="text|number"
+                                        android:drawableRight="@drawable/ic_calendar"
                                         android:textSize="@dimen/sp10" />
 
 
                                 </android.support.design.widget.TextInputLayout>
-                                <ImageView
-                                    style="@style/ImageviewStyle"
-                                    android:id="@+id/calendarpurchasedate"
-                                    android:src="@drawable/ic_calendar"
-                                    android:visibility="visible"
-                                    android:layout_gravity="center"
-                                    android:contentDescription="calendarforRegistereddate" />
 
 
 
@@ -422,8 +412,8 @@
                                         android:padding="@dimen/dp0">
 
                                         <EditText
-                                            style="@style/edittext_normal"
                                             android:id="@+id/previousownername"
+                                            style="@style/edittext_normal"
                                             android:hint="@string/previous_owner_name"
                                             android:importantForAutofill="no"
                                             android:textSize="@dimen/sp10"
@@ -450,24 +440,19 @@
                                                 android:hint="@string/previous_owner_purchased_date"
                                                 android:importantForAutofill="no"
                                                 android:inputType="text|number"
+                                                android:drawableRight="@drawable/ic_calendar"
                                                 android:textSize="@dimen/sp10" />
 
 
                                         </android.support.design.widget.TextInputLayout>
-                                        <ImageView
-                                            style="@style/ImageviewStyle"
-                                            android:id="@+id/iv_previousownerpurchasedate"
-                                            android:src="@drawable/ic_calendar"
-                                            android:visibility="visible"
-                                            android:layout_gravity="center"
-                                            android:contentDescription="calendarforRegistereddate" />
 
 
                                         <android.support.design.widget.TextInputLayout
                                             style="@style/textinputlaout_weight"
                                             android:layout_margin="@dimen/dp5"
                                             android:layout_weight="1"
-                                            android:padding="@dimen/dp0">
+                                            android:padding="@dimen/dp10"
+                                            android:layout_marginTop="@dimen/dp10">
 
                                             <EditText
 
@@ -476,7 +461,9 @@
                                                 android:hint="@string/previous_owner_puchased_cost"
                                                 android:importantForAutofill="no"
                                                 android:inputType="text|number"
-                                                android:textSize="@dimen/sp10" />
+                                                android:paddingTop="@dimen/dp10"
+                                                android:textSize="@dimen/sp10"
+                                               />
 
 
                                         </android.support.design.widget.TextInputLayout>
@@ -1796,13 +1783,13 @@
                                 <TextView
                                     style="@style/tv_normal"
                                     android:layout_width="0dp"
-                                    android:layout_weight="0.5"
+                                    android:layout_weight="1"
                                     android:text="@string/vehicle_images" />
 
                                 <View
                                     style="@style/view_horizantal"
                                     android:layout_width="0dp"
-                                    android:layout_weight="0.5"
+                                    android:layout_weight="1"
                                     android:layout_marginStart="@dimen/dp10"
                                     android:layout_marginTop="@dimen/dp10">
 

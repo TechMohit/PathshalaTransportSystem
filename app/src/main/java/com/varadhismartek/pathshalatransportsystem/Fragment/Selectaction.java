@@ -16,7 +16,8 @@ import com.varadhismartek.pathshalatransportsystem.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Selectaction extends Fragment {
+public class Selectaction extends Fragment implements View.OnClickListener {
+    Button setBarrier,addvehicle,createRoute;
 
 
     public Selectaction() {
@@ -30,32 +31,48 @@ public class Selectaction extends Fragment {
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_selectaction, container, false);
-        Button setBarrier = view.findViewById(R.id.btnsetBarrier);
-        Button addvehicle = view.findViewById(R.id.btnaddvehicle);
-        Button createRoute = view.findViewById(R.id.btncreateroute);
-        setBarrier.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addtransportbarriers();
-            }
-        });
+        initviews(view);
+        InitListener();
 
-        addvehicle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addvehicleinfo();
-            }
-        });
-        createRoute.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createRoute();
-            }
-        });
         return view;
+
     }
+
+    private void InitListener() {
+        setBarrier.setOnClickListener(this);
+        addvehicle.setOnClickListener(this);
+        createRoute.setOnClickListener(this);
+    }
+
+    private void initviews(View view) {
+        setBarrier = view.findViewById(R.id.btnsetBarrier);
+        addvehicle = view.findViewById(R.id.btnaddvehicle);
+        createRoute = view.findViewById(R.id.btncreateroute);
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btnsetBarrier:
+
+                addtransportbarriers();
+                break;
+
+            case R.id.btnaddvehicle:
+                addvehicleinfo();
+                break;
+
+            case R.id.btncreateroute:
+                createRoute();
+                break;
+
+
+        }
+    }
+
     private void addtransportbarriers(){
-        Log.d("Selectaction","addtransportBarriersClick");
+
         Transportbarriers transportbarriers = new Transportbarriers();
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, transportbarriers);
@@ -63,7 +80,7 @@ public class Selectaction extends Fragment {
         fragmentTransaction.commit();
     }
     private void addvehicleinfo(){
-        Log.d("Selectaction","addvehicleinfo");
+
         Addvehicle addvehicle= new Addvehicle();
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, addvehicle);
@@ -71,12 +88,11 @@ public class Selectaction extends Fragment {
         fragmentTransaction.commit();
     }
     private void createRoute(){
-        Log.d("Selectaction","createRoute");
+
         Createroute createroute = new Createroute();
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, createroute);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
-
 }

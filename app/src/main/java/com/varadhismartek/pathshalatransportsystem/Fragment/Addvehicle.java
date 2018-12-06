@@ -101,7 +101,7 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
 
 
 
-    ImageView iv_calendarregisterdate, iv_calendarpurchasedate, iv_previousownerpurchasedate,iv_otherdoc_attach,
+    ImageView iv_otherdoc_attach,
               iv_loandoc_attach,iv_financedoc_attach,iv_vehicle_attach,bckbtnclick;
 
     TransBarrierModel transBarrierModel, transBarrierModelreg, transBarrierModelService,transBarrierModelInsurance,
@@ -237,15 +237,14 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         seating_capacity        = v.findViewById(R.id.seating_capacity);
         registering_authority   = v.findViewById(R.id.registering_authority);
         registering_state       = v.findViewById(R.id.registering_state);
-        iv_calendarregisterdate = v.findViewById(R.id.calendarregistereddate);
+
 
         iv_otherdoc_attach      = v.findViewById(R.id.img_otherdoc_attachfile);
         iv_loandoc_attach       = v.findViewById(R.id.img_loandoc_attachfile);
         iv_financedoc_attach    = v.findViewById(R.id.img_financedoc_attachfile);
         iv_vehicle_attach       = v.findViewById(R.id.img_vehicle_attachfile);
 
-        iv_calendarpurchasedate         = v.findViewById(R.id.calendarpurchasedate);
-        iv_previousownerpurchasedate    = v.findViewById(R.id.iv_previousownerpurchasedate);
+
         bt_save                         = v.findViewById(R.id.button_send);
         registered_date                 = v.findViewById(R.id.et_registereddate);
         purchase_date                   = v.findViewById(R.id.et_purchasedate);
@@ -307,9 +306,9 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
 
 
     private void initListner() {
-        iv_calendarregisterdate.setOnClickListener(this);
-        iv_calendarpurchasedate.setOnClickListener(this);
-        iv_previousownerpurchasedate.setOnClickListener(this);
+        registered_date.setOnClickListener(this);
+        purchase_date.setOnClickListener(this);
+        preownerpurchase_date.setOnClickListener(this);
         mlastservicedate.setOnClickListener(this);
         minsurancedate.setOnClickListener(this);
         minsurancerenewdate.setOnClickListener(this);
@@ -331,15 +330,15 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
                 saveaddvehicledata();
                 break;
 
-            case R.id.calendarregistereddate:
+            case R.id.et_registereddate:
                 String registerdate = "Registereddate";
                 getDOB(registerdate);
                 break;
-            case R.id.calendarpurchasedate:
+            case R.id.et_purchasedate:
                 String purchasedate = "Purchasedate";
                 getDOB(purchasedate);
                 break;
-            case R.id.iv_previousownerpurchasedate:
+            case R.id.previousownerpurchasedate:
                 String previousownerpurchasedate = "Previousownerpurchasedate";
                 getDOB(previousownerpurchasedate);
                 break;
@@ -452,7 +451,6 @@ public class Addvehicle extends Fragment implements AdapterView.OnItemSelectedLi
         fitnesscertificatenum = mfitnesscertificatenum.getText().toString();
         fitnesscertificateissuedate = mfitnesscertificateissuedate.getText().toString();
         fitnesscertificaterenewdate = mfitnesscertificaterenewdate.getText().toString();
-        Log.d("fitness","dated"+fitnesscertificaterenewdate);
         taxpermitnum = mtaxpermitnum.getText().toString();
         taxpayabledate = mtaxpayabledate.getText().toString();
         taxpayableamount = mtaxpayableamount.getText().toString();
